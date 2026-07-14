@@ -7,7 +7,7 @@ Tversky), Szpilrajn's extension theorem, and the partial-order theory of multi-i
 (De Loof, De Baets & De Meyer). This appendix states, in one place, *which established result
 justifies which step of the protocol*, and fixes the object precisely so the steps are well-defined.
 Every result here is classical or definitional; the paper's contribution is the protocol and the
-controlled empirical findings (main text §4), not the theorems.
+controlled empirical findings (main text §4–§5), not the theorems.
 
 Correctness note: an earlier draft of this appendix contained (i) a scale-type "ladder" claiming
 families are interval/ratio classes, (ii) an argument that a logarithmic relation implies different
@@ -52,6 +52,24 @@ from the earlier draft, which stated these backwards):
   replicates across cohorts is unlikely to be coincidental; a disagreement that replicates is a
   property of κ, not the sample. Reproducibility, not the consensus construction, is what licenses
   reading `I(≽_𝓜)` as concept-level incomparability.
+- **(External anchor as a second, independent check.)** Reproducibility guards against sampling
+  coincidence but is still *internal* to the measures `𝓜`. A crude, theory-light **external anchor** `A`
+  for the concept (number of active targets for selectivity, chronological age for clocks, self-reported
+  exposure for smoking) gives an *independent* check: the consensus order `≽_𝓜` should agree with the
+  order induced by `A` at the extremes, where both are unambiguous. Agreement there is external-validity
+  evidence that `≽_𝓜` tracks κ rather than a shared artifact of the measures; disagreement there is a red
+  flag that the measures are collectively mis-oriented (the failure mode the step-1 orientation check
+  targets — see main text §2, §4.1). The anchor is too crude to *define* `≽` (it is one more coarse
+  measure), but it is exactly the right tool to *falsify* a mis-oriented consensus. **Demonstrated across
+  all four domains** (`analysis/external_anchor.py`): every standard measure is correctly oriented against
+  its anchor (n_active / chronological age / exposure ordinal), the mis-oriented un-gated candidate is
+  caught (+0.94 vs n_active, wrong sign), and the consensus agrees with the anchor (Spearman +0.65 to
+  +0.94) — more strongly at the extremes than in the middle where the anchor is continuous enough to split
+  (kinase 0.92 vs 0.56; clocks 0.68 vs 0.36). **Two caveats keep this honest:** the extremes-vs-middle
+  split is undefined for the discrete anchors (serotonin, smoking), so that leg rests on kinase + clocks;
+  and for the *position clocks* the anchor `A` = chronological age is their **training target**, so the
+  clock check is confirmatory, not independent — the genuinely independent anchors are kinase, serotonin,
+  and smoking. The "independent check" framing applies fully to those three.
 
 ---
 
@@ -167,8 +185,10 @@ distribution family it is meant to join: Spearman(candidate, entropy) = −0.87,
 −0.94, consensus-of-4 −0.86; robust across floors 5.0→0.0. Cause: 93.6% of Klaeger entries sit at the
 detection floor and softplus never zeroes them (pedestal T·log2 ≈ 0.69 per kinase), so a genuinely
 selective compound (one spike among 342 pedestals) looks maximally uniform → high entropy → the
-candidate calls it *non*-selective (worked example: 1-target H≈8.39 > 50-target H≈7.92, i.e. it ranks
-the promiscuous compound as more selective). Not a sign typo — the pedestal dominates. **Unaffected:**
+candidate calls it *non*-selective (schematic worked example: a single-target profile gives candidate-H
+≈8.4, near the 343-kinase maximum, while a many-target profile gives a *lower* H — so the promiscuous
+compound is ranked as more selective; the inversion direction is confirmed on data by candidate_bench.py,
+−0.87 vs entropy, and the un-gated +0.94 vs n_active). Not a sign typo — the pedestal dominates. **Unaffected:**
 the candidate's panel-size convergence (p*≈110–170) and D4 monotonicity, which concern self-consistency,
 not agreement direction.
 
@@ -199,7 +219,7 @@ the author to verify.
 
 ---
 
-## 6. What the empirical work actually establishes (main text §4) — the real contribution
+## 6. What the empirical work actually establishes (main text §4–§5) — the real contribution
 
 The theorems above are scaffolding. The controlled findings are the contribution; each is stated with
 its honest scope.
@@ -213,14 +233,15 @@ its honest scope.
    on middle-position *is* significant (0.315, p=4e-6, controlling n_active/max_act) — which is exactly
    the trap. But that control does not remove rank-boundary compression; the proper boundary-compression
    **independence null** does, and against it the apparent interior peak vanishes: observed slope
-   (0.11–0.27) lies inside the null band (up to 0.42), in fact at/below its mean. So the interior peak is
+   (0.11–0.27) lies inside the null band (up to 0.42) — at/below the null mean for the consensus
+   coordinate (0.265 vs 0.299). So the interior peak is
    a mechanical artifact, not concept structure. In smoking, the former-smoker divergence (per-cohort
    classification agreement 78% / 66%; the source repo's pooled figure is 71%) is a
    **binary-threshold** effect (robust to the cutoff, but a boundary phenomenon); a threshold-free
    metric does **not** put the peak at the intermediate group, and is itself density-confounded — so no
    directional concentration law is claimed.
 3. **Reliability-gate / detection-floor instability is real and robust.** Kinase zero-active compounds
-   carry the large instability (disagreement ~40–92 vs ~21–25; ≥~2× the active level), stable across every pKd active cutoff
+   carry the large instability (disagreement ~40–92 vs ~21–25; ≈1.9–3.7× the active level), stable across every pKd active cutoff
    (5.5–7.0). These are exactly what the gate (G1) excludes; excluding them is necessary, not optional.
 4. **Reproducibility across cohorts (G4) is directionally supported.** In smoking the classification-
    agreement ordering (never > current > former) reproduces in both cohorts separately (GSE50660

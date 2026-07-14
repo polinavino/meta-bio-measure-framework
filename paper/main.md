@@ -95,10 +95,18 @@ Input: a latent concept κ; a set Ω of objects; several candidate measures f₁
 quantify κ; ideally ≥2 independent cohorts. Each step names the established result that justifies it
 (Appendix A).
 
-1. **Declare type and scale.** For each measure, state what comparative structure it represents (what it
-   would mean for one object to exceed another) and its scale of measurement. Measures of different
-   declared types are not rival estimates of one number and must not be benchmarked against each other.
-   *(RMT; Appendix A Def 1–2.)*
+1. **Declare type and scale, and verify orientation.** For each measure, state what comparative structure
+   it represents (what it would mean for one object to exceed another) and its scale of measurement.
+   Measures of different declared types are not rival estimates of one number and must not be benchmarked
+   against each other. **Then check each measure is oriented the right way** against a theory-light
+   *external anchor* for the concept — a crude, independent proxy that everyone agrees tracks it in the
+   obvious direction (number of active targets for selectivity, chronological age for clocks, self-reported
+   exposure for smoking): the measure should move with the anchor, not against it. This catches a measure
+   that passes every internal stability and monotonicity check yet points *backwards* — a real failure
+   mode (§4.1: a kinase selectivity measure that satisfied the stability and monotonicity desiderata while
+   ranking the most promiscuous compounds as the *most* selective). Internal consistency among the
+   measures cannot catch this, because they could be collectively mis-oriented; only an external anchor can.
+   *(RMT; G2; "Sharpening the desiderata" below; Appendix A Def 1–2.)*
 2. **Compute the consensus order and the disagreement set.** Form the partial order in which a ≽ b iff
    *every* measure ranks a ≥ b. The pairs on which the measures disagree are the candidate
    incomparabilities. *(Patil & Taillie; Appendix A Lemma 1.)*
@@ -114,8 +122,9 @@ quantify κ; ideally ≥2 independent cohorts. Each step names the established r
 5. **Cluster measures into families and score them against the desiderata.** Group measures by the
    ordering they induce (rank agreement); within a family they agree up to a monotone reparameterization
    (ordinal equivalence — *not* a shared interval/ratio scale; Appendix A Lemma 2). Then fill the
-   desiderata checklist (§3) — reliability gate, monotonicity, ordinal stability under nuisance,
-   cross-cohort reproducibility, intervention consistency — recording which measures satisfy which.
+   desiderata checklist — a reliability/domain gate (G1), monotonicity in the concept (G2), ordinal
+   stability under nuisance (G3), cross-cohort reproducibility (G4), intervention consistency (G5) —
+   recording which measures satisfy which. Three of these need care (see "Sharpening the desiderata" below).
 6. **Report a map, not a winner.** Because no measure is canonical when incomparabilities exist
    (Appendix A §4), report the comparability skeleton (where the concept decides), the reproducible
    incomparable set (where it does not), the families, and the desiderata table — rather than a single
@@ -128,6 +137,32 @@ quantify κ; ideally ≥2 independent cohorts. Each step names the established r
 
 The protocol's value is concentrated in steps 3–4: without them, naive disagreement metrics manufacture
 structure that proper controls dissolve (§5).
+
+**Sharpening the desiderata.** Validating a constructed selectivity measure across four kinase datasets
+(§4.1) exposed three subtleties that make three of the desiderata sharper than their one-line names
+suggest:
+
+- **G2 (monotonicity in the concept) must be checked against an external anchor, not internal
+  consistency.** A measure can satisfy stability, monotonicity, *and* fast panel-convergence while being
+  oriented backwards — the constructed candidate, before a correction, ranked the *most promiscuous*
+  compounds as *most* selective, and no internal check caught it; correlation with the crude external
+  anchor (number of active targets) did. Hence the orientation check in step 1. This is the operational
+  content of G2: order-preservation is meaningful only relative to an independently-anchored direction.
+  Applied across all four domains (`analysis/external_anchor.py`), every standard measure is correctly
+  oriented against its anchor (n_active / chronological age / exposure ordinal), while the mis-oriented
+  un-gated candidate is flagged — the check generalizes and has teeth.
+- **G3 (ordinal stability under nuisance) applies only to analyst-chosen parameters, not
+  apparatus-fixed ones.** A measure typically has two kinds of parameters: ones the analyst *chooses*
+  (a smoothing width, a normalization) and ones the measurement apparatus *fixes* (a detection floor, an
+  assay type). G3 should demand robustness to the former; the latter are declared context, not knobs to
+  vary. Conflating them cuts both ways — one can wrongly fault a measure for a parameter that is not
+  free, or wrongly pass it by testing the innocuous knob while the load-bearing one is pinned. (Empirical
+  wrinkle: how sensitive a ranking is to moving even a *fixed* boundary is itself data-dependent — it
+  depends on how many objects sit near the boundary.)
+- **G1 (the reliability/domain gate) can be load-bearing for correctness, not merely a courtesy flag.**
+  In the kinase case, gating out the sub-threshold (non-binding) region is not just about suppressing
+  low-signal noise: without the gate the measure *inverts*. So G1 can be what keeps a measure correctly
+  oriented at all — a stronger role than "report undefined below threshold."
 
 ---
 
@@ -189,7 +224,7 @@ datasets/three assay technologies (Davis 68×433, Klaeger 222×343, Anastassiadi
 - **Families (step 5):** two families by induced order — distribution {S-score, entropy, Gini}
   (within-r 0.74–0.99) and the target-ratio (cross-family r 0.14–0.62). Ordinal classes only.
 - **Reliability gate (step 5):** zero-active compounds carry large instability (disagreement ~40–92 vs
-  ~21–25 for active; ≥~2× the active level at every pKd active cutoff 5.5–7.0). These are exactly what the gate
+  ~21–25 for active; ≈1.9–3.7× the active level at every pKd active cutoff 5.5–7.0). These are exactly what the gate
   excludes; the "extreme instability" is a domain-of-definition issue, not concept structure.
 - **Locate disagreement, controlled (step 4):** pairwise discordance is governed by separation on the
   selectivity axis — equal-n_active pairs 76% discordant, well-separated pairs (Δ≥16) 19% — and axis
@@ -198,7 +233,15 @@ datasets/three assay technologies (Davis 68×433, Klaeger 222×343, Anastassiadi
 - **Canonical aggregate (step 7):** consensus poset over 206 gated-in compounds is 37.2% incomparable;
   the average-rank extension is best proxied by Gini (+0.955) and entropy (+0.950), worst by ratio
   (+0.796) — a quantitative "ratio is the outlier."
-- **Desiderata:** no existing measure satisfies all (D1–D4); consistent with non-uniqueness.
+- **Desiderata and the constructed candidate:** no *existing* measure satisfies all (D1–D4). A
+  constructed candidate can — but only once *correctly oriented*: a naive un-gated version **inverted**
+  (it ranked the most promiscuous compounds as the *most* selective, corr +0.94 with n_active) until
+  gated at the detection floor. In a fixed-floor form it must *pin* the active/inactive boundary to the
+  physical floor rather than leave it free — the price of keeping correct orientation is giving up
+  robustness to the boundary choice (Appendix A §5). The corrected, gated candidate then validates across
+  all four datasets (`selectivity/candidate_validation.py`: orientation −0.79 to −0.97, D4 100%,
+  T-robust). This is the running illustration for the orientation check (step 1) and the sharpened
+  desiderata (§2).
 
 ### 4.2 Epigenetic clocks (families and a scale caution)
 Concept: biological age. Five clocks, three *declared* types (position, deviation, rate) on 1,385 blood
@@ -282,6 +325,19 @@ With the protocol's controls applied, the honest, reproducible findings are:
    tiny 13-receptor panel and mixed conventions (§4.3). Honest reading: the *qualitative* law (near-ties
    disagree, well-separated objects agree) is domain-general and is the transferable content; the
    *quantitative* decay rate is domain-specific. This supports methodological — not numerical — generality.
+6. **The orientation check and external-anchor validation hold across all four domains**
+   (`analysis/external_anchor.py`). Every standard measure is correctly oriented against a crude external
+   anchor (n_active for selectivity, chronological age for clocks, exposure ordinal for smoking), and the
+   check flags the mis-oriented un-gated candidate as a control — so it generalizes and has teeth. The
+   consensus order agrees with the anchor in every domain (Spearman +0.65 to +0.94), rises from the
+   bottom to the top anchor tertile, and — where the anchor is continuous enough to split (kinase, clocks)
+   — agrees *more strongly at the extremes* than in the middle (kinase 0.92 vs 0.56; clocks 0.68 vs 0.36).
+   Two honest limits: for the discrete anchors (serotonin n_active-heavy ties; smoking's 3-level ordinal)
+   the extremes-vs-middle split is undefined, so that part-2 result rests on kinase + clocks; and for the
+   *position clocks* the anchor (chronological age) is their **training target**, so the clock leg is
+   confirmatory, not independent — the genuinely independent anchor checks are kinase, serotonin, and
+   smoking. With those caveats, the external-validity check the framework prescribes is demonstrated
+   rather than asserted.
 
 These are less sweeping than "the same five-part phenomenon recurs in four domains," and deliberately so:
 they are what survives controls. The protocol's contribution is precisely the machinery that separates

@@ -61,11 +61,16 @@ Re-scoped from a new-mathematics claim to a methods/Perspective paper after thre
 borrowed prior art (Patil–Taillie; RMT; Szpilrajn; average-rank canonical extension; Campbell–Fiske).
 Not yet tailored to a target venue (see below).
 
-## Refinements to fold in (from the kinase cross-dataset validation)
+## Refinements from the kinase cross-dataset validation — FOLDED IN ✓
 
 The kinase candidate was validated across all four datasets (orientation correct everywhere, D4 100%,
 T-robust, gate-necessity shown by the un-gated inversion). That work surfaced protocol/framework
-refinements worth adding to the meta-paper. Not yet written into `paper/main.md` — captured here first.
+refinements. **All four are written into the paper:** #1 → `paper/main.md` §2 step 1 + the
+"Sharpening the desiderata" note (G2); #2, #3 → same note (G3, G1) + `synthesis/repo-findings.md` §2.5
+table; #4 → `paper/formal-spine.md` §1.1. **#1 and #4 are now DEMONSTRATED across all four domains**
+(not just kinase-asserted) via `analysis/external_anchor.py` — every standard measure correctly oriented
+against its external anchor, the un-gated candidate control caught, and consensus–anchor agreement +0.65
+to +0.94 (stronger at the extremes); see main.md §5 point 6. The notes below are the rationale/record.
 
 1. **Orientation check against an external anchor → sharpen G2 (monotonicity in the concept).**
    The kinase candidate passed stability, monotonicity, and panel-convergence while being *oriented
@@ -98,7 +103,7 @@ refinements worth adding to the meta-paper. Not yet written into `paper/main.md`
 Also: the cross-dataset validation turns "a valid closed-form candidate exists" (option i) into
 "validated across four assay technologies," which strengthens the (i)-vs-(ii) framing in §5.
 
-Placement when written up: #1 → §2 protocol (an orientation step) + §3 G2; #2 → §3 G3; #3 → §3 G1;
+Placement when written up: #1 → §2 protocol (an orientation step) + the §2 "Sharpening the desiderata" note (G2); #2, #3 → that same §2 note (G3, G1);
 #4 → the `≽`-estimation / reproducibility discussion (formal-spine §1.1). Running illustration: the
 kinase inversion + cross-dataset validation (`selectivity/candidate_validation.py`).
 

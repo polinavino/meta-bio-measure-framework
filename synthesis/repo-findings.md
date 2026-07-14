@@ -85,17 +85,17 @@ Signatures `s_1..s_k`, each maps methylation profile M → scalar score.
 Does not restate or test them; reuses the four measures {S-score, entropy, Gini, ratio} + a bias
 factor (Kenakin operational-model transduction ratio) for biased agonism.
 
-### 2.5 Proposed unified schema (G-axioms) — the meta-paper's §3 contribution
+### 2.5 Proposed unified schema (G-axioms) — folded into the paper (§2 protocol step 5 + "Sharpening the desiderata")
 
 The domain lists are reorderings/projections of a small domain-independent set. Proposed mapping
 (this is a *synthesis*, to be defended in the paper, not something any single repo states):
 
-| General axiom | Kinase | Clocks | Methylation | Meaning (measurement-theoretic, see framework-core.md) |
+| General axiom | Kinase | Clocks | Methylation | Meaning (measurement-theoretic) |
 |---|---|---|---|---|
 | **G0 Type/scale declaration** | (implicit: "ratio answers a different question") | **D0** | (implicit) | Declare the empirical relational structure + scale type; cross-type comparison ill-formed. |
-| **G1 Reliability / domain gate** | **D1** | — | **C1** | The homomorphism is only defined on objects where the relation is observable. |
-| **G2 Monotonicity in the concept** | **D4** (directional: junk↛selective) | **D1** (age↑→out↑) | **C4** (exposure↑→score↑) | Order-preservation: the defining homomorphism condition. |
-| **G3 Ordinal stability under nuisance** | **D2, D3** | **D2** | **C2** | Induced order invariant to implementation-arbitrary parameters. |
+| **G1 Reliability / domain gate** | **D1** | — | **C1** | The homomorphism is defined only where the relation is observable. *Can be load-bearing for correctness, not just a flag* — kinase: without the gate the measure inverts (§6.2). |
+| **G2 Monotonicity in the concept** | **D4** (directional: junk↛selective) | **D1** (age↑→out↑) | **C4** (exposure↑→score↑) | Order-preservation (the homomorphism condition), *verified against an external anchor, not internal consistency* — a measure can be stable + monotone yet oriented backwards (kinase inversion, §6.2). |
+| **G3 Ordinal stability under nuisance** | **D2, D3** | **D2** | **C2** | Induced order invariant to *analyst-chosen* nuisance parameters; *apparatus-fixed* ones (detection floor, assay type) are declared context, not varied (kinase floor-vs-baseline, §6.2). |
 | **G4 Cross-instance reproducibility** | (panel-size stability) | **D3** | **C3** | The order is a property of the concept, not the sample; replicates across cohorts/panels. |
 | **G5 Intervention consistency** | — | **D4** | — | Order preserved under the relevant operations/interventions. |
 
@@ -113,7 +113,7 @@ closest to kinase **D4** (monotonicity under weak addition) blended with **D3** 
 stability). The G-schema above resolves this, but the paper must *show* the resolution, not assert it.
 
 **3.2 "Families" membership is NOT stable across domains — the biggest crack.**
-- Kinase (Davis/Klaeger): distribution family {S-score, entropy, Gini} within-r 0.75–0.999; **ratio is the outlier** (cross-family r 0.14–0.62). "Ratio is the consistent outlier."
+- Kinase (Davis/Klaeger): distribution family {S-score, entropy, Gini} within-r 0.74–0.99 (Davis reaches 0.999); **ratio is the outlier** (cross-family r 0.14–0.62). "Ratio is the consistent outlier."
 - Serotonin ChEMBL (n=297): {S-score, Gini, ratio} cluster; **entropy is the outlier** (entropy vs all ≈ 0; S-score–Gini = −0.682). Shulgin/PDSP (n=36): entropy again the outlier.
 - So *which* measure is categorically different flips between domains. Contributing factors: (a) **direction-convention inconsistency** — the serotonin scripts compute S-score as fraction *above* vs *below* threshold in different sub-analyses, and measures mix "higher=selective" vs "lower=selective", so raw correlation *signs* are not directly comparable to kinase; (b) **panel size** — 13 serotonin receptors vs 300–433 kinases; entropy's behavior is panel-size-dependent (it only stabilizes above ~110 targets in kinase data), so on 13 receptors it may genuinely measure something different.
 - **Safe claim for the paper:** the *phenomenon* "measures partition into a low-disagreement cluster plus at least one categorically-different outlier, by the order they induce" recurs; the *identity* of the outlier is scale- and panel-dependent. Do **not** claim entropy (or ratio) is universally the odd one out. This is more honest and still supports P2.
@@ -129,7 +129,7 @@ framework, each instantiated where it occurs, rather than implying all four inst
 a CV-methodology / scaffold-generalization question ("evaluations overstate performance"); it has no
 desiderata, no order relation, no families. The "second face of the same problem" reading is an
 *interpretive* mapping we would impose. → leans toward **companion citation, not deep fold-in** (§6
-decision). See framework-core.md §6 for the argument.
+decision). See `../paper/main.md` §5 (companion axis) and §6 for the argument.
 
 **3.5 Non-independence caveat (methylation FASD).** The strong blood episignature (van der Laan 2025)
 shares lab/tissue/likely samples with the eval cohorts → treat as **upper bound**, not clean
@@ -261,7 +261,8 @@ Interpreter: `/Users/polina/miniforge3/bin/python`; R 4.5.2. Scripts in the sess
   join: Spearman vs entropy −0.87, Gini −0.87, S-score −0.94, consensus-of-4 −0.86; robust across floors
   5.0→0.0. 93.6% of Klaeger entries are at the detection floor and softplus never zeroes them (pedestal
   T·log2≈0.69/kinase), so a truly selective compound (1 spike among 342 pedestals) looks near-uniform →
-  high entropy → ranked *non*-selective (worked ex.: 1-target H≈8.39 > 50-target H≈7.92). Not a sign
+  high entropy → ranked *non*-selective (schematic: 1-target candidate-H≈8.4 near the panel max, many-target
+  H lower; inversion direction confirmed on data — candidate_bench −0.87 vs entropy, un-gated +0.94 vs n_active). Not a sign
   typo. **Fix attempt reveals a fundamental tradeoff:** pedestal-subtraction restores orientation
   (entropy +1.00, S-score +0.94, canonical +0.996, p*=110, D4 100%) **but breaks D3** (worst-case −0.94,
   ≈ hard entropy). T-sweep: original is D3-robust(0.94–1.00) but inverted(−0.87); fixed is oriented(+1.00)
@@ -312,6 +313,16 @@ contradictory rankings" paragraph was **already commented out** by the author in
 `introduction.tex:44–51` — i.e. the P3 overclaim was deliberately avoided. P3 lived only in the
 meta-paper's synthesis and the original plan, and has now been removed there too.
 
+*Update (candidate repaired + validated):* the author fixed the inversion (§6.2) with a **hard gate at
+the fixed assay floor** (`selectivity/candidate_measure.py`; `candidate(P) = negH( 1[P>floor]·softplus((P−β)/T) )`)
+and added `candidate_validation.py` — validating the candidate across **all four datasets** (orientation
+−0.79 to −0.97, D4 100%, T-robust, cross-T agreement 0.999) with a per-dataset floor (incl. a
+%-inhibition adaptation for Anastassiadis), plus an explicit inversion demo (un-gated +0.94 vs n_active).
+The D3 story was corrected to be honest (emphasis-baseline robust; boundary pinned to the physical floor,
+its sensitivity reported). This cross-dataset validation is the **evidence base for the three protocol
+refinements** now folded into the meta-paper (external-anchor orientation → G2; apparatus-fixed vs
+analyst-chosen params → G3; gate load-bearing for correctness → G1; see §2.5 table and main.md §2).
+
 ### 6.5 Cross-domain transfer (the "earns its generality" test)
 Script `analysis/transfer.py`. For four domains (different concepts, measures, object types) — kinase
 selectivity (4 measures, 222 cpds), serotonin selectivity (4, 297), epigenetic age (5 clocks, 1385
@@ -326,3 +337,20 @@ issues (§3.2). Honest reading: the *near-tie law* (disagreement = near-ties) is
 domain-general regularity; the *magnitude/decay* is domain-specific (panel size, measure design). This
 supports methodological generality (one protocol, one universal qualitative law) without claiming a
 single quantitative curve fits all domains.
+
+### 6.6 Orientation check + external-anchor validation across domains (backs refinements #1, #4)
+Script `analysis/external_anchor.py`. For all four domains, with a crude external anchor per concept
+(kinase/serotonin selectivity → n_active; clocks → chronological age; smoking → never<former<current):
+- **Orientation check (G2/G1).** Every standard measure is correctly oriented against its anchor — kinase
+  S-score −1.00 / entropy −0.94 / Gini −0.94 / ratio −0.32; serotonin all NEG; clocks all POS (+0.33 to
+  +0.81 vs age); smoking all POS (+0.60 to +0.69). **Control:** the un-gated kinase candidate is +0.94 vs
+  n_active → flagged MIS-ORIENTED. So the check generalizes and catches a real inversion. (N: kinase 222,
+  serotonin 949 [≥4 receptors measured], clocks 1385, smoking 1085 [never/former/current only].)
+- **Anchor validates the consensus (formal-spine §1.1).** Consensus–anchor Spearman: kinase +0.94,
+  serotonin +0.82, clocks +0.65, smoking +0.68; consensus rises monotonically across anchor tertiles;
+  agreement is **higher at the extremes than the middle** where computable (kinase 0.92 vs 0.56; clocks
+  0.68 vs 0.36; serotonin/smoking middle undefined — discrete/tied anchor). Turns the §1.1 method from
+  asserted to demonstrated.
+Note (clocks): chronological age is also the training target of the position clocks, so their agreement
+is expected — but that is precisely the role of a crude external anchor (the obvious independent proxy),
+and the clocks are imperfect predictors (r 0.33–0.81), so there is genuine content.
