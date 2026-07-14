@@ -1,0 +1,15 @@
+data/
+*.rds
+*.rda
+*.RData
+*.Rhistory
+.DS_Store
+.claude/
+.vscode/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# keep the small derived score tables that analysis/transfer.py needs (override data/)
+!analysis/data/
+!analysis/data/*.csv
