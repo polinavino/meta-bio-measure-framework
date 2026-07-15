@@ -1,0 +1,37 @@
+==========================================================================
+(1) ORIENTATION CHECK vs ClinVar (path vs benign, >=1 star; n_labeled=361)
+    concept-positive measure should score pathogenic>benign  =>  AUC>0.5
+==========================================================================
+  TA:waf1          AUC=0.991  (n= 359, path=220)   OK
+  TA:mdm2          AUC=0.978  (n= 359, path=220)   OK
+  TA:bax           AUC=0.985  (n= 359, path=220)   OK
+  TA:h1433s        AUC=0.994  (n= 359, path=220)   OK
+  TA:aip1          AUC=0.993  (n= 359, path=220)   OK
+  TA:gadd45        AUC=0.989  (n= 359, path=220)   OK
+  TA:noxa          AUC=0.989  (n= 359, path=220)   OK
+  TA:p53r2         AUC=0.962  (n= 359, path=220)   OK
+  AlphaMissense    AUC=0.989  (n= 361, path=222)   OK
+  Giac:WT_Nutlin   AUC=0.064  (n= 358, path=222)   MIS-ORIENTED
+  Giac:Null_Nutlin AUC=0.058  (n= 358, path=222)   MIS-ORIENTED
+  Giac:Null_Etop   AUC=0.016  (n= 358, path=222)   MIS-ORIENTED
+  Kotler           AUC=0.017  (n= 243, path=205)   MIS-ORIENTED
+
+  (The 8 transactivation promoters + AlphaMissense should all read OK. The DMS null-selection
+   screens are the step-1 illustration: the anchor confirms/flags each screen's orientation.)
+
+==========================================================================
+(2) ANCHOR VALIDATES THE CONSENSUS  (core panel N=2314; consensus = mean rank of 9)
+==========================================================================
+  consensus AUC vs ClinVar path/benign: 0.997  (n=359, path=220)
+
+  Among ClinVar-labeled variants, by consensus tertile:
+   tertile   n_lab   %pathogenic   |   all core: %VUS(-1)   %unlabeled
+   bottom      74         0.00    |           0.38        0.51
+   middle      63         0.05    |           0.40        0.51
+   top        222         0.98    |           0.49        0.21
+  (Expect: %pathogenic rises bottom->top; VUS/unlabeled concentrate in the middle tertile —
+   the concept decides the extremes and is silent in the middle.)
+
+  Agreement (consensus AUC vs ClinVar) — extremes vs middle of the consensus axis:
+    extremes: consensus AUC 0.996  (n=296, path=217, benign=79)
+    middle  : consensus AUC 0.928  (n=63, path=3, benign=60)

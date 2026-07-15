@@ -13,3 +13,22 @@ __pycache__/
 # keep the small derived score tables that analysis/transfer.py needs (override data/)
 !analysis/data/
 !analysis/data/*.csv
+
+# TP53 instance: re-include tp53/data (data/ rule ignores it), keep the small derived + source tables
+# that all tp53/analysis/*.py need, but ignore the large re-downloadable raw files
+# (regenerate them via tp53/analysis/build_matrix.py — sources documented in tp53/analysis/README.md)
+!tp53/data/
+tp53/data/P53_HUMAN_*.csv
+tp53/data/alphamissense_TP53_P04637.tsv
+tp53/data/clinvar_TP53_variant_summary.tsv
+tp53/data/tp53_FunctionDownload_r21.csv
+
+# inflammation instance: re-include the folder (data/ rule ignores it), keep the small derived + tidy
+# source tables the scripts need; ignore the large re-downloadable raw files (regenerate the derived
+# tables via build_indices.py / build_sepsis_scores.py — sources documented in inflammation/README.md)
+!inflammation/data/
+inflammation/data/*.XPT
+inflammation/data/*.dat
+inflammation/data/GSE65682_series_matrix.txt.gz
+inflammation/data/GPL13667_probe_annotation.txt
+inflammation/data/sepsis_expr.parquet

@@ -1,0 +1,27 @@
+=== Inflammatory-index families (NHANES 2015-16, N=6197) ===
+
+Spearman correlation (all concept-positive; higher = more inflammation):
+          NLR   PLR   MLR   SII  SIRI   CRP   CAR
+  NLR   +1.00 +0.47 +0.62 +0.86 +0.84 +0.23 +0.23
+  PLR   +0.47 +1.00 +0.42 +0.63 +0.24 +0.04 +0.04
+  MLR   +0.62 +0.42 +1.00 +0.48 +0.77 +0.11 +0.12
+  SII   +0.86 +0.63 +0.48 +1.00 +0.77 +0.28 +0.28
+  SIRI  +0.84 +0.24 +0.77 +0.77 +1.00 +0.28 +0.28
+  CRP   +0.23 +0.04 +0.11 +0.28 +0.28 +1.00 +1.00
+  CAR   +0.23 +0.04 +0.12 +0.28 +0.28 +1.00 +1.00
+
+Within count-ratio family (NLR/PLR/MLR/SII/SIRI): r = 0.24..0.86, mean 0.61
+Within CRP-protein family (CRP/CAR):              r = 1.00..1.00, mean 1.00
+Between the two families:                         r = 0.04..0.28, mean 0.19
+
+Mean agreement of each index with the rest (ascending):
+  PLR   +0.31
+  CRP   +0.32
+  CAR   +0.32
+  MLR   +0.42
+  SIRI  +0.53
+  NLR   +0.54
+  SII   +0.55
+
+Reading: the count-ratio indices cohere; CRP/CAR sit apart (they measure an acute-phase protein,
+not a leukocyte ratio) — a family split by measurement basis, as in kinase and TP53.

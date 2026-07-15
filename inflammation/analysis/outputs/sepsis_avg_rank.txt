@@ -1,0 +1,17 @@
+Consensus poset over N=479 samples (5 signatures): incomparable fraction = 0.792
+Running two Bubley-Dyer chains ...
+Chain convergence: Spearman = 0.9602
+
+Spearman(signature ranking, canonical average-rank):
+  IFNg         rho=+0.756
+  MARS8        rho=+0.595
+  SRSq19       rho=+0.582
+  SRS7         rho=+0.568
+  Inflammatory rho=+0.473
+
+Mortality AUC:  canonical=0.600
+  Inflammatory 0.589
+  IFNg         0.597
+  SRS7         0.571
+  SRSq19       0.548
+  MARS8        0.505

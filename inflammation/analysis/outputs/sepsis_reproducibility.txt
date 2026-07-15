@@ -1,0 +1,17 @@
+=== Cross-cohort reproducibility: MARS discovery (N=263) vs validation (N=216) ===
+
+(a) mortality-orientation signs per cohort (should match):
+    {'Inflammatory': (-1, -1), 'IFNg': (-1, -1), 'SRS7': (-1, -1), 'SRSq19': (-1, -1), 'MARS8': (1, -1)} -> DIFFER
+
+(b) inter-signature correlation structure: Spearman(disc-vec, val-vec) = 0.321  (10 pairs); mean|Δr| = 0.152
+
+(c) near-tie slope (discordance near-tie -> well-separated), per cohort:
+    discovery   near-tie 0.994 -> well-separated 0.641
+    validation  near-tie 0.992 -> well-separated 0.414
+
+Reading (honest, mixed): the near-tie LAW reproduces qualitatively (steep near-tie->separated
+decline in both cohorts), and 4/5 orientation signs match. BUT reproducibility is WEAK compared
+to the NHANES indices: the fine correlation structure only weakly replicates (Spearman ~0.32 vs
+0.99 for indices) and MARS8's mortality orientation flips between cohorts. So in sepsis the
+qualitative regularity is stable but the detailed disagreement structure is only partly
+constitutive — reported as a limitation, not a strong reproducibility result.

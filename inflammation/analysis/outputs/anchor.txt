@@ -1,0 +1,23 @@
+=== Orientation + anchor validation (NHANES 2015-16, N=5327, deaths=224) ===
+
+(1) ORIENTATION — each index vs external anchors (expect mortality AUC>0.5, age r>0):
+  NLR    mortality AUC=0.656   age r=+0.134   OK
+  PLR    mortality AUC=0.551   age r=+0.048   OK
+  MLR    mortality AUC=0.718   age r=+0.226   OK
+  SII    mortality AUC=0.575   age r=+0.033   OK
+  SIRI   mortality AUC=0.672   age r=+0.145   OK
+  CRP    mortality AUC=0.608   age r=+0.151   OK
+  CAR    mortality AUC=0.617   age r=+0.161   OK
+
+(2) ANCHOR VALIDATES THE CONSENSUS (consensus = mean rank of 7 indices):
+  consensus mortality AUC = 0.669   |  consensus vs age r = +0.175
+
+  death rate by consensus tertile (expect monotone rise):
+    bottom  n=1776  death rate=0.021  mean age=44.6
+    middle  n=1775  death rate=0.032  mean age=47.9
+    top     n=1776  death rate=0.074  mean age=52.0
+
+  consensus mortality AUC:  extremes 0.692 (n=3552)  |  middle 0.508 (n=1775)
+
+  (Age confounds inflammation and mortality; mean age per tertile is reported so the reader can
+   see the anchor is crude but directionally valid — the point is orientation, not a causal claim.)

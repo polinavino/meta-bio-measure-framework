@@ -1,0 +1,13 @@
+=== Sepsis pairwise discordance among 5 signatures (N=479, 114,481 pairs) ===
+overall discordance rate: 0.792
+
+separation axis = consensus mean-rank:
+  |Δaxis| in [0.000,0.107]: discordance=0.990  (n=22,893)
+  |Δaxis| in [0.107,0.227]: discordance=0.950  (n=22,892)
+  |Δaxis| in [0.227,0.369]: discordance=0.882  (n=22,897)
+  |Δaxis| in [0.369,0.554]: discordance=0.753  (n=22,839)
+  |Δaxis| in [0.554,1.000]: discordance=0.386  (n=22,960)
+linear-prob R^2: sep-only=0.3021, sep+midpos=0.3210; midpos coef=+0.2735
+
+Reading: discordance falls with separation (near-tie law); the overall rate is high because the
+Hallmark and SRS families are near-orthogonal, so even well-separated pairs often disagree.

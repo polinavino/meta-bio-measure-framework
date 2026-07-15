@@ -1,0 +1,23 @@
+=== Sepsis anchor + endotype caveat (N=479, deaths=114) ===
+
+(1) each signature vs mortality (raw AUC and the orientation sign it implies):
+  Inflammatory raw AUC=0.411  -> orient -  (|AUC-0.5|=0.089)
+  IFNg         raw AUC=0.403  -> orient -  (|AUC-0.5|=0.097)
+  SRS7         raw AUC=0.429  -> orient -  (|AUC-0.5|=0.071)
+  SRSq19       raw AUC=0.452  -> orient -  (|AUC-0.5|=0.048)
+  MARS8        raw AUC=0.495  -> orient -  (|AUC-0.5|=0.005)
+  (Signatures differ in how strongly they track outcome; some barely beat chance — they do not
+   agree on who is high-risk, the same disagreement seen in the family structure.)
+
+(2) mortality-oriented consensus: AUC=0.601; death rate by consensus tertile:
+    bottom  n=161  death rate=0.161
+    middle  n=158  death rate=0.259
+    top     n=160  death rate=0.294
+
+(3) endotype caveat — signatures vs the given MARS labels (a PARTITION, not an order):
+    Mars1: n=132  mean consensus-rank pct=0.62
+    Mars2: n=176  mean consensus-rank pct=0.57
+    Mars3: n=118  mean consensus-rank pct=0.36
+    Mars4: n= 53  mean consensus-rank pct=0.27
+    The consensus separates the MARS endotypes only partially; comparing two label systems (e.g.
+    SRS vs MARS) needs cluster-agreement (ARI), not the average-rank machinery — an adjacent problem.

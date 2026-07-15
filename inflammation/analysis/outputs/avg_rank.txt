@@ -1,0 +1,22 @@
+Consensus poset over N=600 NHANES participants (7 indices): incomparable fraction = 0.728
+Running two Bubley-Dyer chains ...
+Chain convergence: Spearman = 0.9846
+
+Spearman(index ranking, canonical average-rank):
+  SII                      rho=+0.983
+  [equal-weight mean rank] rho=+0.899
+  NLR                      rho=+0.839
+  SIRI                     rho=+0.726
+  PLR                      rho=+0.721
+  MLR                      rho=+0.515
+  CRP                      rho=+0.335
+  CAR                      rho=+0.331
+
+Mortality AUC (n=600, deaths=25):  canonical=0.657
+  NLR   0.710
+  PLR   0.643
+  MLR   0.770
+  SII   0.635
+  SIRI  0.708
+  CRP   0.650
+  CAR   0.652

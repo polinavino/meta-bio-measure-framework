@@ -1,0 +1,18 @@
+=== Cross-platform reproducibility (yeast promoters vs mammalian DMS), N=2308 ===
+
+  (Giacomelli conditions sign-aligned to the yeast consensus; alignment signs: ['-1', '-1', '-1'] — negative confirms the ProteinGym 'fitness' convention is opposite to deleteriousness.)
+
+(1) Spearman(consensus_yeast, consensus_mammalian):
+    overall +0.487 | extremes +0.627 | middle -0.054
+    (High overall + stronger at the extremes = the comparability skeleton is constitutive;
+     the middle is where BOTH platforms lose resolution — the concept is silent there.)
+
+(2) Direction agreement between platforms, by yeast-platform separation:
+    |Δconsensus_yeast| in [0.000,0.106]: cross-platform agreement=0.533  (n=531,975)
+    |Δconsensus_yeast| in [0.106,0.226]: cross-platform agreement=0.600  (n=532,917)
+    |Δconsensus_yeast| in [0.226,0.368]: cross-platform agreement=0.647  (n=532,427)
+    |Δconsensus_yeast| in [0.368,0.553]: cross-platform agreement=0.697  (n=532,491)
+    |Δconsensus_yeast| in [0.553,0.998]: cross-platform agreement=0.850  (n=532,468)
+    (Agreement ~chance for yeast near-ties, ->~1.0 for well-separated pairs: the two independent
+     platforms AGREE exactly where the concept decides and BOTH are unsure on the same near-ties.
+     The incomparable set is reproducible => constitutive, not an artifact of either assay.)

@@ -1,0 +1,28 @@
+=== Evaluation overstatement ===
+ClinVar-labeled core variants (>=1 star): n=359, pathogenic=220, benign=139
+Pathogenic labels on the 6 hotspot codons: 0.10  (hotspots are 6/393 = 1.5% of positions)
+
+(1) AUC vs ClinVar path/benign:        all labeled | hotspots removed | drop
+    AlphaMissense                0.988       |   0.987        +0.001
+    EVE                          0.955       |   0.955        -0.000
+    ESM1b                        0.961       |   0.958        +0.003
+    REVEL                        0.971       |   0.968        +0.002
+    CADD                         0.928       |   0.925        +0.003
+    PrimateAI                    0.895       |   0.887        +0.008
+    BayesDel                     0.980       |   0.978        +0.002
+    median-of-8 (experimental)   0.994       |   0.993        +0.001
+    Honest null: removing hotspots barely changes AUC — at the unique-variant level ClinVar
+    is not hotspot-dominated, so the scaffold-memorization analogy does not bite in this slice.
+
+(2) Curated ClinVar AUC vs independent functional-truth AUC on the VUS:
+    (VUS n=988; functionally non-functional by the median<=20% rule: 236)
+    predictor                     ClinVar AUC | functional-truth AUC (VUS) | gap
+    AlphaMissense                0.988      | 0.889  (n=988)        +0.099
+    EVE                          0.955      | 0.867  (n=865)        +0.087
+    ESM1b                        0.961      | 0.866  (n=988)        +0.095
+    REVEL                        0.971      | 0.866  (n=988)        +0.105
+    CADD                         0.928      | 0.813  (n=988)        +0.115
+    PrimateAI                    0.895      | 0.785  (n=911)        +0.110
+    BayesDel                     0.980      | 0.866  (n=988)        +0.113
+    Every predictor scores lower against experimental truth on the VUS than against curated
+    ClinVar labels — the curated benchmark overstates skill on the decision-relevant variants.

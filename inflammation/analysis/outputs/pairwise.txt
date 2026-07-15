@@ -1,0 +1,21 @@
+=== Pairwise discordance among 7 indices (N=2000, 1,999,000 pairs) ===
+overall discordance rate: 0.736
+
+--- separation axis = consensus mean-rank (consensus coord) ---
+    |Δaxis| in [0.000,0.106]: discordance=0.987  (n=399,795)
+    |Δaxis| in [0.106,0.226]: discordance=0.940  (n=399,659)
+    |Δaxis| in [0.226,0.368]: discordance=0.833  (n=399,855)
+    |Δaxis| in [0.368,0.553]: discordance=0.638  (n=399,693)
+    |Δaxis| in [0.553,1.000]: discordance=0.285  (n=399,998)
+    linear-prob R^2: sep-only=0.3539, sep+midpos=0.3807; midpos coef=+0.3536
+
+--- separation axis = chronological age (external to the index formulas) ---
+    |Δaxis| in [0.000,0.106]: discordance=0.748  (n=398,698)
+    |Δaxis| in [0.106,0.227]: discordance=0.748  (n=400,076)
+    |Δaxis| in [0.227,0.368]: discordance=0.746  (n=399,669)
+    |Δaxis| in [0.368,0.552]: discordance=0.737  (n=398,841)
+    |Δaxis| in [0.552,0.965]: discordance=0.704  (n=401,716)
+    linear-prob R^2: sep-only=0.0015, sep+midpos=0.0015; midpos coef=+0.0077
+
+Reading: if discordance falls steeply with separation and midpos adds little, disagreement is a
+near-tie phenomenon, not a 'consequential middle' — the same pattern as kinase and TP53.

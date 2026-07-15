@@ -1,0 +1,37 @@
+=== TP53 measure families (core panel N=2314; pairwise-complete Spearman) ===
+
+Rank-correlation matrix (concept-positive; higher = more deleterious):
+            TA:waf1 TA:mdm2  TA:bax TA:h143 TA:aip1 TA:gadd TA:noxa TA:p53r AlphaMi     EVE   ESM1b   REVEL    CADD Primate BayesDe
+  TA:waf1       +1.00   +0.82   +0.86   +0.83   +0.76   +0.76   +0.76   +0.70   +0.64   +0.64   +0.56   +0.60   +0.54   +0.52   +0.59
+  TA:mdm2       +0.82   +1.00   +0.85   +0.80   +0.73   +0.70   +0.66   +0.67   +0.59   +0.56   +0.56   +0.55   +0.46   +0.50   +0.55
+  TA:bax        +0.86   +0.85   +1.00   +0.89   +0.82   +0.76   +0.76   +0.67   +0.60   +0.57   +0.49   +0.54   +0.47   +0.51   +0.53
+  TA:h1433s     +0.83   +0.80   +0.89   +1.00   +0.86   +0.85   +0.83   +0.72   +0.58   +0.57   +0.45   +0.53   +0.44   +0.51   +0.54
+  TA:aip1       +0.76   +0.73   +0.82   +0.86   +1.00   +0.83   +0.81   +0.74   +0.54   +0.53   +0.47   +0.47   +0.39   +0.54   +0.48
+  TA:gadd45     +0.76   +0.70   +0.76   +0.85   +0.83   +1.00   +0.84   +0.81   +0.48   +0.51   +0.41   +0.43   +0.35   +0.43   +0.45
+  TA:noxa       +0.76   +0.66   +0.76   +0.83   +0.81   +0.84   +1.00   +0.77   +0.54   +0.55   +0.43   +0.48   +0.45   +0.44   +0.48
+  TA:p53r2      +0.70   +0.67   +0.67   +0.72   +0.74   +0.81   +0.77   +1.00   +0.50   +0.49   +0.50   +0.43   +0.37   +0.40   +0.44
+  AlphaMissense   +0.64   +0.59   +0.60   +0.58   +0.54   +0.48   +0.54   +0.50   +1.00   +0.83   +0.76   +0.85   +0.81   +0.73   +0.84
+  EVE           +0.64   +0.56   +0.57   +0.57   +0.53   +0.51   +0.55   +0.49   +0.83   +1.00   +0.75   +0.81   +0.81   +0.63   +0.81
+  ESM1b         +0.56   +0.56   +0.49   +0.45   +0.47   +0.41   +0.43   +0.50   +0.76   +0.75   +1.00   +0.73   +0.67   +0.56   +0.73
+  REVEL         +0.60   +0.55   +0.54   +0.53   +0.47   +0.43   +0.48   +0.43   +0.85   +0.81   +0.73   +1.00   +0.85   +0.74   +0.93
+  CADD          +0.54   +0.46   +0.47   +0.44   +0.39   +0.35   +0.45   +0.37   +0.81   +0.81   +0.67   +0.85   +1.00   +0.66   +0.83
+  PrimateAI     +0.52   +0.50   +0.51   +0.51   +0.54   +0.43   +0.44   +0.40   +0.73   +0.63   +0.56   +0.74   +0.66   +1.00   +0.73
+  BayesDel      +0.59   +0.55   +0.53   +0.54   +0.48   +0.45   +0.48   +0.44   +0.84   +0.81   +0.73   +0.93   +0.83   +0.73   +1.00
+
+Within EXPERIMENTAL (8 promoters, 28 pairs):   r = 0.66..0.89, mean 0.78
+Within COMPUTATIONAL (7 predictors, 21 pairs): r = 0.56..0.93, mean 0.76
+BETWEEN experimental and computational:        r = 0.35..0.64, mean 0.50
+
+Mean agreement of each computational predictor with the 8 experimental readouts:
+  CADD         +0.43
+  PrimateAI    +0.48
+  ESM1b        +0.48
+  REVEL        +0.50
+  BayesDel     +0.51
+  EVE          +0.55
+  AlphaMissense +0.56
+
+Closest to experiment: AlphaMissense (+0.56); farthest: CADD (+0.43).
+Reading: each block is internally coherent and the two blocks agree less with each other than
+within themselves (between-mean below both within-means) — a family split by measurement basis
+(experimental function vs computational prediction), the TP53 analog of kinase's family structure.

@@ -1,0 +1,22 @@
+=== Sepsis signature families (GSE65682, N=479 mortality-labelled, deaths=114) ===
+
+orientation sign applied so each positively predicts mortality: {'Inflammatory': -1, 'IFNg': -1, 'SRS7': -1, 'SRSq19': -1, 'MARS8': -1}
+(a negative sign means the raw mean-z ran opposite to outcome — mean-z direction is not a-priori
+ meaningful for the mixed-direction SRS/MARS classifier genes.)
+
+Spearman among mortality-oriented signature scores:
+            Inflamm    IFNg    SRS7  SRSq19   MARS8
+  Inflammatory +1.00 +0.72 -0.03 -0.07 -0.02
+  IFNg        +0.72 +1.00 +0.09 +0.09 +0.39
+  SRS7        -0.03 +0.09 +1.00 +0.84 +0.12
+  SRSq19      -0.07 +0.09 +0.84 +1.00 +0.19
+  MARS8       -0.02 +0.39 +0.12 +0.19 +1.00
+
+Hallmark pair (Inflammatory,IFNg) r = +0.72
+SRS pair (SRS7,SRSq19)           r = +0.84
+Hallmark vs SRS families         r = -0.07..+0.09 (mean +0.02)
+MARS8 vs the rest                r = -0.02..+0.39
+
+Reading: even after orienting all five to the same outcome, the Hallmark-inflammatory and SRS
+families remain nearly independent — 'inflammatory dysregulation' is not one order. Strong
+instance of the framework's premise: competing measures of one concept genuinely disagree.

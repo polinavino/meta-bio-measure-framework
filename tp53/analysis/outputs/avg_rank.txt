@@ -1,0 +1,43 @@
+Consensus poset over N=2314 TP53 variants (9 measures): incomparable-pair fraction = 0.566
+Running two independent Bubley-Dyer chains (this takes ~1-2 min for N=2314) ...
+Chain convergence: Spearman(chain1, chain2) = 0.9979 (want ~1.0)
+
+Spearman(existing measure's ranking, canonical average-rank extension):
+  [field] median-of-8    rho=+0.987   mean|rank-canonical|=  74.9
+  TA:h1433s              rho=+0.943   mean|rank-canonical|= 160.9
+  TA:bax                 rho=+0.928   mean|rank-canonical|= 185.0
+  TA:aip1                rho=+0.898   mean|rank-canonical|= 214.6
+  TA:waf1                rho=+0.897   mean|rank-canonical|= 220.1
+  TA:gadd45              rho=+0.895   mean|rank-canonical|= 203.0
+  TA:noxa                rho=+0.874   mean|rank-canonical|= 228.1
+  TA:mdm2                rho=+0.861   mean|rank-canonical|= 249.7
+  TA:p53r2               rho=+0.822   mean|rank-canonical|= 266.1
+  AlphaMissense          rho=+0.597   mean|rank-canonical|= 452.5
+
+Best single proxy for the weight-free consensus: [field] median-of-8 (rho=+0.987)
+Strays most (commits beyond the consensus / outlier): AlphaMissense (rho=+0.597)
+
+Other computational predictors (external to the poset) vs the canonical order:
+  EVE          rho=+0.593  (n=1942)
+  ESM1b        rho=+0.501  (n=2314)
+  REVEL        rho=+0.540  (n=2314)
+  CADD         rho=+0.460  (n=2314)
+  PrimateAI    rho=+0.524  (n=2086)
+  BayesDel     rho=+0.540  (n=2314)
+  (All computational predictors, like AlphaMissense, sit well below the experimental measures'
+   agreement with the consensus — the computational family as a block diverges from it.)
+
+ClinVar discrimination (AUC path/benign, >=1 star; n=359, path=220):
+  canonical average-rank : 0.993
+  [field] median-of-8    : 0.994
+  TA:waf1               : 0.991
+  TA:mdm2               : 0.978
+  TA:bax                : 0.985
+  TA:h1433s             : 0.994
+  TA:aip1               : 0.993
+  TA:gadd45             : 0.989
+  TA:noxa               : 0.989
+  TA:p53r2              : 0.962
+  AlphaMissense         : 0.988
+
+Wrote tp53/data/tp53_canonical.csv (canonical average-rank per variant).

@@ -1,0 +1,41 @@
+Wrote /Users/polina/Documents/BioInfStuff/meta-bio-measure-framework/tp53/data/tp53_matrix.csv: 7486 unique missense variant keys
+
+Non-null coverage per column:
+  waf1              2314
+  mdm2              2314
+  bax               2314
+  h1433s            2314
+  aip1              2314
+  gadd45            2314
+  noxa              2314
+  p53r2             2314
+  ish_median        2314
+  am_path           7467
+  eve_score         6251
+  esm1b_llr         7467
+  revel             2320
+  cadd_phred        2320
+  primateai         2086
+  bayesdel_addaf    2320
+  giac_wtnut        7467
+  giac_nullnut      7467
+  giac_nulletop     7467
+  kotler            1048
+  clinvar_simple    1377
+
+Complete-panel counts (intersection):
+  all 8 promoters present:            2314
+  all 8 promoters + AlphaMissense:    2314
+  core + giac_wtnut       2308
+  core + kotler           973
+  core + eve_score        1942
+  core + esm1b_llr        2314
+  core + revel            2314
+  core + cadd_phred       2314
+  core + primateai        2086
+  core + bayesdel_addaf   2314
+  core + all 7 predictors:            1942
+
+ClinVar labels among core panel (all 8 promoters + AM):
+   {-1.0: 988, nan: 957, 1.0: 227, 0.0: 142}   (1=path,0=benign,-1=VUS/conflict,NaN=absent)
+  path/benign with >=1 star: 359

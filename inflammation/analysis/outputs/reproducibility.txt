@@ -1,0 +1,22 @@
+=== Cross-cohort reproducibility: NHANES 2015-16 (N=6197) vs 2017-18 (N=5882) ===
+
+(a) inter-index correlation structure:
+    Spearman(2015 corr-vector, 2017 corr-vector) = 0.995  (21 index pairs); mean|Δr| = 0.013
+(b) mean inter-index agreement:  2015 0.427  |  2017 0.427
+
+(c) near-tie slope (discordance by consensus-separation quintile), per cohort:
+    2015: near-tie discordance 0.987  ->  well-separated 0.285
+    2017: near-tie discordance 0.987  ->  well-separated 0.299
+
+(d) anchor orientation (index vs mortality AUC), per cohort:
+    index   2015    2017
+    NLR    0.656  0.668
+    PLR    0.551  0.506
+    MLR    0.718  0.717
+    SII    0.575  0.570
+    SIRI   0.672  0.699
+    CRP    0.608  0.597
+    CAR    0.617  0.606
+
+Reading: matching correlation structure, near-tie slopes, and anchor orientation across two
+independent cohorts => the disagreement structure is a property of the indices, not one sample.

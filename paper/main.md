@@ -38,7 +38,8 @@ best approximated by Gini and selectivity entropy and worst by the ratio measure
 in which the ratio is an outlier. We provide a domain-independent desiderata checklist (reliability gate,
 monotonicity, ordinal stability, cross-cohort reproducibility, intervention consistency) of which the
 published per-domain lists are specializations, and worked demonstrations in kinase pharmacology,
-epigenetic ageing, serotonin pharmacology, and methylation biomarkers.
+epigenetic ageing, serotonin pharmacology, methylation biomarkers, TP53 variant-effect prediction, and
+inflammatory-burden measures (clinical indices and sepsis signatures).
 
 ---
 
@@ -209,8 +210,8 @@ Bland–Altman proportional-bias/range effect (Bland & Altman 1995); §5 shows t
 ## 4. Worked demonstrations
 
 Each subsection applies the protocol. **Provenance:** the kinase near-tie/gate/canonical results (§4.1),
-the smoking per-cohort agreement (§4.4), and the cross-domain transfer (§5) are computed here with
-controls (`analysis/`). The remaining figures — clock affinities/cosine/cell-type (§4.2), FASD AUCs
+the smoking per-cohort agreement (§4.4), the cross-domain transfer (§5), and the entire TP53
+variant-effect instance (§4.5) are computed here on public data with controls (`analysis/`, `../tp53/`). The remaining figures — clock affinities/cosine/cell-type (§4.2), FASD AUCs
 (§4.4), serotonin S-score–Gini −0.682 (§4.3) — originate in the source-repo analyses and were
 **reproduced/confirmed locally this session** (`analysis/repro_borrowed.py`, `analysis/fasd_auc.R`):
 serotonin −0.682 exact; position-clock R² 0.991–0.995, rate–position signed-log R² 0.93–0.95,
@@ -276,6 +277,64 @@ signatures scored on blood transfer poorly (AUC 0.68–0.79); the strong blood-n
 the depositing author) and is an upper bound only. Shows the protocol classifying *which* desideratum
 fails, and step 3's independence caveat.
 
+### 4.5 TP53 variant effect (a strong-anchor, cross-platform demonstration)
+Concept: deleteriousness of a TP53 missense variant. Measures: eight Kato/Ishioka yeast transactivation
+readouts (WAF1, MDM2, BAX, 14-3-3σ, AIP1, GADD45, NOXA, P53R2; NCI *TP53 Database* = Kato 2003),
+AlphaMissense, and mammalian proliferation DMS screens (Giacomelli 2018 ×3, Kotler 2018); external
+anchor: ClinVar germline significance with review-star weighting. Core panel 2,314 missense variants
+(all eight promoters + AlphaMissense); full analysis in `../tp53/`.
+- **Orientation (step 1):** the eight transactivation readouts and AlphaMissense are correctly oriented
+  against ClinVar (AUC 0.96–0.99); **all four DMS proliferation screens read mis-oriented** (AUC
+  0.016–0.064) under the ProteinGym "higher = higher fitness" convention — higher proliferative fitness is
+  *less* deleterious — and must be flipped. A second concrete instance of the orientation check catching
+  a backwards measure by external anchor alone (cf. §4.1).
+- **Families (step 5):** the measures split into two families by measurement basis — eight experimental
+  transactivation readouts (within-*r* mean 0.78) and seven computational predictors (AlphaMissense, EVE,
+  ESM1b, REVEL, CADD, PrimateAI, BayesDel; within-*r* mean 0.76), agreeing less across the blocks (mean
+  0.50) than within either. The same family structure as kinase, here split by experiment vs prediction.
+- **Canonical aggregate (step 7):** the consensus poset is **56.6% incomparable** — the nine measures
+  jointly order fewer pairs than kinase's four did (37%); the
+  weight-free average-rank extension is best proxied by **the field's own median-of-eight-promoters rule
+  (ρ=0.987; Kato/ClinGen)** and worst by the seven computational predictors (ρ 0.46–0.60).
+  The protocol here *vindicates* an
+  existing field formula as an approximation of the minimal-commitment aggregate rather than displacing
+  it; both discriminate ClinVar at AUC ≈ 0.99.
+- **Located disagreement (step 4):** discordance is separation-driven (0.93 on the closest quintile →
+  0.05 on the widest). Unlike kinase, a **modest genuine middle residual survives** (mid-axis near-ties
+  disagree more; midpos coefficient +0.33 on the consensus axis, +0.10 on an independent AlphaMissense
+  axis) — the partial-LOF / separation-of-function variants. Reported as a real cross-domain *difference*,
+  not the retired "consequential middle."
+- **Reproducibility (step 3):** yeast transactivation vs mammalian proliferation — independent
+  *platforms* — agree ρ=0.49 overall, **+0.63 at the extremes, −0.05 in the middle**, and cross-platform
+  direction-agreement rises from 0.53 on near-ties (≈chance) to 0.85 when well-separated. The
+  comparability skeleton is constitutive; both platforms are unsure on the *same* near-ties.
+- **Companion axis:** across all seven predictors, each scores 0.90–0.99 against curated ClinVar but
+  0.79–0.89 against the experimentally-independent functional truth on the 988 VUS where prediction is
+  actually used (gap +0.09 to +0.12) — the ADMET "evaluations overstate performance" result in
+  variant-interpretation form. (A hotspot-codon holdout showed *no* inflation for any predictor and is
+  reported as an honest null.)
+
+### 4.6 Inflammatory burden (three sub-instances of varied strength)
+Concept: systemic inflammatory burden, quantified three ways on public data (full analysis in
+`../inflammation/`). These are reported at honest, varying strength.
+- **Clinical indices (strong).** Seven routine indices (NLR, PLR, MLR, SII, SIRI, CRP, CRP/albumin) on
+  two NHANES cycles (n≈6,000 each), anchor all-cause mortality. Two families by measurement basis
+  (leukocyte-count ratios vs CRP-protein; between-family *r*=0.19; CRP and CRP/albumin are rank-identical).
+  All correctly oriented; the consensus discriminates mortality at the extremes (AUC 0.69) but not the
+  middle (0.51). The correlation structure replicates across the two independent cycles at Spearman
+  **0.995** — the strongest reproducibility in this work.
+- **Sepsis signatures (strong disagreement, weak reproducibility).** Five published blood signatures
+  (Hallmark inflammatory, Hallmark IFN-γ, SRS7, SRSq19, MARS8) on GSE65682 (802 samples), anchor 28-day
+  mortality. The Hallmark and SRS families are **near-independent (cross-family *r*=+0.02)** — two
+  published "sepsis severity" signatures that barely agree. But cross-cohort (discovery vs validation)
+  reproducibility of the detailed structure is **weak (Spearman 0.32)**, and is reported as such.
+- **Inflammaging clocks (thin).** Only two composite clocks (SImAge; ipAGE, recomputed) are publicly
+  reconstructable on shared samples (n=343); iAge/IMM-AGE are not. Reported as a qualitative check, not a
+  full instance.
+
+The endotype-*labelling* problem (SRS vs MARS as partitions) is a clustering task, a different object
+from a scalar order; only the signature *scores* are analysed with the average-rank machinery.
+
 ---
 
 ## 5. What the demonstrations establish
@@ -338,6 +397,20 @@ With the protocol's controls applied, the honest, reproducible findings are:
    confirmatory, not independent — the genuinely independent anchor checks are kinase, serotonin, and
    smoking. With those caveats, the external-validity check the framework prescribes is demonstrated
    rather than asserted.
+7. **TP53 variant effect adds a strong-anchor, cross-platform confirmation — and one honest cross-domain
+   difference.** In a fifth domain (§4.5, `../tp53/`) the two-family structure, the near-tie law, and
+   the extremes-constitutive/middle-silent reproducibility pattern all recur, now with an unusually strong
+   anchor (ClinVar + experimental function) and genuine cross-*platform* (yeast vs mammalian) rather than
+   only cross-cohort independence. Two results sharpen the honest picture: the field's own median-of-eight
+   rule is an excellent approximation of the weight-free canonical aggregate (ρ=0.987) — the protocol
+   vindicates existing practice — and, unlike kinase, a *modest genuine middle residual* survives control
+   (separation-of-function variants), reported as a real difference rather than smoothed away.
+8. **Reproducibility is domain-dependent, and the test shows it.** Across inflammatory-burden measures
+   (§4.6) the constitutive/artifactual test gives sharply different verdicts: the disagreement structure
+   of clinical indices replicates across independent NHANES cycles at Spearman 0.995, while sepsis
+   signature structure replicates only weakly (0.32). Rather than a weakness, this is the test doing its
+   job — separating a stable, concept-level disagreement from a partly sample-specific one — and it
+   cautions against assuming any single instance's reproducibility generalises.
 
 These are less sweeping than "the same five-part phenomenon recurs in four domains," and deliberately so:
 they are what survives controls. The protocol's contribution is precisely the machinery that separates

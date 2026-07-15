@@ -354,3 +354,40 @@ Script `analysis/external_anchor.py`. For all four domains, with a crude externa
 Note (clocks): chronological age is also the training target of the position clocks, so their agreement
 is expected — but that is precisely the role of a crude external anchor (the obvious independent proxy),
 and the clocks are imperfect predictors (r 0.33–0.81), so there is genuine content.
+
+### 6.7 TP53 variant effect — NEW fifth domain instance (computed in this repo, not a source repo)
+Full writeup + scripts in `../tp53/` (`tp53/README.md`, `tp53/analysis/`). Concept = deleteriousness of a
+TP53 missense variant. Data (all public, assembled by `tp53/analysis/build_matrix.py`): 8 Kato/Ishioka
+yeast transactivation promoters (NCI TP53 DB r21 = Kato PNAS 2003), 7 computational predictors
+(AlphaMissense, EVE, ESM1b, REVEL, CADD, PrimateAI, BayesDel; EVE/ESM1b native, rest via dbNSFP v4.1a),
+Giacomelli 2018 ×3 + Kotler 2018 DMS (ProteinGym), ClinVar anchor. Core panel N=2314 (8 promoters +
+AlphaMissense; 227 P / 142 B / 988 VUS). Interpreter `/Users/polina/miniforge3/bin/python`.
+- *Orientation (step 1):* 8 promoters + AlphaMissense correctly oriented vs ClinVar (AUC 0.96–0.99);
+  **all 4 DMS proliferation screens MIS-ORIENTED** (AUC 0.016–0.064) under ProteinGym "higher=fitness"
+  convention → must be flipped. Concrete second instance of the orientation check catching a backwards
+  measure by external anchor.
+- *Families (step 5):* two families by measurement basis — 8 experimental transactivation readouts
+  (within-r mean 0.78) and 7 computational predictors (within-r mean 0.76), between-block mean 0.50.
+  Both internally coherent, less agreement across than within. AlphaMissense closest to experiment
+  (0.56), CADD farthest (0.43). = kinase's family structure, split by experiment vs prediction.
+- *Canonical (step 7):* consensus poset **56.6% incomparable**; Bubley–Dyer avg-rank (2 chains ρ=0.998)
+  best proxied by **field median-of-8 rule ρ=0.987** (Kato/ClinGen); all 7 computational predictors sit
+  ρ 0.46–0.60 (CADD 0.46 … AlphaMissense 0.60); canonical/median ClinVar AUC ≈0.99. → protocol *vindicates* an
+  existing field formula as ≈ the minimal-commitment aggregate.
+- *Located disagreement (step 4):* separation-driven (0.93→0.05 across separation quintiles) BUT a
+  **modest genuine middle residual survives** — midpos coef +0.33 (consensus axis) → **+0.10 (independent
+  AlphaMissense axis)**. Honest cross-domain DIFFERENCE vs kinase (which had ~0): partial-LOF /
+  separation-of-function variants. NOT the retired P3 "consequential middle".
+- *Reproducibility (step 3):* cross-**platform** (yeast transactivation vs mammalian proliferation, not
+  just cross-cohort): consensus ρ 0.49 overall / **+0.63 extremes / −0.05 middle**; direction-agreement
+  0.53 (near-ties) → 0.85 (well-separated). Skeleton constitutive; both platforms silent on same near-ties.
+- *Companion axis (evaluations overstate):* hotspot-codon holdout **null** for all predictors (AUC drop
+  ≤0.01; ClinVar not hotspot-dominated at unique-variant level — reported honestly). Real gap holds
+  across all 7 predictors: **0.90–0.99 vs curated ClinVar** but **0.79–0.89 vs experimentally-independent
+  functional truth on the 988 VUS** (gap +0.09 to +0.12). TP53 face of the ADMET sibling result.
+- *Honest limits:* predictor coverage varies (EVE residues 45–374 = 1942; family/canonical use
+  pairwise-complete corr); dbNSFP v4.1a lacks MetaRNN. 8 promoters are one study (Kato) — genuine
+  platform independence is from Giacomelli/Kotler; candidate additional platforms Funk 2025 (endogenous
+  CRISPR RFS), Boettcher 2019 (DN), Fayer 2021 (integrated consensus). Field formulas/hotspots = ClinGen
+  TP53 VCEP (Fortuno 2021).
+- *Placement:* folded into `../paper/main.md` as §4.5 + §5 point 7; abstract domain list updated.

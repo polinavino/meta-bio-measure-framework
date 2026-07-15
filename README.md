@@ -52,6 +52,13 @@ reasonable formulas at once, the consensus is the less arbitrary summary.
 - **`synthesis/repo-findings.md`** — verified ground truth from the five source repos; **§6** has the
   controlled re-analyses, prior-art map, and decision log. **Start here.**
 - **`analysis/`** — scripts reproducing the controlled findings (§6.2) + their README.
+- **`tp53/`** — fifth domain instance: TP53 variant-effect prediction, computed end-to-end on public data
+  (ProteinGym DMS + AlphaMissense + NCI/Kato transactivation + ClinVar). `tp53/README.md` writeup;
+  `tp53/analysis/` scripts. Folded into `paper/main.md` §4.5 (see `synthesis/repo-findings.md` §6.7).
+- **`inflammation/`** — sixth domain: inflammatory-burden measures, three sub-topics on public data
+  (clinical indices/NHANES — strong; sepsis signatures/GSE65682 — strong disagreement, weak
+  reproducibility; inflammaging clocks — thin). `inflammation/README.md` (incl. where the candidate
+  measures come from + the base-set/completeness caveat). Folded into `paper/main.md` §4.6.
 - **`paper/framework-core.md`**, **`meta-paper-plan.md`** — SUPERSEDED / historical (old "new-math" framing).
 
 ## Status (2026-07)

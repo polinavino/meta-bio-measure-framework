@@ -1,0 +1,35 @@
+=== Inflammaging (SImAge cohort, n=343) ===
+Status: {'Control': 300, 'ESRD': 43}
+recomputed ipAGE: ElasticNet on 300 controls, 37/46 nonzero coefs; ipAGE vs age r=0.744
+
+(families) Spearman among the 5 measures:
+          SImAge  ipAGE  CXCL9    IL6    TNF
+  SImAge   +1.00 +0.90 +0.88 +0.62 +0.48
+  ipAGE    +0.90 +1.00 +0.89 +0.56 +0.49
+  CXCL9    +0.88 +0.89 +1.00 +0.54 +0.48
+  IL6      +0.62 +0.56 +0.54 +1.00 +0.51
+  TNF      +0.48 +0.49 +0.48 +0.51 +1.00
+  clocks pair r=+0.90; within-cytokine mean +0.51; clocks-vs-cytokines mean +0.65
+
+(anchor) each measure vs chronological age (Spearman):
+  SImAge   +0.788
+  ipAGE    +0.744
+  CXCL9    +0.685
+  IL6      +0.507
+  TNF      +0.359
+  consensus (mean rank) vs age: +0.739
+  consensus vs age by tertile (mean age): bottom 36.5 | middle 52.0 | top 71.9
+
+(near-tie) pairwise discordance among the 5 measures vs consensus separation:
+  overall discordance 0.549
+    sep [0.00,0.13]: discordance 0.957
+    sep [0.13,0.30]: discordance 0.716
+    sep [0.30,0.50]: discordance 0.402
+    sep [0.50,1.00]: discordance 0.120
+
+(consensus poset) incomparable fraction = 0.541  (5 measures, n=343)
+
+Honest reading: SImAge and ipAGE (both age-trained composites) agree strongly; the single
+cytokines induce different orders and agree less with the clocks — competing quantifications of
+inflammatory burden that disagree, as elsewhere. But this panel is small, heterogeneous, and only
+2 measures are true published clocks; treat as a qualitative check, not a strong instance.

@@ -1,0 +1,38 @@
+=== TP53 pairwise discordance among 8 promoters (N=2314, 2,676,141 pairs) ===
+overall discordance rate: 0.482
+
+--- separation axis = 8-promoter consensus (consensus coord) ---
+  discordance by separation quintile (near-ties should dominate):
+    |Δaxis| in [0.000,0.106]: discordance=0.934  (n_pairs=534,943)
+    |Δaxis| in [0.106,0.226]: discordance=0.727  (n_pairs=534,881)
+    |Δaxis| in [0.226,0.368]: discordance=0.471  (n_pairs=535,637)
+    |Δaxis| in [0.368,0.553]: discordance=0.231  (n_pairs=534,798)
+    |Δaxis| in [0.553,0.998]: discordance=0.046  (n_pairs=535,882)
+  among NEAR-TIE pairs, discordance by middle-position of the pair:
+    ends     (midpos 0.00-0.33): discordance=0.851  (n_pairs=156,780)
+    mid-ish  (midpos 0.33-0.66): discordance=0.944  (n_pairs=186,503)
+    center   (midpos 0.66-1.01): discordance=0.992  (n_pairs=192,229)
+  linear-prob model R^2: sep-only=0.4030, sep+midpos=0.4217; midpos coef=+0.3347
+  => near-ties drive discordance; middle-position adds SOME beyond separation.
+
+--- separation axis = AlphaMissense (independent of the promoter panel) ---
+  discordance by separation quintile (near-ties should dominate):
+    |Δaxis| in [0.000,0.106]: discordance=0.614  (n_pairs=535,058)
+    |Δaxis| in [0.106,0.226]: discordance=0.583  (n_pairs=534,931)
+    |Δaxis| in [0.226,0.368]: discordance=0.521  (n_pairs=535,595)
+    |Δaxis| in [0.368,0.553]: discordance=0.433  (n_pairs=535,282)
+    |Δaxis| in [0.553,1.000]: discordance=0.257  (n_pairs=535,275)
+  among NEAR-TIE pairs, discordance by middle-position of the pair:
+    ends     (midpos 0.00-0.33): discordance=0.602  (n_pairs=156,788)
+    mid-ish  (midpos 0.33-0.66): discordance=0.609  (n_pairs=186,592)
+    center   (midpos 0.66-1.01): discordance=0.630  (n_pairs=192,212)
+  linear-prob model R^2: sep-only=0.0706, sep+midpos=0.0723; midpos coef=+0.0998
+  => near-ties drive discordance; middle-position adds SOME beyond separation.
+
+Conclusion (cf. kinase): separation (near-tie-ness) is the DOMINANT driver of TP53 disagreement
+(discordance ~0.93 at near-ties -> ~0.05 when well-separated). Unlike kinase, a MODEST residual
+middle effect survives: mid-deleteriousness near-ties disagree more than end near-ties. It is
+partly circular on the consensus axis (midpos coef +0.33) but shrinks to +0.10 on the independent
+AlphaMissense axis. Honest reading: the near-tie law holds and dominates, with a small genuine
+middle residual (partial-LOF / separation-of-function variants) that kinase lacked — a real
+cross-domain difference, not a 'consequential middle' of the retired P3 kind.
