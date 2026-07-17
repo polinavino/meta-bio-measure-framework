@@ -58,7 +58,7 @@ better question follows from an old and well-established view of what a measurem
 measurement theory (Krantz et al., 1971, Suppes et al., 1989, Luce et al., 1990), a measure is an
 order-preserving map from a concept's comparative structure into the real numbers. When several indicators
 target one concept, the aggregates consistent with all of them are exactly the *linear extensions* of the
-partial order the indicators jointly induce (Patil and Taillie 2004, Brüggemann and Patil 2011). We do not
+partial order the indicators jointly induce (Patil and Taillie, 2004, Brüggemann and Patil, 2011). We do not
 extend this theory. We bring it to biological measurement as a usable protocol, and show what it reveals,
 and what it dissolves.
 
@@ -210,7 +210,9 @@ below is copied from a stored analysis output in the project repository.
 ### 4.1 Kinase-inhibitor selectivity
 Concept: how concentrated an inhibitor's activity is across the kinome. Measures: the S-score, selectivity
 entropy, the Gini coefficient, and target-ratio, applied across four profiling datasets spanning three
-assay technologies (Davis 68 compounds, Klaeger 222, Anastassiadis 178, Metz 704). The measures split into
+assay technologies (Davis et al., 2011, 68 compounds, Klaeger et al., 2017, 222, Anastassiadis et al.,
+2011, 178, Metz et al., 2011, 704, with prior comparisons of these metrics by Uitdehaag and Zaman, 2011,
+and Bosc et al., 2017). The measures split into
 two families that measure different things. The S-score, entropy, and Gini quantify concentration across
 the panel and agree closely (within-family Spearman 0.74 to 0.99), while the target-ratio quantifies the
 gap to one off-target and is the consistent outlier (cross-family 0.14 to 0.62). On the reliability-gated
@@ -228,13 +230,28 @@ gated smooth-hinge effective-target number does.
 Concept: biological age. Measures: DNA-methylation clocks of three declared *types*, which the protocol's
 step 1 keeps separate rather than pooling. Position clocks report where a sample sits on the ageing
 trajectory, deviation clocks report departure from it, and rate clocks report speed along it (1,385 blood
-samples, GSE40279 and GSE87571). Position clocks are affine-related (R² 0.991 to 0.995), and rate clocks
+samples, GSE40279 and GSE87571). Rate clocks such as DunedinPACE (Belsky et al., 2022) are one declared
+type, and independent comparisons confirm that clocks disagree and differ in predictive value
+(Mavrommatis et al., 2025). Position clocks are affine-related (R² 0.991 to 0.995), and rate clocks
 relate to position through a signed logarithm (R² 0.93 to 0.95), a Weber-Fechner-like relation that is a
 descriptive observation, not a scale-type proof (Section 2). All clocks fail an ordinal-stability check
 against cell-type composition (absolute correlation up to 0.372), and GrimAge, a two-stage composite, is
 structurally near-orthogonal to the others (cosine of coefficient vectors between −0.17 and 0.11). The
 external anchor here, chronological age, is the training target of the position clocks, so for them the
 orientation check is confirmatory rather than independent. This is stated as a limitation.
+
+The clock idea is not specific to blood or to methylation. On a rat retinal bulk RNA-seq aging series
+(GSE314970, 85 samples over 6 to 27 months, Shavlakadze et al., 2026), five competing transcriptomic
+aging measures disagree sharply on the aging axis: the SenMayo and Fridman senescence signatures (Saul et
+al., 2022, Fridman and Tainsky, 2008), a Hallmark inflammatory inflammaging proxy, and a fitted
+elastic-net clock. Against true age they range from Spearman 0.98 for the fitted clock down to 0.13 for
+the Fridman senescence-up signature. The curated senescence signatures are weak individual age-trackers
+while the fitted clock is near-perfect. They split into a senescence and inflammaging family plus a
+distinct fitted-clock direction, the mean-rank consensus tracks age (0.755) and rises monotonically across
+age tertiles, and discordance falls with separation as elsewhere. This is a single-cohort, rat,
+single-sex extension with the clock trained in-distribution, so it is qualitative, on par with the
+inflammaging clocks. It shows the clock family structure and the near-tie pattern recur in a new tissue
+and a new measurement modality. Full analysis in the clock instance repository (`eye_aging/`).
 
 ### 4.3 Serotonin-receptor selectivity
 Concept: 5-HT2A versus 5-HT2B selectivity. The kinase selectivity measures transfer directly (ChEMBL
@@ -259,9 +276,11 @@ author), so it is an upper bound only.
 
 ### 4.5 TP53 variant effect
 Concept: the functional impact of a TP53 missense variant. Measures: eight Kato/Ishioka yeast
-transactivation readouts, seven computational pathogenicity predictors (AlphaMissense, EVE, ESM1b, REVEL,
-CADD, PrimateAI, BayesDel), and mammalian proliferation screens (Giacomelli, Kotler), with ClinVar as the
-external clinical anchor (core panel 2,314 variants). Step 1 earns its place here. The eight
+transactivation readouts (Kato et al., 2003), seven computational pathogenicity predictors (AlphaMissense,
+Cheng et al., 2023, EVE, Frazer et al., 2021, ESM1b, Brandes et al., 2023, plus REVEL, CADD, PrimateAI and
+BayesDel), and mammalian proliferation screens (Giacomelli et al., 2018, Kotler et al., 2018, via ProteinGym,
+Notin et al., 2023), with ClinVar (Landrum et al., 2018) as the external clinical anchor and the ClinGen
+TP53 specifications (Fortuno et al., 2021) for the field's functional rules (core panel 2,314 variants). Step 1 earns its place here. The eight
 transactivation readouts and AlphaMissense are correctly oriented against ClinVar (AUC 0.96 to 0.99),
 while all four proliferation screens read as mis-oriented (AUC 0.016 to 0.064) under the naive "higher
 fitness is worse" convention, so they must be flipped before use. The measures form two families by
@@ -288,13 +307,17 @@ ratios and CRP-protein, nearly independent of each other (between-family mean 0.
 albumin ratio are rank-identical (1.00), so one is redundant. The consensus discriminates mortality at the
 extremes (AUC 0.69) but not the middle (0.51), and its inter-index correlation structure replicates across
 the two cycles at Spearman **0.995**, the strongest reproducibility in this work. **Sepsis signatures
-(strong disagreement, weak reproducibility):** five published blood signatures (Hallmark inflammatory,
-Hallmark interferon-γ, SRS7, SRSq19, MARS8) on GSE65682 (802 samples), anchor 28-day mortality. The
+(strong disagreement, weak reproducibility):** five published blood signatures (the Hallmark inflammatory
+and interferon-γ sets, Liberzon et al., 2015, the SRS7 and SRSq19 Sepsis Response Signatures, Davenport et
+al., 2016, and the MARS8 endotype signature, Scicluna et al., 2017) on GSE65682 (802 samples), anchor
+28-day mortality. The
 Hallmark and SRS families are near-independent (cross-family mean +0.02), so two published sepsis-severity
 signatures barely agree, but the detailed structure replicates only weakly across the discovery and
 validation cohorts (Spearman 0.32), which we report as a limitation rather than a success. **Inflammaging
-clocks (thin):** only two composite clocks are publicly reconstructable on shared samples (SImAge, and
-ipAGE recomputed), so this is a qualitative check, not a full instance. Sepsis *endotype labels* (SRS
+clocks (thin):** only two composite clocks are publicly reconstructable on shared samples, SImAge
+(Kalyakulina et al., 2023) and a recomputed ipAGE (Yusipov et al., 2022). Two further inflammaging clocks,
+iAge (Sayed et al., 2021) and IMM-AGE, are not reconstructable here, so this is a qualitative check, not a
+full instance. Sepsis *endotype labels* (SRS
 versus MARS) are partitions rather than scalar orders, a related but different object for which cluster
 agreement, not average rank, is the right tool. Only the signature scores are analysed with the protocol.
 
@@ -390,10 +413,15 @@ cluster-agreement methods, not the average-rank machinery, apply.
 
 **Scope and relation to prior work.** The formalism is entirely borrowed. It is representational
 measurement theory (Krantz et al., 1971), the partial-order theory of multi-indicator systems (Patil and
-Taillie 2004, Brüggemann and Patil 2011), Szpilrajn's extension theorem, and the average-rank canonical
-extension (De Loof et al. 2008). The clearest prior application of measurement theory in biology (Houle et
-al. 2011) treats single measurements and scale types rather than competing measures of one concept as
-extensions of a shared partial order. Our contribution is the protocol, the constitutive/artefactual
+Taillie 2004, Brüggemann and Patil, 2011), Szpilrajn's extension theorem, and the average-rank canonical
+extension (De Loof et al., 2008). The clearest prior application of measurement theory in biology (Houle et
+al., 2011) treats single measurements and scale types rather than competing measures of one concept as
+extensions of a shared partial order. The partial-order approach has precedent in environmental chemistry
+(Halfon and Reggiani, 1986) and in social indicators (Fattore, 2016), and it contrasts with
+rank-aggregation methods that force a consensus (Dwork et al., 2001, Kolde et al., 2012) rather than
+preserve incomparability. An early biological instance of measures that share few components yet agree
+where the concept is determined is the concordance among breast-cancer gene-expression predictors (Fan et
+al., 2006). Our contribution is the protocol, the constitutive/artefactual
 reproducibility test, and the cross-domain demonstration on public data. The value, for a working analyst,
 is a reusable and honest procedure for the recurring situation of several defensible measures of one
 latent concept that refuse to agree.
@@ -469,7 +497,7 @@ exist. So when incomparabilities exist there are at least two order-distinct adm
 requirement that only entails order-preservation can single one out. This justifies step 6.
 
 **The canonical aggregate.** When a single summary is required, the average rank of each object over the
-linear extensions of ≽𝓜 (Patil and Taillie 2004, De Loof et al. 2008) is the centroid of the admissible
+linear extensions of ≽𝓜 (Patil and Taillie, 2004, De Loof et al., 2008) is the centroid of the admissible
 class. It agrees with every admissible measure on the comparable pairs, and on each incomparable pair it
 returns the fraction of extensions ranking one object above the other. It is weight-free and
 parameter-free. Exact enumeration is #P-complete (Brightwell and Winkler, 1991), so it is estimated by
@@ -478,79 +506,92 @@ justifies step 7.
 
 ## References
 
-*Author-year list below. The methodological references are verified in `related-work.md`. The
-domain/data-source references are the standard citations for each dataset and need a final page/year
-verification and conversion to JTB's reference style before submission. Two items flagged in
-`related-work.md` to confirm against the primary source: Foundations of Measurement Vol. II year (1989
-vs 1990), and Michell (1997) page range.*
+*Elsevier name-date (Harvard) style; DOIs verified against primary/publisher records. `[UNVERIFIED]` tags mark residual gaps to confirm at proof. Journal house style (including semicolon-separated in-text citation lists) is applied by the journal at proof.*
 
-**Foundations (measurement theory, order theory, aggregation).**
-- Arrow, K.J. (1963). *Social Choice and Individual Values*, 2nd ed. Wiley.
-- Bland, J.M. and Altman, D.G. (1995). Comparing methods of measurement. *Lancet* 346, 1085–1087.
-- Brightwell, G. and Winkler, P. (1991). Counting linear extensions. *Order* 8, 225–242.
-- Brüggemann, R. and Patil, G.P. (2011). *Ranking and Prioritization for Multi-indicator Systems*. Springer.
-- Bubley, R. and Dyer, M. (1999). Faster random generation of linear extensions. *Discrete Mathematics*
-  201, 81–88.
-- Campbell, D.T. and Fiske, D.W. (1959). Convergent and discriminant validation by the
-  multitrait-multimethod matrix. *Psychological Bulletin* 56(2), 81–105.
-- De Loof, K., De Baets, B., De Meyer, H. and Brüggemann, R. (2008). A Hitchhiker's Guide to Poset Ranking.
-  *Comb. Chem. High Throughput Screen.* 11(9), 734–744.
-- De Loof, K., De Baets, B. and De Meyer, H. (2011). Approximation of Average Ranks in Posets.
-  *MATCH Commun. Math. Comput. Chem.* 66(1), 219–229.
-- Dwork, C., Kumar, R., Naor, M. and Sivakumar, D. (2001). Rank aggregation methods for the web. *WWW '01*.
-- Fattore, M. (2016). Partially Ordered Sets and the Measurement of Multidimensional Ordinal Deprivation.
-  *Social Indicators Research* 128(2), 835–858.
-- Halfon, E. and Reggiani, M.G. (1986). On ranking chemicals for environmental hazard. *Environ. Sci.
-  Technol.* 20(11), 1173–1179.
-- Houle, D., Pélabon, C., Wagner, G.P. and Hansen, T.F. (2011). Measurement and Meaning in Biology.
-  *Quarterly Review of Biology* 86(1), 3–34.
-- Krantz, D.H., Luce, R.D., Suppes, P. and Tversky, A. (1971). *Foundations of Measurement, Vol. I*.
-  Academic Press.
-- Kolde, R., Laur, S., Adler, P. and Vilo, J. (2012). Robust rank aggregation for gene list integration.
-  *Bioinformatics* 28(4), 573–580.
-- Lerche, D., Sørensen, P.B. and Brüggemann, R. (2003). Improved estimation of the ranking probabilities
-  in partial orders. *J. Chem. Inf. Comput. Sci.* 43(5), 1471–1480.
-- Luce, R.D., Krantz, D.H., Suppes, P. and Tversky, A. (1990). *Foundations of Measurement, Vol. III*.
-  Academic Press.
-- Michell, J. (1999). *Measurement in Psychology: A Critical History of a Methodological Concept*.
-  Cambridge University Press.
-- Patil, G.P. and Taillie, C. (2004). Multiple indicators, partially ordered sets, and linear extensions.
-  *Environmental and Ecological Statistics* 11(2), 199–228.
-- Singleton, J. and Booth, R. (2022). Towards an axiomatic approach to truth discovery. *Autonomous Agents
-  and Multi-Agent Systems* 36(2), 42.
-- Suppes, P., Krantz, D.H., Luce, R.D. and Tversky, A. (1989). *Foundations of Measurement, Vol. II*.
-  Academic Press.
-- Szpilrajn, E. (1930). Sur l'extension de l'ordre partiel. *Fundamenta Mathematicae* 16, 386–389.
+Anastassiadis, T., Deacon, S.W., Devarajan, K., Ma, H., Peterson, J.R., 2011. Comprehensive assay of kinase catalytic activity reveals features of kinase inhibitor selectivity. Nature Biotechnology 29, 1039–1045. https://doi.org/10.1038/nbt.2017
 
-**Domain precedents and data sources.**
-- Belsky, D.W. et al. (2022). DunedinPACE, a DNA methylation biomarker of the pace of aging. *eLife* 11,
-  e73420.
-- Bosc, N. et al. (2017). Large-scale comparison of kinase selectivity metrics. *BMC Bioinformatics* 18, 17.
-- Cheng, J. et al. (2023). Accurate proteome-wide missense variant effect prediction with AlphaMissense.
-  *Science* 381, eadg7492.
-- Davenport, E.E. et al. (2016). Genomic landscape of the individual host response and outcomes in sepsis
-  (SRS). *Lancet Respiratory Medicine* 4, 259–271.
-- Fan, C. et al. (2006). Concordance among gene-expression-based predictors for breast cancer.
-  *New England Journal of Medicine* 355(6), 560–569.
-- Fortuno, C. et al. (2021). Specifications of the ACMG/AMP variant interpretation guidelines for germline
-  TP53. *Human Mutation* 42, 223–236.
-- Furman, D. et al. (2021). An inflammatory aging clock (iAge). *Nature Aging* 1, 598–615.
-- Giacomelli, A.O. et al. (2018). Mutational processes shape the landscape of TP53 mutations in human
-  cancer. *Nature Genetics* 50, 1381–1387.
-- Kato, S. et al. (2003). Understanding the function-structure and function-mutation relationships of p53.
-  *PNAS* 100, 8424–8429.
-- Kotler, E. et al. (2018). A systematic p53 mutation library links differential functional impact to
-  cancer mutation pattern. *Molecular Cell* 71, 178–190.
-- Mavrommatis, T. et al. (2025). An unbiased comparison of 14 epigenetic clocks. *Nature Communications*
-  16, 11164.
-- Notin, P. et al. (2023). ProteinGym: large-scale benchmarks for protein fitness prediction. *NeurIPS
-  Datasets and Benchmarks*.
-- Scicluna, B.P. et al. (2017). Classification of patients with sepsis according to blood genomic endotype
-  (MARS). *Lancet Respiratory Medicine* 5, 816–826.
-- Uitdehaag, J.C.M. and Zaman, G.J.R. (2011). A theoretical entropy score as a single value to express
-  inhibitor selectivity. *BMC Bioinformatics* 12, 94.
-- *Additional data sources to cite: NHANES (CDC, 2015–2016 and 2017–2018 cycles) and its Linked Mortality
-  File, ClinVar (Landrum et al. 2018), dbNSFP (Liu et al.), EVE (Frazer et al. 2021), ESM1b (Brandes et
-  al. 2023), SImAge and ipAGE (Kalyakulina et al. 2023 and 2022), MSigDB Hallmark gene sets (Liberzon et
-  al. 2015). The four kinase datasets: Davis et al. 2011, Klaeger et al. 2017, Anastassiadis et al. 2011,
-  Metz et al. 2011.*
+Arrow, K.J., 1963. Social Choice and Individual Values, 2nd ed. Wiley, New York.
+
+Belsky, D.W., Caspi, A., Corcoran, D.L., Sugden, K., Poulton, R., Arseneault, L., Baccarelli, A., Chamarti, K., Gao, X., Hannon, E., Harrington, H.L., Houts, R., Kothari, M., Kwon, D., Mill, J., Schwartz, J., Vokonas, P., Wang, C., Williams, B.S., Moffitt, T.E., 2022. DunedinPACE, a DNA methylation biomarker of the pace of aging. eLife 11, e73420. https://doi.org/10.7554/eLife.73420
+
+Bland, J.M., Altman, D.G., 1995. Comparing methods of measurement: why plotting difference against standard method is misleading. Lancet 346, 1085–1087. https://doi.org/10.1016/S0140-6736(95)91748-9
+
+Bosc, N., Meyer, C., Bonnet, P., 2017. The use of novel selectivity metrics in kinase research. BMC Bioinformatics 18, 17. https://doi.org/10.1186/s12859-016-1413-y
+
+Brandes, N., Goldman, G., Wang, C.H., Ye, C.J., Ntranos, V., 2023. Genome-wide prediction of disease variant effects with a deep protein language model. Nature Genetics 55, 1512–1522. https://doi.org/10.1038/s41588-023-01465-0
+
+Brightwell, G., Winkler, P., 1991. Counting linear extensions. Order 8, 225–242. https://doi.org/10.1007/BF00383444
+
+Brüggemann, R., Patil, G.P., 2011. Ranking and Prioritization for Multi-indicator Systems: Introduction to Partial Order Applications. Springer, New York.
+
+Bubley, R., Dyer, M., 1999. Faster random generation of linear extensions. Discrete Mathematics 201, 81–88. https://doi.org/10.1016/S0012-365X(98)00333-1
+
+Campbell, D.T., Fiske, D.W., 1959. Convergent and discriminant validation by the multitrait-multimethod matrix. Psychological Bulletin 56, 81–105. https://doi.org/10.1037/h0046016
+
+Cheng, J., Novati, G., Pan, J., Bycroft, C., Žemgulytė, A., Applebaum, T., Pritzel, A., Wong, L.H., Zielinski, M., Sargeant, T., Schneider, R.G., Senior, A.W., Jumper, J., Hassabis, D., Kohli, P., Avsec, Ž., 2023. Accurate proteome-wide missense variant effect prediction with AlphaMissense. Science 381, eadg7492. https://doi.org/10.1126/science.adg7492
+
+Davenport, E.E., Burnham, K.L., Radhakrishnan, J., Humburg, P., Hutton, P., Mills, T.C., Rautanen, A., Gordon, A.C., Garrard, C., Hill, A.V.S., Hinds, C.J., Knight, J.C., 2016. Genomic landscape of the individual host response and outcomes in sepsis: a prospective cohort study. Lancet Respiratory Medicine 4, 259–271. https://doi.org/10.1016/S2213-2600(16)00046-1
+
+Davis, M.I., Hunt, J.P., Herrgard, S., Ciceri, P., Wodicka, L.M., Pallares, G., Hocker, M., Treiber, D.K., Zarrinkar, P.P., 2011. Comprehensive analysis of kinase inhibitor selectivity. Nature Biotechnology 29, 1046–1051. https://doi.org/10.1038/nbt.1990
+
+Dwork, C., Kumar, R., Naor, M., Sivakumar, D., 2001. Rank aggregation methods for the web. In: Proceedings of the 10th International Conference on World Wide Web (WWW '01). ACM, New York, pp. 613–622. https://doi.org/10.1145/371920.372165
+
+Fan, C., Oh, D.S., Wessels, L., Weigelt, B., Nuyten, D.S.A., Nobel, A.B., van't Veer, L.J., Perou, C.M., 2006. Concordance among gene-expression-based predictors for breast cancer. New England Journal of Medicine 355, 560–569. https://doi.org/10.1056/NEJMoa052933
+
+Fattore, M., 2016. Partially ordered sets and the measurement of multidimensional ordinal deprivation. Social Indicators Research 128, 835–858. https://doi.org/10.1007/s11205-015-1059-6
+
+Fortuno, C., Lee, K., Olivier, M., Pesaran, T., Mai, P.L., de Andrade, K.C., Attardi, L.D., Crowley, S., Evans, D.G., Feng, B.J., Foreman, A.K.M., Frone, M.N., Huether, R., James, P.A., McGoldrick, K., Mester, J., Seifert, B.A., Slavin, T.P., Witkowski, L., Zhang, L., Plon, S.E., Spurdle, A.B., Savage, S.A., 2021. Specifications of the ACMG/AMP variant interpretation guidelines for germline TP53 variants. Human Mutation 42, 223–236. https://doi.org/10.1002/humu.24152
+
+Frazer, J., Notin, P., Dias, M., Gomez, A., Min, J.K., Brock, K., Gal, Y., Marks, D.S., 2021. Disease variant prediction with deep generative models of evolutionary data. Nature 599, 91–95. https://doi.org/10.1038/s41586-021-04043-8
+
+Fridman, A.L., Tainsky, M.A., 2008. Critical pathways in cellular senescence and immortalization revealed by gene expression profiling. Oncogene 27, 5975–5987. https://doi.org/10.1038/onc.2008.213
+
+Giacomelli, A.O., Yang, X., Lintner, R.E., McFarland, J.M., Duby, M., Kim, J., Howard, T.P., Takeda, D.Y., Ly, S.H., Kim, E., Gannon, H.S., Hurhula, B., Sharpe, T., Goodale, A., Fritchman, B., Steelman, S., Vazquez, F., Tsherniak, A., Aguirre, A.J., Doench, J.G., Piccioni, F., Roberts, C.W.M., Meyerson, M., Getz, G., Johannessen, C.M., Root, D.E., Hahn, W.C., 2018. Mutational processes shape the landscape of TP53 mutations in human cancer. Nature Genetics 50, 1381–1387. https://doi.org/10.1038/s41588-018-0204-y
+
+Halfon, E., Reggiani, M.G., 1986. On ranking chemicals for environmental hazard. Environmental Science & Technology 20, 1173–1179. https://doi.org/10.1021/es00154a010
+
+Houle, D., Pélabon, C., Wagner, G.P., Hansen, T.F., 2011. Measurement and meaning in biology. Quarterly Review of Biology 86, 3–34. https://doi.org/10.1086/658408
+
+Kalyakulina, A., Yusipov, I., Kondakova, E., Bacalini, M.G., Franceschi, C., Vedunova, M., Ivanchenko, M., 2023. Small immunological clocks identified by deep learning and gradient boosting. Frontiers in Immunology 14, 1177611. https://doi.org/10.3389/fimmu.2023.1177611
+
+Kato, S., Han, S.Y., Liu, W., Otsuka, K., Shibata, H., Kanamaru, R., Ishioka, C., 2003. Understanding the function-structure and function-mutation relationships of p53 tumor suppressor protein by high-resolution missense mutation analysis. Proceedings of the National Academy of Sciences of the United States of America 100, 8424–8429. https://doi.org/10.1073/pnas.1431692100
+
+Klaeger, S., Heinzlmeir, S., Wilhelm, M., Polzer, H., Vick, B., Koenig, P.A., Reinecke, M., Ruprecht, B., Petzoldt, S., Meng, C., Zecha, J., Reiter, K., Qiao, H., Helm, D., Koch, H., Schoof, M., Canevari, G., Casale, E., Re Depaolini, S., Feuchtinger, A., Wu, Z., Schmidt, T., Rueckert, L., Becker, W., Huenges, J., Garz, A.K., Gohlke, B.O., Zolg, D.P., Kayser, G., Vooder, T., Preissner, R., Hahne, H., Tõnisson, N., Kramer, K., Götze, K., Bassermann, F., Schlegl, J., Ehrlich, H.C., Aiche, S., Walch, A., Greif, P.A., Schneider, S., Felder, E.R., Ruland, J., Médard, G., Jeremias, I., Spiekermann, K., Kuster, B., 2017. The target landscape of clinical kinase drugs. Science 358, eaan4368. https://doi.org/10.1126/science.aan4368
+
+Kolde, R., Laur, S., Adler, P., Vilo, J., 2012. Robust rank aggregation for gene list integration and meta-analysis. Bioinformatics 28, 573–580. https://doi.org/10.1093/bioinformatics/btr709
+
+Kotler, E., Shani, O., Goldfeld, G., Lotan-Pompan, M., Tarcic, O., Gershoni, A., Hopf, T.A., Marks, D.S., Oren, M., Segal, E., 2018. A systematic p53 mutation library links differential functional impact to cancer mutation pattern and evolutionary conservation. Molecular Cell 71, 178–190.e8. https://doi.org/10.1016/j.molcel.2018.06.012
+
+Krantz, D.H., Luce, R.D., Suppes, P., Tversky, A., 1971. Foundations of Measurement, Vol. I: Additive and Polynomial Representations. Academic Press, New York.
+
+Landrum, M.J., Lee, J.M., Benson, M., Brown, G.R., Chao, C., Chitipiralla, S., Gu, B., Hart, J., Hoffman, D., Jang, W., Karapetyan, K., Katz, K., Liu, C., Maddipatla, Z., Malheiro, A., McDaniel, K., Ovetsky, M., Riley, G., Zhou, G., Holmes, J.B., Kattman, B.L., Maglott, D.R., 2018. ClinVar: improving access to variant interpretations and supporting evidence. Nucleic Acids Research 46, D1062–D1067. https://doi.org/10.1093/nar/gkx1153
+
+Liberzon, A., Birger, C., Thorvaldsdóttir, H., Ghandi, M., Mesirov, J.P., Tamayo, P., 2015. The Molecular Signatures Database hallmark gene set collection. Cell Systems 1, 417–425. https://doi.org/10.1016/j.cels.2015.12.004
+
+Luce, R.D., Krantz, D.H., Suppes, P., Tversky, A., 1990. Foundations of Measurement, Vol. III: Representation, Axiomatization, and Invariance. Academic Press, San Diego.
+
+Mavrommatis, C., Belsky, D.W., Ying, K., Moqri, M., Campbell, A., Richmond, A., Gladyshev, V.N., Chandra, T., McCartney, D.L., Marioni, R.E., 2025. An unbiased comparison of 14 epigenetic clocks in relation to 174 incident disease outcomes. Nature Communications 16, 11164. https://doi.org/10.1038/s41467-025-66106-y [UNVERIFIED: middle-author list (Ying, Moqri, Campbell, Richmond, Gladyshev, Chandra) drawn from open-access listing, not confirmed against the trusted source, which abbreviated it; year/venue/volume/article-number/DOI verified]
+
+Metz, J.T., Johnson, E.F., Soni, N.B., Merta, P.J., Kifle, L., Hajduk, P.J., 2011. Navigating the kinome. Nature Chemical Biology 7, 200–202. https://doi.org/10.1038/nchembio.530
+
+Notin, P., Kollasch, A., Ritter, D., van Niekerk, L., Paul, S., Spinner, H., Rollins, N., Shaw, A., Orenbuch, R., Weitzman, R., Frazer, J., Dias, M., Franceschi, D., Gal, Y., Marks, D.S., 2023. ProteinGym: large-scale benchmarks for protein fitness prediction and design. In: Advances in Neural Information Processing Systems 36 (NeurIPS 2023), Datasets and Benchmarks Track, pp. 64331–64379.
+
+Patil, G.P., Taillie, C., 2004. Multiple indicators, partially ordered sets, and linear extensions: multi-criterion ranking and prioritization. Environmental and Ecological Statistics 11, 199–228. https://doi.org/10.1023/B:EEST.0000027209.93218.d9
+
+Saul, D., Kosinsky, R.L., Atkinson, E.J., Doolittle, M.L., Zhang, X., LeBrasseur, N.K., Pignolo, R.J., Robbins, P.D., Niedernhofer, L.J., Ikeno, Y., Jurk, D., Passos, J.F., Hickson, L.T.J., Xue, A., Monroe, D.G., Tchkonia, T., Kirkland, J.L., Farr, J.N., Khosla, S., 2022. A new gene set identifies senescent cells and predicts senescence-associated pathways across tissues. Nature Communications 13, 4827. https://doi.org/10.1038/s41467-022-32552-1
+
+Sayed, N., Huang, Y., Nguyen, K., Krejciova-Rajaniemi, Z., Grawe, A.P., Gao, T., Tibshirani, R., Hastie, T., Alpert, A., Cui, L., Kuznetsova, T., Rosenberg-Hasson, Y., Ostan, R., Monti, D., Lehallier, B., Shen-Orr, S.S., Maecker, H.T., Dekker, C.L., Wyss-Coray, T., Franceschi, C., Jojic, V., Haddad, F., Montoya, J.G., Wu, J.C., Davis, M.M., Furman, D., 2021. An inflammatory aging clock (iAge) based on deep learning tracks multimorbidity, immunosenescence, frailty and cardiovascular aging. Nature Aging 1, 598–615. https://doi.org/10.1038/s43587-021-00082-y
+
+Scicluna, B.P., van Vught, L.A., Zwinderman, A.H., Wiewel, M.A., Davenport, E.E., Burnham, K.L., Nürnberg, P., Schultz, M.J., Horn, J., Cremer, O.L., Bonten, M.J., Hinds, C.J., Wong, H.R., Knight, J.C., van der Poll, T., MARS Consortium, 2017. Classification of patients with sepsis according to blood genomic endotype: a prospective cohort study. Lancet Respiratory Medicine 5, 816–826. https://doi.org/10.1016/S2213-2600(17)30294-1
+
+Shavlakadze, T., Xiong, K., Donne, R., Glass, D.J., et al., 2026. Multitissue, multi-time point transcriptomic atlas of aging in mice and rats. Science Advances. https://doi.org/10.1126/sciadv.ady8401  [UNVERIFIED: complete author list and volume/eLocator to confirm at proof]
+
+Singleton, J., Booth, R., 2022. Towards an axiomatic approach to truth discovery. Autonomous Agents and Multi-Agent Systems 36, 42. https://doi.org/10.1007/s10458-022-09569-3
+
+Suppes, P., Krantz, D.H., Luce, R.D., Tversky, A., 1989. Foundations of Measurement, Vol. II: Geometrical, Threshold, and Probabilistic Representations. Academic Press, San Diego.
+
+Szpilrajn, E., 1930. Sur l'extension de l'ordre partiel. Fundamenta Mathematicae 16, 386–389. https://doi.org/10.4064/fm-16-1-386-389
+
+Uitdehaag, J.C.M., Zaman, G.J.R., 2011. A theoretical entropy score as a single value to express inhibitor selectivity. BMC Bioinformatics 12, 94. https://doi.org/10.1186/1471-2105-12-94
+
+Yusipov, I., Kondakova, E., Kalyakulina, A., Krivonosov, M., Lobanova, N., Bacalini, M.G., Franceschi, C., Vedunova, M., Ivanchenko, M., 2022. Accelerated epigenetic aging and inflammatory/immunological profile (ipAGE) in patients with chronic kidney disease. GeroScience 44, 817–834. https://doi.org/10.1007/s11357-022-00540-4
