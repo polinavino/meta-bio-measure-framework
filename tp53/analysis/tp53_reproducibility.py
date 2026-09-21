@@ -3,7 +3,7 @@ TP53 domain, protocol step 3: the constitutive/artifactual split via cross-PLATF
 
 Two experimentally INDEPENDENT platforms measure the same latent concept (p53 loss of function):
   Cohort A = 8 Kato/Ishioka YEAST transactivation promoters
-  Cohort B = MAMMALIAN cDNA proliferation DMS (Giacomelli 2018 x3 conditions; + Kotler on its subset)
+  Cohort B = MAMMALIAN cDNA proliferation DMS (Giacomelli 2018, three conditions, on 2,308 core variants)
 Different organism, readout, and lab -> genuinely independent, unlike two cohorts of one assay.
 
 The framework's claim: disagreement that REPRODUCES across independent platforms is constitutive

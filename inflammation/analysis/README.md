@@ -13,7 +13,7 @@ are the single source of truth for the numbers in `../README.md`. Rerun `bash ru
 | `infl_pairwise.py` | indices | `pairwise.txt` | near-tie law (0.987→0.285); flat on independent age axis (R² 0.0015) |
 | `infl_avg_rank.py` | indices | `avg_rank.txt` | poset 72.8% incomparable; SII best proxy 0.983, CRP/CAR worst ~0.33 |
 | `infl_reproducibility.py` | indices | `reproducibility.txt` | corr structure replicates **Spearman 0.995** across cycles |
-| `build_sepsis_scores.py` | sepsis | (writes `../data/sepsis_scores.csv`) | 802 samples; 5 signatures scored (mean-z) |
+| `build_sepsis_scores.py` | sepsis | (writes `../data/sepsis_scores.csv`) | 5 signatures scored (mean-z) on all 802 samples; the 479 carrying 28-day mortality are the analysis set for every `sep_*` script below |
 | `sep_families.py` | sepsis | `sepsis_families.txt` | Hallmark family vs SRS family near-independent (cross r +0.02) |
 | `sep_anchor.py` | sepsis | `sepsis_anchor.txt` | individual mortality AUC 0.40–0.50; consensus 0.601; MARS endotype caveat |
 | `sep_pairwise.py` | sepsis | `sepsis_pairwise.txt` | near-tie law (0.990→0.386); high overall (families orthogonal) |
@@ -22,6 +22,7 @@ are the single source of truth for the numbers in `../README.md`. Rerun `bash ru
 | `infl_clocks.py` | clocks | `clocks.txt` | SImAge↔ipAGE 0.90; thin (2 public clocks); near-tie 0.96→0.12 |
 
 **Data provenance.** NHANES 2015-16 / 2017-18 (CDC, CBC + hs-CRP + albumin + Linked Mortality).
-GSE65682 (GEO, MARS sepsis) + GPL13667 annotation + MSigDB Hallmark + SRS/MARS gene lists. SImAge/ipAGE
-tables (Kalyakulina GitHub). Full source list + the measure-selection rule and its completeness caveat
+GSE65682 (GEO, MARS sepsis) + GPL13667 annotation + MSigDB Hallmark (Liberzon 2015) + SRS7 (Davenport
+2016), SRSq19 (Cano-Gamez 2022) and MARS8 (Scicluna 2017) gene lists. SImAge (Kalyakulina 2023) and
+ipAGE (Yusipov 2022) tables (Kalyakulina GitHub). Full source list + the measure-selection rule and its completeness caveat
 are in `../README.md`.

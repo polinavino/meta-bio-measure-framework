@@ -1,0 +1,21 @@
+=== (1) Un-inversion: Spearman(candidate, entropy/gini/s_score) ===
+  ORIGINAL: vs entropy -0.869 | vs gini -0.870 | vs s_score -0.941
+  FIXED   : vs entropy +1.000 | vs gini +1.000 | vs s_score +0.940
+
+=== (2) D3 baseline/floor robustness (worst-case pairwise Spearman, floor in [4.5,6.5]) ===
+  FIXED candidate (smooth): -0.940
+  hard entropy (baseline) : -0.954   (candidate should be >> this, ~0.99)
+
+=== (3) D4 monotonicity: add a sub-threshold off-target ===
+  ORIGINAL: non-increasing for 100% ; max increase 0.0000
+  FIXED   : non-increasing for 100% ; max increase 0.0000
+
+=== (4) Panel-size convergence p* (smallest panel, mean Spearman>0.90 vs full) ===
+  FIXED cand p* = 110
+  entropy    p* = 110
+  s_score    p* = 140
+  gini       p* = 290
+
+=== (5) FIXED candidate vs average-rank canonical (gated-in) — should now be a GOOD proxy ===
+  Spearman(FIXED candidate, consensus-of-3 distribution measures) = +0.996
+  (original was ~ -0.86)

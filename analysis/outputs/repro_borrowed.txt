@@ -1,0 +1,33 @@
+========== SEROTONIN: S-score vs Gini (cited -0.682) ==========
+rows: 297 | n_receptors range: 4 - 12
+  all rows         n=  297  Spearman(s_score,gini)=-0.682  Pearson=-0.659
+  n_receptors>=4   n=  297  Spearman(s_score,gini)=-0.682  Pearson=-0.659
+  n_receptors>=5   n=  204  Spearman(s_score,gini)=-0.645  Pearson=-0.651
+
+========== CLOCKS: from the repo's computed analysis parquets ==========
+
+-- functional_relationships (position-clock linear R2; rate-position log) --
+  clock1      clock2  best_form  R2_linear   R2_log
+ Horvath      Hannum     linear   0.994598 0.877096
+ Horvath    PhenoAge     linear   0.991519 0.884696
+  Hannum    PhenoAge     linear   0.994859 0.879888
+ Horvath DunedinPACE signed_log   0.747603 0.950827
+  Hannum DunedinPACE signed_log   0.759479 0.939054
+PhenoAge DunedinPACE signed_log   0.793150 0.933347
+  position-clock pair R2_linear range: 0.992-0.995  (cited 0.991-0.995)
+
+-- cosine_similarity (coefficient-vector cosines) --
+              Horvath    Hannum  PhenoAge  DunedinPACE
+Horvath      1.000000  0.058241  0.114779     0.000000
+Hannum       0.058241  1.000000  0.030781     0.000000
+PhenoAge     0.114779  0.030781  1.000000    -0.171002
+DunedinPACE  0.000000  0.000000 -0.171002     1.000000
+  off-diagonal cosine range: -0.171-0.115  (cited 0.03-0.11; Horvath-DunedinPACE=0)
+
+-- d3_cell_type (max correlation with cell-type proportions) --
+   clock    type  max_cell_cor  passes_D3
+ Horvath   T_tau      0.292935      False
+  Hannum   T_tau      0.372393      False
+PhenoAge T_delta      0.349826      False
+ GrimAge T_delta      0.278147      False
+  max cell-type |r| across clocks: 0.372  (cited up to 0.372)

@@ -4,7 +4,7 @@ A methods/Perspective paper: **a protocol for comparing competing measures of a 
 concept.** When several formally distinct measures each claim to quantify one concept (kinase
 *selectivity*, *biological age*, *exposure*, a *disease signature*) and disagree, the field usually
 benchmarks them to pick a winner. This paper argues that is mis-specified and gives a better procedure,
-justified with established measurement theory and demonstrated across four domains.
+justified with established measurement theory and demonstrated across six domains.
 
 ## In plain language
 
@@ -46,38 +46,62 @@ and it can have an intuitive physical meaning. But if you're able to look at the
 reasonable formulas at once, the consensus is the less arbitrary summary.
 
 ## Repo map
-- **`paper/main.md`** — the manuscript draft (methods/Perspective).
-- **`paper/formal-spine.md`** — Appendix A: formal justification of the protocol (corrected; classical
-  results cited, not claimed).
-- **`synthesis/repo-findings.md`** — verified ground truth from the five source repos; **§6** has the
-  controlled re-analyses, prior-art map, and decision log. **Start here.**
-- **`analysis/`** — scripts reproducing the controlled findings (§6.2) + their README.
-- **`tp53/`** — fifth domain instance: TP53 variant-effect prediction, computed end-to-end on public data
-  (ProteinGym DMS + AlphaMissense + NCI/Kato transactivation + ClinVar). `tp53/README.md` writeup;
-  `tp53/analysis/` scripts. Folded into `paper/main.md` §4.5 (see `synthesis/repo-findings.md` §6.7).
-- **`inflammation/`** — sixth domain: inflammatory-burden measures, three sub-topics on public data
-  (clinical indices/NHANES — strong; sepsis signatures/GSE65682 — strong disagreement, weak
-  reproducibility; inflammaging clocks — thin). `inflammation/README.md` (incl. where the candidate
-  measures come from + the base-set/completeness caveat). Folded into `paper/main.md` §4.6.
+- **`paper/manuscript.md`** — **the canonical submission draft** (Journal of Theoretical Biology).
+  Every quantitative claim in it is copied from a stored analysis output. Section numbers cited
+  elsewhere in this README refer to this file.
+- **`paper/main.md`**, **`paper/formal-spine.md`** — working notes the manuscript draws on. `formal-spine.md`
+  is the source for Appendix A (classical results cited, not claimed). Where either disagrees with
+  `manuscript.md`, the manuscript wins.
+- **`paper/references-formatted.md`** — reference list in Elsevier name-date style, with a DOI-verification
+  log at the end. A superset of the manuscript's list.
+- **`paper/related-work.md`** — prior-art notes.
+- **`synthesis/repo-findings.md`** — verified ground truth from the four source repos; **§6** has the
+  controlled re-analyses, prior-art map, and decision log. **Start here** for provenance.
+- **`analysis/`** — the controlled re-analyses behind §4.1 to §4.4 and §5. `run_all.sh` regenerates every
+  file in `analysis/outputs/`, which is the source of truth for those numbers. The scripts read the four
+  source repos by absolute path, so those must be cloned as siblings.
+- **`tp53/`** — TP53 variant effect (§4.5), computed end-to-end on public data (ProteinGym DMS +
+  AlphaMissense + NCI/Kato transactivation + ClinVar). `tp53/README.md` writeup, `tp53/analysis/run_all.sh`
+  regenerates `tp53/analysis/outputs/`. See `synthesis/repo-findings.md` §6.7.
+- **`inflammation/`** — inflammatory burden (§4.6), three sub-topics on public data: clinical
+  indices/NHANES (strong), sepsis signatures/GSE65682 (strong disagreement, weak reproducibility),
+  inflammaging clocks (thin). `inflammation/README.md` documents where the candidate measures come from
+  and the base-set/completeness caveat. `inflammation/analysis/run_all.sh` regenerates its outputs.
 - **`paper/framework-core.md`**, **`meta-paper-plan.md`** — SUPERSEDED / historical (old "new-math" framing).
 
-## Status (2026-07)
+### The six domains and where each one lives
+Four of the six instances were computed in separate sibling repositories, which have to be archived
+alongside this one for the paper's data-availability statement to hold.
+
+| § | Domain | Instance repository |
+|---|---|---|
+| 4.1 | Kinase selectivity | `../selectivity` (preprint on ChemRxiv) |
+| 4.2 | Epigenetic ageing, incl. the rat retina | `../epigenetic-clock-desiderata`, rat retina in its `eye_aging/` |
+| 4.3 | Serotonin-receptor selectivity | `../psychedelic-selectivity` |
+| 4.4 | Methylation exposure biomarkers | `../methylation-biomarker-agreement` |
+| 4.5 | TP53 variant effect | `tp53/` (this repo) |
+| 4.6 | Inflammatory burden | `inflammation/` (this repo) |
+
+## Status (2026-09)
 Re-scoped from a new-mathematics claim to a methods/Perspective paper after three adversarial referees
-+ controlled re-analyses. Core empirical claims are honest and controlled (near-ties, not a
+and controlled re-analyses. Core empirical claims are honest and controlled (near-ties, not a
 "consequential middle"; detection-floor instability; cross-cohort reproducibility). Formalism is
 borrowed prior art (Patil–Taillie; RMT; Szpilrajn; average-rank canonical extension; Campbell–Fiske).
-Not yet tailored to a target venue (see below).
+**Target venue decided: Journal of Theoretical Biology**, with `paper/manuscript.md` written to it and
+`paper/references-formatted.md` in its reference style. The venue survey below is retained as the
+reasoning behind that choice and as a fallback list; it is not a live recommendation.
 
 ## Refinements from the kinase cross-dataset validation — FOLDED IN ✓
 
 The kinase candidate was validated across all four datasets (orientation correct everywhere, D4 100%,
 T-robust, gate-necessity shown by the un-gated inversion). That work surfaced protocol/framework
-refinements. **All four are written into the paper:** #1 → `paper/main.md` §2 step 1 + the
+refinements. **All four are written into the paper:** #1 → `paper/manuscript.md` §3 step 1 + the
 "Sharpening the desiderata" note (G2); #2, #3 → same note (G3, G1) + `synthesis/repo-findings.md` §2.5
 table; #4 → `paper/formal-spine.md` §1.1. **#1 and #4 are now DEMONSTRATED across all four domains**
 (not just kinase-asserted) via `analysis/external_anchor.py` — every standard measure correctly oriented
 against its external anchor, the un-gated candidate control caught, and consensus–anchor agreement +0.65
-to +0.94 (stronger at the extremes); see main.md §5 point 6. The notes below are the rationale/record.
+to +0.94 (stronger at the extremes); see `paper/manuscript.md` §5 point 6 and
+`analysis/outputs/external_anchor.txt`. The notes below are the rationale/record.
 
 1. **Orientation check against an external anchor → sharpen G2 (monotonicity in the concept).**
    The kinase candidate passed stability, monotonicity, and panel-convergence while being *oriented
@@ -116,7 +140,7 @@ kinase inversion + cross-dataset validation (`selectivity/candidate_validation.p
 
 ---
 
-## Candidate venues
+## Venue survey (historical: the reasoning behind choosing JTB, kept as a fallback list)
 
 Preprint to **bioRxiv** (and cross-list arXiv q-bio / math.ST for the formal-methods audience) **first,
 regardless of target** — it establishes priority and is expected by every venue below. Prerequisite
@@ -171,17 +195,13 @@ strengthen submission.
 - *Cons:* the biological instances — the whole point — are out of scope; wrong audience for impact in
   comp-bio. Only sensible as a *second*, formal companion, not the flagship.
 
-### Recommendation
-**Target PLOS Computational Biology as a Perspective**, with bioRxiv+arXiv preprint first. Rationale:
-it is the best balance of (a) reach into the intended comp-bio audience, (b) tolerance for the
-formal-methods angle that is the author's differentiator, (c) realistic acceptance odds for an honest
-methodological Perspective with a modest empirical core, and (d) identity-building value. It does not
-demand the cross-domain-transfer demonstration that **Patterns** would likely require.
+### Decision
+**Journal of Theoretical Biology**, and `paper/manuscript.md` is written to it. JTB takes the formal
+core in the body rather than only in an appendix, which the venues above would not, and it is free
+hybrid, so no APC. The survey above ranked PLOS Computational Biology first on comp-bio reach; that
+remains the strongest alternative if JTB declines.
 
-Keep **Patterns** as the stretch option: if we later add a genuine cross-domain transfer result (and/or
-package the tool), reposition there for higher impact. Keep **Briefings in Bioinformatics** as the
-fast, receptive fallback. Treat **GigaScience/Bioinformatics** as contingent on deciding to build a
-software package. Reserve a math-psych venue only for a possible formal companion paper.
-
-*(Decision not yet made; no paper-tailoring done. Confirm the target before we adapt length, format,
-and framing to it.)*
+Fallbacks in order: **PLOS Computational Biology** (Perspective), **Briefings in Bioinformatics**
+(fast, receptive), **Patterns** (only if a genuine cross-domain transfer result is added), and
+**GigaScience/Bioinformatics** (only if the protocol is packaged as software). Reserve a math-psych
+venue for a possible formal companion paper.

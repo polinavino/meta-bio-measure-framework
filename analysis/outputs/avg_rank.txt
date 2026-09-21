@@ -1,0 +1,18 @@
+Gated-in compounds N=206; incomparable-pair fraction in consensus poset = 0.372
+Running two independent Bubley-Dyer chains ...
+Chain convergence: Spearman(chain1, chain2) = 0.9968  (want ~1.0)
+
+Spearman of each existing measure's ranking vs canonical average-rank extension:
+  S-score  : +0.869
+  entropy  : +0.950
+  Gini     : +0.955
+  ratio    : +0.796
+
+Mean |rank - canonical| (rank units, N compounds):
+  S-score  :  22.2
+  entropy  :  13.6
+  Gini     :  13.0
+  ratio    :  29.0
+
+Interpretation: the measure closest to the canonical average-rank extension is the
+best single proxy for the weight-free consensus aggregate; large gaps = commits beyond consensus.

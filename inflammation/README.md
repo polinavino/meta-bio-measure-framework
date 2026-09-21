@@ -22,12 +22,12 @@ differing fit to the protocol's machinery (which needs scalar measures that indu
 use* in that field, taken from named sources — not invented here:
 - *Indices:* the systemic-inflammation indices in routine clinical/epidemiological use (NLR, PLR, MLR,
   SII, SIRI) plus CRP and the CRP-to-albumin ratio; all computed from standard CBC + CRP + albumin.
-- *Clocks:* published inflammatory-age clocks (SImAge — Kalyakulina 2023; ipAGE — Kalyakulina 2022),
-  plus canonical single-cytokine inflammaging markers (CXCL9 — the dominant iAge driver, Furman 2021;
-  IL-6; TNF).
-- *Sepsis:* published blood signatures — Sepsis Response Signature (SRS/SRSq; Davenport 2016,
-  Cano-Gamez 2022), the MARS endotype bi-signature (Scicluna 2017), and two MSigDB Hallmark sets
-  (inflammatory response, IFN-γ response).
+- *Clocks:* published inflammatory-age clocks (SImAge from Kalyakulina 2023, ipAGE from Yusipov 2022),
+  plus canonical single-cytokine inflammaging markers: CXCL9, the dominant driver of iAge (Sayed 2021),
+  and IL-6 and TNF.
+- *Sepsis:* published blood signatures. The Sepsis Response Signature in its two forms (SRS7 from
+  Davenport 2016, SRSq19 from Cano-Gamez 2022), the MARS endotype bi-signature (Scicluna 2017), and two
+  MSigDB Hallmark sets (inflammatory response, IFN-γ response, both Liberzon 2015).
 
 **How do we know we have all of them? We do not — and cannot.** There is no closed enumeration of "all
 measures of inflammation." New indices and signatures are published continually. This is the framework's
@@ -93,7 +93,9 @@ SIRI, CRP, CAR (=CRP/albumin).
 **Data.** GSE65682 (MARS consortium, whole-blood, Affymetrix U219), 802 samples; 479 with 28-day
 mortality (114 deaths) and a MARS discovery(263)/validation(216) split. Five published signatures scored
 per sample as a mean-*z* over their genes by `analysis/build_sepsis_scores.py`: Hallmark Inflammatory
-(148/200 genes), Hallmark IFN-γ (177/200), SRS7 (7/7), SRSq19 (19/19), MARS8 (8/8). Anchor = mortality.
+(148/200 genes), Hallmark IFN-γ (177/200), SRS7 (7/7, Davenport 2016), SRSq19 (19/19, Cano-Gamez 2022),
+MARS8 (8/8, Scicluna 2017). All five are scored on all 802 samples, and every analysis below runs on the
+479 that carry 28-day mortality. Anchor = mortality.
 **Scoring caveat:** mean-*z* sign is not a-priori meaningful for the mixed-direction SRS/MARS classifier
 genes, so each signature is oriented to positively predict mortality; mortality is therefore not re-used
 as an independent validator — the discovery/validation split plays that role.
@@ -124,9 +126,10 @@ individual mortality signal; weak cross-cohort reproducibility of the detailed s
 ## Topic 2 — Inflammaging clocks (SImAge cohort). THIN — a qualitative check only.
 **Data.** SImAge cohort (Kalyakulina), n=343 (300 controls, 43 ESRD), 46 serum cytokines + chronological
 age. Only two composite inflammatory-age clocks are publicly reconstructable on shared samples: **SImAge**
-(per-sample values provided) and **ipAGE** (recomputed here as an ElasticNet age-regression on the 46
-cytokines, fit on controls; 37/46 nonzero coefficients; ρ=0.744 vs age). iAge and IMM-AGE are not
-publicly obtainable. Two measures are degenerate for the machinery, so the concept is widened to
+(Kalyakulina 2023, per-sample values provided) and **ipAGE** (Yusipov 2022, recomputed here as an
+ElasticNet age-regression on the 46 cytokines, fit on controls; 37/46 nonzero coefficients; ρ=0.744 vs
+age). iAge (Sayed 2021) and IMM-AGE (Alpert 2019) are not publicly obtainable. Two measures are
+degenerate for the machinery, so the concept is widened to
 "inflammatory burden" and three canonical single-cytokine markers are added (CXCL9, IL-6, TNF). Anchor =
 age. `analysis/infl_clocks.py`.
 

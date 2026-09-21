@@ -15,8 +15,10 @@ reactivators) — the drug problem is single-mutant medicinal chemistry and is o
 ## Data (all public; `data/`, assembled by `analysis/build_matrix.py`)
 - **8 Kato/Ishioka yeast transactivation promoters** — WAF1, MDM2, BAX, 14-3-3σ, AIP1, GADD45, NOXA,
   P53R2, % of WT activity (NCI *TP53 Database* r21; = Kato *PNAS* 2003). n=2314 missense variants.
-- **Seven computational predictors:** AlphaMissense (Cheng 2023), EVE, ESM1b, REVEL, CADD, PrimateAI,
-  BayesDel (EVE + ESM1b native; REVEL/CADD/PrimateAI/BayesDel via dbNSFP v4.1a). Coverage of the core
+- **Seven computational predictors:** AlphaMissense (Cheng 2023), EVE (Frazer 2021), ESM1b (Brandes
+  2023), REVEL (Ioannidis 2016), CADD (Kircher 2014, with the v1.6 scores of Rentzsch 2021), PrimateAI
+  (Sundaram 2018), BayesDel (Feng 2017). EVE and ESM1b are native, the other four come via dbNSFP v4.1a
+  (Liu 2020). Coverage of the core
   panel: ESM1b/REVEL/CADD/BayesDel 2,314, PrimateAI 2,086, EVE 1,942 (its scored region, residues 45–374).
 - **DMS proliferation screens** (ProteinGym): Giacomelli 2018 ×3 conditions (WT-Nutlin, Null-Nutlin,
   Null-Etoposide), Kotler 2018. Mammalian cDNA — an experimentally *independent platform* from yeast.
@@ -34,15 +36,18 @@ screens must be flipped before use. A concrete, real instance of the orientation
 backwards measure (the analog of the un-gated kinase candidate), and the reason the reproducibility
 script sign-aligns the DMS screens.
 
-**Step 5 — families (`tp53_families.py`).** The measures split into two families by measurement basis.
+**Step 5 — families (`tp53_families.py`).** The 15 core-panel measures split into two families by
+measurement basis. The proliferation screens are **held out** of this analysis, so the family means are
+over the 8 transactivation readouts and the 7 predictors only.
 Within the 8 experimental transactivation readouts, mean *r* = 0.78 (0.66–0.89); within the 7
 computational predictors, mean *r* = 0.76 (0.56–0.93); between the two blocks, mean *r* = 0.50
 (0.35–0.64). Both blocks are internally coherent and agree less across than within. AlphaMissense tracks
 the experimental block best (0.56), CADD worst (0.43). This is the TP53 analog of kinase's family
 structure: experimental function and computational prediction induce different orders of the same concept.
 
-**Step 7 — consensus poset + canonical aggregate (`tp53_avg_rank.py`).** The 9-measure consensus poset
-is **56.6% incomparable** — the nine measures jointly order fewer pairs than kinase's four did (37%). The
+**Step 7 — consensus poset + canonical aggregate (`tp53_avg_rank.py`).** The consensus poset over the 9
+base measures (the 8 promoters plus AlphaMissense)
+is **56.6% incomparable** — those nine jointly order fewer pairs than kinase's four did (37%). The
 weight-free average-rank-over-linear-extensions canonical measure (Bubley–Dyer sampler, two chains
 ρ=0.998) is best proxied by **the field's own proposed formula — the median of the 8 promoters
 (ρ=0.987)** — and worst by **AlphaMissense (ρ=0.597)**, quantifying that the predictor commits most
@@ -63,7 +68,10 @@ variants — that kinase did not. A real, interpretable cross-domain difference;
 "consequential middle."
 
 **Step 3 — constitutive vs artifactual, cross-platform (`tp53_reproducibility.py`).** Yeast
-transactivation vs mammalian proliferation — different organism, readout, lab. Consensus orders agree
+transactivation vs mammalian proliferation — different organism, readout, lab. The mammalian side is the
+**3 Giacomelli conditions** (sign-aligned), not all four screens: Kotler enters the orientation check
+against ClinVar and nothing else, because its overlap with the core panel is only 973 variants.
+Consensus orders agree
 **ρ=0.49 overall, +0.63 at the extremes, −0.05 in the middle**; cross-platform direction-agreement
 rises from **0.53 on near-ties (≈chance) to 0.85 on well-separated pairs**. The comparability skeleton is
 reproducible across independent platforms (**constitutive**); both platforms lose resolution on the
@@ -89,7 +97,9 @@ This is the TP53 face of the ADMET "evaluations overstate performance" sibling r
   power for EVE. dbNSFP v4.1a lacks MetaRNN and the native AlphaMissense/EVE/ESM1b columns of later
   releases; those three are taken from their own sources instead.
 - **Independent-platform breadth.** The 8 promoters are one study (Kato/NCI). True cross-platform
-  independence comes only from the Giacomelli/Kotler mammalian screens; **Funk 2025** (endogenous-locus
+  independence comes from the mammalian screens, and in the reproducibility test that means the 3
+  Giacomelli conditions alone (Kotler overlaps the core panel too thinly to serve there, 973 variants).
+  **Funk 2025** (endogenous-locus
   CRISPR RFS, 9,225 variants — a third, mechanistically distinct platform), **Boettcher 2019**
   (dominant-negative), and the **Fayer 2021** integrated consensus are the obvious next cohorts.
 - **Anchor caveat.** AlphaMissense is trained on ClinVar-adjacent signal, so its agreement with ClinVar

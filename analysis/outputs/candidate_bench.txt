@@ -1,0 +1,23 @@
+=== Spearman among measure RANKINGS on full Klaeger (rank1=most selective) ===
+           candidate   entropy      gini   s_score     ratio
+candidate     +1.000    -0.869    -0.870    -0.941    -0.247
+entropy       -0.869    +1.000    +0.999    +0.939    +0.330
+gini          -0.870    +0.999    +1.000    +0.941    +0.336
+s_score       -0.941    +0.939    +0.941    +1.000    +0.323
+ratio         -0.247    +0.330    +0.336    +0.323    +1.000
+
+=== Is the candidate floor-dominated? candidate vs entropy at different floors ===
+  floor=5.0: Spearman(candidate, hard-entropy) = -0.869
+  floor=4.0: Spearman(candidate, hard-entropy) = -0.883
+  floor=3.0: Spearman(candidate, hard-entropy) = -0.889
+  floor=2.0: Spearman(candidate, hard-entropy) = -0.890
+  floor=0.0: Spearman(candidate, hard-entropy) = -0.888
+
+  fraction of Klaeger entries at/below floor 5.0 = 0.936  (pedestal weight per kinase = T*log(2) = 0.693)
+
+=== On gated-in (n=206): candidate vs consensus-of-4 and vs each ===
+  Spearman(candidate, consensus-of-4) = -0.863
+  Spearman(candidate, entropy ) = -0.867
+  Spearman(candidate, gini    ) = -0.868
+  Spearman(candidate, s_score ) = -0.928
+  Spearman(candidate, ratio   ) = -0.321

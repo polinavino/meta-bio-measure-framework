@@ -1,0 +1,33 @@
+Klaeger matrix: 222 compounds x 343 kinases
+
+[1/2] Reliability-gate resolution of the 'extreme counterexample'
+  zero-active (n_active==0): 16 compounds
+  inter-measure disagreement (std of rank across 4 measures):
+     ungated (zero-active): mean=65.9
+     gated-in   (active)  : mean=23.1
+  repo 30-config rank_std: ungated=72.6, gated-in=31.6  (expect ~74 vs ~32)
+
+[3] Concentration test on gated-in set (n=206)
+  decile | mean disagreement | n
+    0    |    22.47         | 21
+    1    |    22.37         | 20
+    2    |    22.43         | 21
+    3    |    23.71         | 20
+    4    |    25.62         | 21
+    5    |    26.01         | 20
+    6    |    30.29         | 21
+    7    |    28.20         | 20
+    8    |    20.91         | 21
+    9    |     9.04         | 21
+
+  Spearman(disagreement, middleness): raw r=0.265 (p=1.15e-04)
+  Partial Spearman controlling n_active,max_act: r=0.315 (p=4.13e-06)
+
+  Interior-concentration slope (Spearman disagreement~middleness):
+     observed = 0.265
+     independence null: mean=0.299, 2.5-97.5% = [0.175,0.423]
+     observed exceeds null: False
+
+  Interpretation: if observed >> null, interior concentration is structural,
+  not a boundary-compression artifact. If observed within null band, the
+  'middle' pattern is mechanical and the concentration claim must be downgraded.

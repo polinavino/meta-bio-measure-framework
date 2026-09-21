@@ -15,8 +15,10 @@ Local paths (all siblings of this repo under `/Users/polina/Documents/BioInfStuf
 > a set of **controlled re-analyses** substantially changed the empirical story — most importantly, the
 > "concentration in the consequential middle" (P3) claim **did not survive controls** and has been
 > retired. §6 records the referee findings, the controlled numbers, the prior-art map, and the
-> decisions. The live paper docs are `../paper/main.md` (manuscript) and `../paper/formal-spine.md`
-> (Appendix A). `../paper/framework-core.md` is **superseded** (old new-math architecture).
+> decisions. The canonical draft is `../paper/manuscript.md`; `../paper/main.md` and
+> `../paper/formal-spine.md` (Appendix A) are the working notes behind it, and section references to
+> `main.md` below should be read against `manuscript.md`. `../paper/framework-core.md` is **superseded**
+> (old new-math architecture).
 
 ---
 
@@ -58,9 +60,10 @@ Satisfaction (verbatim table; ✓/✕/∼):
 | D4 | ✕ | ✓ | ✕ | ✓ | ✓ |
 
 "No existing definition satisfies all four simultaneously; the candidate does." *(This is the kinase
-paper's verbatim claim. Our controlled re-analysis in §6.2 finds the candidate as implemented does
-**not** hold — it is inverted, and the fix trades orientation against D3. Read §2.1 as attribution, §6.2
-as the finding.)* Section was renamed
+paper's verbatim claim. Our controlled re-analysis in §6.2 found the candidate as then implemented did
+**not** hold — it was inverted by the softplus floor pedestal. The author has since fixed it with a hard
+gate at the fixed assay floor and validated it across all four datasets, so the claim now stands. Read
+§2.1 as attribution, §6.2 as the finding, §6.4 as the resolution.)* Section was renamed
 "Required Properties for a Well-Formed Selectivity Measure" per reviewer request.
 
 ### 2.2 Clocks — D0–D4 (from `epigenetic-clock-desiderata/README.md`)
@@ -113,8 +116,8 @@ closest to kinase **D4** (monotonicity under weak addition) blended with **D3** 
 stability). The G-schema above resolves this, but the paper must *show* the resolution, not assert it.
 
 **3.2 "Families" membership is NOT stable across domains — the biggest crack.**
-- Kinase (Davis/Klaeger): distribution family {S-score, entropy, Gini} within-r 0.74–0.99 (Davis reaches 0.999); **ratio is the outlier** (cross-family r 0.14–0.62). "Ratio is the consistent outlier."
-- Serotonin ChEMBL (n=297): {S-score, Gini, ratio} cluster; **entropy is the outlier** (entropy vs all ≈ 0; S-score–Gini = −0.682). Shulgin/PDSP (n=36): entropy again the outlier.
+- Kinase (Davis/Klaeger): distribution family {S-score, entropy, Gini} within-r 0.722–0.999 (min is Klaeger S-score–Gini, max is Davis entropy–Gini); **ratio is the outlier** (cross-family r 0.138–0.616). "Ratio is the consistent outlier."
+- Serotonin ChEMBL (n=297): {S-score, Gini, ratio} cluster; **entropy is the outlier** (entropy vs all ≈ 0; S-score–Gini = **−0.682 raw, i.e. +0.682 once both are oriented towards selectivity** — the raw sign reflects the opposing conventions, not disagreement). Shulgin/PDSP (n=36): entropy again the outlier.
 - So *which* measure is categorically different flips between domains. Contributing factors: (a) **direction-convention inconsistency** — the serotonin scripts compute S-score as fraction *above* vs *below* threshold in different sub-analyses, and measures mix "higher=selective" vs "lower=selective", so raw correlation *signs* are not directly comparable to kinase; (b) **panel size** — 13 serotonin receptors vs 300–433 kinases; entropy's behavior is panel-size-dependent (it only stabilizes above ~110 targets in kinase data), so on 13 receptors it may genuinely measure something different.
 - **Safe claim for the paper:** the *phenomenon* "measures partition into a low-disagreement cluster plus at least one categorically-different outlier, by the order they induce" recurs; the *identity* of the outlier is scale- and panel-dependent. Do **not** claim entropy (or ratio) is universally the odd one out. This is more honest and still supports P2.
 
@@ -143,11 +146,20 @@ visible if the FASD arm is cited.
 
 **Kinase.** Datasets: Davis 68×433 (competition binding), Klaeger 222×343 (chemoproteomics),
 Anastassiadis 178×300 (functional %inhibition), Metz 704×172 (pK_i). Two-family clustering
-replicates across all four (within-distribution r 0.74–0.99; ratio-vs-distribution 0.14–0.62).
-Rank instability concentrated in: zero-active compounds (σ≈74 vs 32), near-tied top targets (top1–top2
-gap predicts ratio instability r=−0.34, p<0.001), broad-profile+dominant-target (entropy–ratio
-disagreement). Panel size to reach Spearman 0.90 vs full panel: **entropy ~110, S-score ~140,
-Gini ~290, ratio only at full 343**. Candidate: entropy + D1 gate + softplus hinge (`w_i =
+replicates across all four (within-distribution r 0.722–0.999; ratio-vs-distribution 0.138–0.616).
+Rank instability concentrated in: zero-active compounds (σ 72.9 vs 31.3 on Klaeger), near-tied top targets
+(top1–top2 gap predicts ratio instability r=−0.34, p<0.001), broad-profile+dominant-target (entropy–ratio
+disagreement). Panel size to reach Spearman 0.90 vs full panel on Klaeger: **entropy 110, S-score 110,
+Gini 290, ratio only at full 343** (on Metz: S-score 50, entropy 80, Gini 80, ratio 170).
+*(Corrected 2026-09 against `selectivity/outputs/{klaeger_analysis,panel_size_analysis,failure_mode_illustration}.txt`
+and a direct recomputation of the four within-family pair correlations: the earlier "0.74–0.99", "σ≈74 vs 32"
+and "S-score ~140" were all slightly off. The manuscript now carries the corrected values. The same pass
+also corrected, further down this file: the single-linear-clock R² range (0.992–0.995, and three of those
+pairs involve the deviation clock PhenoAge, so they are not all position-position pairs), the scope of the
+cell-type D3 failure (four clocks tested, DunedinPACE not among them), which clocks the near-orthogonal
+cosine matrix covers (GrimAge is not in it), the raw-versus-oriented sign of the serotonin S-score–Gini
+correlation, and, in §6.7, the measure counts behind the TP53 family means, consensus poset and
+cross-platform test.)* Candidate: entropy + D1 gate + softplus hinge (`w_i =
 T·log(1+e^{(x_i−x_0)/T})`, floor x_0, width T≈1); satisfies D1–D4; converges at p*≈170
 ("half a large panel"); **explicitly non-unique** (T is a design choice; T→0 recovers standard
 entropy + its D3 failure).
@@ -156,18 +168,24 @@ entropy + its D3 failure).
 principal curve (Hastie–Stuetzle) under age-informativeness norm `‖·‖²_* = Σ w_i(·)², w_i = R²_i·σ²_i`,
 top 200 CpGs; decompose profile into position τ (arc-length projection) + off-manifold residual r.
 Types: position 𝒯_τ (Horvath, Hannum), deviation 𝒯_δ (PhenoAge, GrimAge), rate 𝒯_τ̇ (DunedinPACE).
-Results: position clocks **linearly** related R²=0.991–0.995 ("same measurement, different scale");
-rate↔position related by **signed log** R²=0.93–0.95 vs 0.75–0.79 linear (**Weber–Fechner**, coeff
-a≈0.0135); **all clocks fail D3** cell-type confounding (max |r|: Hannum 0.372); **GrimAge D0
-violation** (two-stage composite), pairwise coefficient-vector cosine **near-orthogonal** (reproduced
-from the clock repo's `cosine_similarity.parquet`: off-diagonal −0.17 to 0.11, incl. Horvath–DunedinPACE
-= 0.000; the earlier "0.03–0.11" figure omitted the −0.171 PhenoAge–DunedinPACE value — all |cos| ≤ 0.17,
-so "near-orthogonal" stands; GrimAge excluded from the matrix).
+Results: the single-linear clocks are **linearly** related R²=0.992–0.995 ("same measurement, different
+scale") — the three pairs in that range are Horvath–Hannum, Horvath–PhenoAge and Hannum–PhenoAge, so
+they span two position clocks and the **deviation** clock PhenoAge, and "position-clock R²" was the wrong
+label for them; rate↔position related by **signed log** R²=0.93–0.95 vs 0.75–0.79 linear
+(**Weber–Fechner**, coeff a≈0.0135); **every clock tested fails D3** cell-type confounding (max |r|:
+Hannum 0.372), which is Horvath, Hannum, PhenoAge and GrimAge — **DunedinPACE was not tested**, so "all
+clocks fail" overreaches; **GrimAge D0 violation** (two-stage composite), pairwise coefficient-vector
+cosine **near-orthogonal** (reproduced from the clock repo's `cosine_similarity.parquet`: off-diagonal
+−0.17 to 0.11 over Horvath, Hannum, PhenoAge and DunedinPACE, incl. Horvath–DunedinPACE = 0.000; the
+earlier "0.03–0.11" figure omitted the −0.171 PhenoAge–DunedinPACE value — all |cos| ≤ 0.17, so
+"near-orthogonal" stands; GrimAge excluded from the matrix, having no single coefficient vector, so the
+near-orthogonality is not a GrimAge result).
 Uses Kendall's κ not Pearson (ordinal-level agreement, deliberate). Closest precursor: Klemera &
 Doubal (2006) — same complaint, pre-methylation, linear clinical biomarkers only.
 
 **Serotonin.** ChEMBL 13,584 compounds × 13 human 5-HT receptors; 297 with the required overlap.
-Correlation of the four definitions: **entropy ≈ 0 with all; S-score–Gini = −0.682**. Psilocin:
+Correlation of the four definitions: **entropy ≈ 0 with all; S-score–Gini = −0.682 raw, +0.682 after
+orienting both towards selectivity**. Psilocin:
 non-selective (highest affinity 5-HT2B pK_i 8.34 & 5-HT1D, not 5-HT2A 6.72) — "inconsistent with its
 common description as a '5-HT2A agonist.'" Biased-agonism QSAR: **LOO R²≈0.71–0.78 collapses to LOSO
 R²<0** (drop ~0.9) — pure scaffold confounding; this is the case that *motivated* the ADMET repo.
@@ -241,8 +259,9 @@ Interpreter: `/Users/polina/miniforge3/bin/python`; R 4.5.2. Scripts in the sess
 **Kinase (Klaeger, n=222; gated-in = n_active>0 at pKd>6 ⇒ 206):**
 - *Gate-cutoff robustness:* zero-active vs active disagreement (std of rank across 4 measures) =
   92 vs 25 (cutoff 5.5), **66 vs 23 (6.0)**, 55 vs 22 (6.5), 40 vs 21 (7.0). The detection-floor
-  instability is robust and the high-disagreement compounds ARE the ungated ones (reproduces repo's
-  30-config ~74 vs ~32). → G1/D1 reliability gate resolves the "extreme instability," not P3.
+  instability is robust and the high-disagreement compounds ARE the ungated ones (reproduces the repo's
+  30-config rank SD **72.9 vs 31.3**, the exact figure the manuscript now quotes, not the earlier
+  "~74 vs ~32"). → G1/D1 reliability gate resolves the "extreme instability," not P3.
 - *Concentration null test:* observed interior-concentration slope (Spearman disagreement~middleness)
   = 0.27 (consensus coord) / 0.11 (n_active coord); **independence-null band [0.18, 0.42] / [−0.13,
   0.14]** — observed does **NOT** exceed null. The "middle peak" is rank-boundary-compression artifact.
@@ -256,7 +275,7 @@ Interpreter: `/Users/polina/miniforge3/bin/python`; R 4.5.2. Scripts in the sess
   ratio +0.796**; mean |rank−canonical| Gini 13.0 / entropy 13.6 / S-score 22.2 / ratio 29.0.
   → Gini/entropy best proxy the weight-free consensus aggregate; ratio commits most beyond consensus
   (quantitative "ratio is the outlier").
-- *Candidate (softplus-entropy) — ISSUE FOUND (flag for kinase paper).* Using the repo's **exact**
+- *Candidate (softplus-entropy) — ISSUE FOUND, SINCE FIXED BY THE AUTHOR (see §6.4).* Using the repo's **exact**
   `candidate_measure.py`, the candidate is **anti-correlated** with the distribution family it should
   join: Spearman vs entropy −0.87, Gini −0.87, S-score −0.94, consensus-of-4 −0.86; robust across floors
   5.0→0.0. 93.6% of Klaeger entries are at the detection floor and softplus never zeroes them (pedestal
@@ -274,7 +293,7 @@ Interpreter: `/Users/polina/miniforge3/bin/python`; R 4.5.2. Scripts in the sess
   estimates the inactive bulk.) **Two clean fixes for the kinase paper:** (i) fixed floor → per-compound-
   quantile anchor (small edit); (ii) the baseline-free **average-rank canonical extension**. Both
   weight/baseline-free. Scripts: `candidate_bench.py`, `candidate_fix.py`, `candidate_fix2.py`,
-  `candidate_fix3.py`. NOT edited in the kinase repo — flagged to author.
+  `candidate_fix3.py`. Not edited in the kinase repo by us, flagged to the author, and **acted on**: see §6.4.
 
 **Smoking (per-cohort, from `data/scores_*.rds`):**
 - *Per-cohort C3 agreement (thr = never_mean−2SD):* GSE50660 never .950 / current .909 / former .776;
@@ -313,8 +332,9 @@ contradictory rankings" paragraph was **already commented out** by the author in
 `introduction.tex:44–51` — i.e. the P3 overclaim was deliberately avoided. P3 lived only in the
 meta-paper's synthesis and the original plan, and has now been removed there too.
 
-*Update (candidate repaired + validated):* the author fixed the inversion (§6.2) with a **hard gate at
-the fixed assay floor** (`selectivity/candidate_measure.py`; `candidate(P) = negH( 1[P>floor]·softplus((P−β)/T) )`)
+*Update (candidate repaired + validated — this flag is CLOSED):* the author fixed the inversion (§6.2)
+with a **hard gate at the fixed assay floor** (`selectivity/candidate_measure.py`;
+`candidate(P) = negH( 1[P>floor]·softplus((P−β)/T) )`)
 and added `candidate_validation.py` — validating the candidate across **all four datasets** (orientation
 −0.79 to −0.97, D4 100%, T-robust, cross-T agreement 0.999) with a per-dataset floor (incl. a
 %-inhibition adaptation for Anastassiadis), plus an explicit inversion demo (un-gated +0.94 vs n_active).
@@ -322,6 +342,10 @@ The D3 story was corrected to be honest (emphasis-baseline robust; boundary pinn
 its sensitivity reported). This cross-dataset validation is the **evidence base for the three protocol
 refinements** now folded into the meta-paper (external-anchor orientation → G2; apparatus-fixed vs
 analyst-chosen params → G3; gate load-bearing for correctness → G1; see §2.5 table and main.md §2).
+The correction is written up by the author as item 9 ("Post-resubmission correction: candidate measure
+was inverted") of `selectivity/paper/response_to_reviewers.txt`, which also records that the gated
+measure now converges to its full-panel ranking at 110 kinases rather than 170. Item 10 there corrects
+the D3 justification in the same honest direction. Nothing further is owed to the kinase paper on this.
 
 ### 6.5 Cross-domain transfer (the "earns its generality" test)
 Script `analysis/transfer.py`. For four domains (different concepts, measures, object types) — kinase
@@ -366,11 +390,13 @@ AlphaMissense; 227 P / 142 B / 988 VUS). Interpreter `/Users/polina/miniforge3/b
   **all 4 DMS proliferation screens MIS-ORIENTED** (AUC 0.016–0.064) under ProteinGym "higher=fitness"
   convention → must be flipped. Concrete second instance of the orientation check catching a backwards
   measure by external anchor.
-- *Families (step 5):* two families by measurement basis — 8 experimental transactivation readouts
-  (within-r mean 0.78) and 7 computational predictors (within-r mean 0.76), between-block mean 0.50.
+- *Families (step 5):* over the **15 core-panel measures** (the proliferation screens are held out), two
+  families by measurement basis — 8 experimental transactivation readouts (within-r mean 0.78) and 7
+  computational predictors (within-r mean 0.76), between-block mean 0.50.
   Both internally coherent, less agreement across than within. AlphaMissense closest to experiment
   (0.56), CADD farthest (0.43). = kinase's family structure, split by experiment vs prediction.
-- *Canonical (step 7):* consensus poset **56.6% incomparable**; Bubley–Dyer avg-rank (2 chains ρ=0.998)
+- *Canonical (step 7):* consensus poset over the **9 base measures** (8 promoters + AlphaMissense)
+  **56.6% incomparable**; Bubley–Dyer avg-rank (2 chains ρ=0.998)
   best proxied by **field median-of-8 rule ρ=0.987** (Kato/ClinGen); all 7 computational predictors sit
   ρ 0.46–0.60 (CADD 0.46 … AlphaMissense 0.60); canonical/median ClinVar AUC ≈0.99. → protocol *vindicates* an
   existing field formula as ≈ the minimal-commitment aggregate.
@@ -379,7 +405,9 @@ AlphaMissense; 227 P / 142 B / 988 VUS). Interpreter `/Users/polina/miniforge3/b
   AlphaMissense axis)**. Honest cross-domain DIFFERENCE vs kinase (which had ~0): partial-LOF /
   separation-of-function variants. NOT the retired P3 "consequential middle".
 - *Reproducibility (step 3):* cross-**platform** (yeast transactivation vs mammalian proliferation, not
-  just cross-cohort): consensus ρ 0.49 overall / **+0.63 extremes / −0.05 middle**; direction-agreement
+  just cross-cohort). The mammalian platform here is the **3 Giacomelli conditions** only — Kotler enters
+  the orientation check against the anchor and nothing else, so "four screens" is wrong for this test:
+  consensus ρ 0.49 overall / **+0.63 extremes / −0.05 middle**; direction-agreement
   0.53 (near-ties) → 0.85 (well-separated). Skeleton constitutive; both platforms silent on same near-ties.
 - *Companion axis (evaluations overstate):* hotspot-codon holdout **null** for all predictors (AUC drop
   ≤0.01; ClinVar not hotspot-dominated at unique-variant level — reported honestly). Real gap holds
@@ -387,7 +415,9 @@ AlphaMissense; 227 P / 142 B / 988 VUS). Interpreter `/Users/polina/miniforge3/b
   functional truth on the 988 VUS** (gap +0.09 to +0.12). TP53 face of the ADMET sibling result.
 - *Honest limits:* predictor coverage varies (EVE residues 45–374 = 1942; family/canonical use
   pairwise-complete corr); dbNSFP v4.1a lacks MetaRNN. 8 promoters are one study (Kato) — genuine
-  platform independence is from Giacomelli/Kotler; candidate additional platforms Funk 2025 (endogenous
+  platform independence comes from the mammalian screens, and in the reproducibility test from the 3
+  Giacomelli conditions alone (Kotler overlaps the core panel too thinly, 973 variants, so it serves only
+  the orientation check); candidate additional platforms Funk 2025 (endogenous
   CRISPR RFS), Boettcher 2019 (DN), Fayer 2021 (integrated consensus). Field formulas/hotspots = ClinGen
   TP53 VCEP (Fortuno 2021).
 - *Placement:* folded into `../paper/main.md` as §4.5 + §5 point 7; abstract domain list updated.

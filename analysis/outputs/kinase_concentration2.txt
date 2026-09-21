@@ -1,0 +1,14 @@
+Disagreement vs n_active (independent coordinate), gated-in n= 206
+ n_active range | mean disagreement | n
+   [   1,   2]   |      23.73      | 26
+   [   2,   4]   |      23.42      | 42
+   [   4,  10]   |      22.60      | 54
+   [  10,  21]   |      24.87      | 42
+   [  21, 117]   |      21.10      | 42
+
+ interior-peak slope vs n_active: observed=0.109
+ null (measures independent, n_active fixed): mean=0.003, 95% CI=[-0.132,0.141]
+ observed exceeds null 97.5%: False
+
+ disagreement at selective extreme (few active): 23.73
+ disagreement at promiscuous extreme (many active): 14.07

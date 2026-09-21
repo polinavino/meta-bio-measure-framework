@@ -2,6 +2,13 @@
 
 *Polina Vinogradova*
 
+> **⚠ WORKING NOTE, not the submission draft.** The canonical draft is **`manuscript.md`**, written to
+> Journal of Theoretical Biology. This file is the earlier main text it grew out of and is kept for
+> history. Where the two disagree, `manuscript.md` wins, and its numbers are the ones checked against the
+> stored outputs in `../analysis/outputs/`, `../tp53/analysis/outputs/` and
+> `../inflammation/analysis/outputs/`. In particular this file still says "four domains" and predates the
+> TP53 (§4.5), inflammation (§4.6) and rat-retina instances.
+
 **Draft — main text (methods / Perspective).** The paper proposes a *technique* bioinformaticians can
 run when several formally distinct measures each claim to quantify one latent concept and disagree; it
 justifies the technique with established measurement theory (Appendix A) and demonstrates it across four
@@ -22,7 +29,8 @@ procedure. Treating each measure as an order-preserving representation of the co
 structure — the standard view of representational measurement theory, and of the partial-order theory of
 multi-indicator systems (Patil & Taillie 2004) — makes the disagreement interpretable: measures must
 agree wherever the concept's order is determined and can differ only where objects are genuinely
-incomparable, so no measure is canonical once incomparabilities exist (Szpilrajn). The situation is a
+incomparable, so no measure is canonical once incomparabilities exist (standard order theory, with
+non-emptiness of the admissible class from Szpilrajn 1930). The situation is a
 *convergent-validity* problem (Campbell & Fiske 1959); our contribution is a protocol that separates
 disagreement that is **constitutive** (a property of the concept, surviving cross-cohort reproducibility)
 from disagreement that is **artifactual** (near-ties, detection-floor noise, decision-threshold
@@ -64,7 +72,8 @@ Two consequences of the view are immediate and classical. First, any two admissi
 wherever the concept's order is determined and can disagree only on pairs the concept leaves
 **incomparable** (Appendix A, Lemma 1). Second, whenever incomparabilities exist, the desiderata one
 would impose on a "good" measure pin down a whole *class* of admissible measures — the linear extensions
-— and cannot single out a unique one (Szpilrajn; Appendix A §4). So "no measure satisfies every
+— and cannot single out a unique one (standard order theory, with non-emptiness of the class from
+Szpilrajn 1930, Appendix A §4). So "no measure satisfies every
 requirement, and none is canonical" is not a failure of the field's effort; it is a theorem. The right
 output is therefore not a winner but a *map*: where does the concept decide, where is it silent, and —
 if a single number is unavoidable — what is the principled minimal-commitment summary.
@@ -121,8 +130,8 @@ quantify κ; ideally ≥2 independent cohorts. Each step names the established r
    (c) distance to any decision threshold, and (d) rank-boundary compression (via an independence null).
    Report only what survives these controls. *(§5 shows why: uncontrolled, one "finds" a spurious middle.)*
 5. **Cluster measures into families and score them against the desiderata.** Group measures by the
-   ordering they induce (rank agreement); within a family they agree up to a monotone reparameterization
-   (ordinal equivalence — *not* a shared interval/ratio scale; Appendix A Lemma 2). Then fill the
+   ordering they induce (rank agreement); within a family they agree up to a strictly increasing
+   reparameterization (ordinal equivalence — *not* a shared interval/ratio scale; Appendix A Lemma 2). Then fill the
    desiderata checklist — a reliability/domain gate (G1), monotonicity in the concept (G2), ordinal
    stability under nuisance (G3), cross-cohort reproducibility (G4), intervention consistency (G5) —
    recording which measures satisfy which. Three of these need care (see "Sharpening the desiderata" below).
@@ -214,16 +223,16 @@ the smoking per-cohort agreement (§4.4), the cross-domain transfer (§5), and t
 variant-effect instance (§4.5) are computed here on public data with controls (`analysis/`, `../tp53/`). The remaining figures — clock affinities/cosine/cell-type (§4.2), FASD AUCs
 (§4.4), serotonin S-score–Gini −0.682 (§4.3) — originate in the source-repo analyses and were
 **reproduced/confirmed locally this session** (`analysis/repro_borrowed.py`, `analysis/fasd_auc.R`):
-serotonin −0.682 exact; position-clock R² 0.991–0.995, rate–position signed-log R² 0.93–0.95,
-cell-type max |r| 0.372, all confirmed; FASD AUCs buccal 0.68–0.79, van der Laan 0.935/0.959 confirmed.
-One correction surfaced: the clock coefficient-cosine range is −0.17 to 0.11 (not "0.03–0.11"; the
-"near-orthogonal" conclusion is unchanged).
+serotonin −0.682 exact (raw, before orientation); single-linear-clock R² 0.992–0.995, rate–position
+signed-log R² 0.93–0.95, cell-type max |r| 0.372, all confirmed; FASD AUCs buccal 0.68–0.79, van der
+Laan 0.935/0.959 confirmed. One correction surfaced: the clock coefficient-cosine range is −0.17 to 0.11
+(not "0.03–0.11"; the "near-orthogonal" conclusion is unchanged).
 
 ### 4.1 Kinase selectivity (full worked example)
 Concept: inhibitor selectivity. Measures: S-score, selectivity entropy, Gini, target-ratio, across four
 datasets/three assay technologies (Davis 68×433, Klaeger 222×343, Anastassiadis 178×300, Metz 704×172).
 - **Families (step 5):** two families by induced order — distribution {S-score, entropy, Gini}
-  (within-r 0.74–0.99) and the target-ratio (cross-family r 0.14–0.62). Ordinal classes only.
+  (within-r 0.722–0.999) and the target-ratio (cross-family r 0.138–0.616). Ordinal classes only.
 - **Reliability gate (step 5):** zero-active compounds carry large instability (disagreement ~40–92 vs
   ~21–25 for active; ≈1.9–3.7× the active level at every pKd active cutoff 5.5–7.0). These are exactly what the gate
   excludes; the "extreme instability" is a domain-of-definition issue, not concept structure.
@@ -246,20 +255,25 @@ datasets/three assay technologies (Davis 68×433, Klaeger 222×343, Anastassiadi
 
 ### 4.2 Epigenetic clocks (families and a scale caution)
 Concept: biological age. Five clocks, three *declared* types (position, deviation, rate) on 1,385 blood
-samples (GSE40279 n=656, GSE87571 n=729). Position clocks are affine-related (R² 0.991–0.995) — reported
-**descriptively**, with the caution that both are regressions on chronological age, so affinity is
+samples (GSE40279 n=656, GSE87571 n=729). The single-linear clocks are affine-related (R² 0.992–0.995,
+over the position clocks Horvath and Hannum and the deviation clock PhenoAge) — reported
+**descriptively**, with the caution that these are regressions on chronological age, so affinity is
 expected and is *not* evidence of a shared interval-scale latent structure (Appendix A §3). Rate vs
 position relate non-affinely (signed-log R² 0.93–0.95 vs linear 0.75–0.79); reported as a between-measure
-observation, not a scale-type proof. Cell-type reproducibility fails for all clocks (max |r| with cell
-fractions up to 0.372, Hannum), and the age-trained clocks are near-orthogonal in coefficient space
-(|cosine| ≤ 0.17) — a G1/G4/D0 flag. *(These figures confirmed locally from the clock repo's computed
+observation, not a scale-type proof. Cell-type reproducibility fails for every clock tested (max |r| with
+cell fractions up to 0.372, Hannum), which is Horvath, Hannum, PhenoAge and GrimAge — DunedinPACE was not
+tested, so this is not a statement about all five. The four clocks with a single published coefficient
+vector (Horvath, Hannum, PhenoAge, DunedinPACE) are near-orthogonal in coefficient space (pairwise cosine
+−0.17 to 0.11), while GrimAge is a two-stage composite with no single coefficient vector and is not in
+that matrix — a G1/G4/D0 flag. *(These figures confirmed locally from the clock repo's computed
 outputs; `analysis/repro_borrowed.py`.)* This domain best illustrates step 1 (declaring type) and the
 ordinal-only caution in step 5.
 
 ### 4.3 Serotonin selectivity (families replication — and a convention caveat)
 The kinase measures applied to 5-HT receptor pharmacology (ChEMBL, 13,584 compounds × 13 receptors; 297
 with the required overlap). A family structure recurs, but **which** measure is the outlier differs
-(entropy here, not ratio), and the reported anti-correlation (S-score vs Gini −0.68) is entangled with
+(entropy here, not ratio), and the reported anti-correlation (S-score vs Gini −0.682 raw, which becomes
++0.682 once both are oriented towards selectivity) is entangled with
 inconsistent higher-vs-lower-is-selective conventions across sub-analyses. Demonstrates step 1's
 importance (declare orientation/scale first) and the honest limit: family *membership* is not
 domain-invariant; only the existence of families and an outlier is.
@@ -288,12 +302,15 @@ anchor: ClinVar germline significance with review-star weighting. Core panel 2,3
   0.016–0.064) under the ProteinGym "higher = higher fitness" convention — higher proliferative fitness is
   *less* deleterious — and must be flipped. A second concrete instance of the orientation check catching
   a backwards measure by external anchor alone (cf. §4.1).
-- **Families (step 5):** the measures split into two families by measurement basis — eight experimental
-  transactivation readouts (within-*r* mean 0.78) and seven computational predictors (AlphaMissense, EVE,
-  ESM1b, REVEL, CADD, PrimateAI, BayesDel; within-*r* mean 0.76), agreeing less across the blocks (mean
-  0.50) than within either. The same family structure as kinase, here split by experiment vs prediction.
-- **Canonical aggregate (step 7):** the consensus poset is **56.6% incomparable** — the nine measures
-  jointly order fewer pairs than kinase's four did (37%); the
+- **Families (step 5):** the fifteen core-panel measures split into two families by measurement basis —
+  eight experimental transactivation readouts (within-*r* mean 0.78) and seven computational predictors
+  (AlphaMissense, EVE, ESM1b, REVEL, CADD, PrimateAI, BayesDel; within-*r* mean 0.76), agreeing less
+  across the blocks (mean 0.50) than within either. The proliferation screens are held out of this
+  analysis and serve instead as the independent platform in step 3. The same family structure as kinase,
+  here split by experiment vs prediction.
+- **Canonical aggregate (step 7):** the consensus poset over the nine base measures (the eight promoters
+  plus AlphaMissense) is **56.6% incomparable** — those nine jointly order fewer pairs than kinase's
+  four did (37%); the
   weight-free average-rank extension is best proxied by **the field's own median-of-eight-promoters rule
   (ρ=0.987; Kato/ClinGen)** and worst by the seven computational predictors (ρ 0.46–0.60).
   The protocol here *vindicates* an
@@ -304,8 +321,10 @@ anchor: ClinVar germline significance with review-star weighting. Core panel 2,3
   disagree more; midpos coefficient +0.33 on the consensus axis, +0.10 on an independent AlphaMissense
   axis) — the partial-LOF / separation-of-function variants. Reported as a real cross-domain *difference*,
   not the retired "consequential middle."
-- **Reproducibility (step 3):** yeast transactivation vs mammalian proliferation — independent
-  *platforms* — agree ρ=0.49 overall, **+0.63 at the extremes, −0.05 in the middle**, and cross-platform
+- **Reproducibility (step 3):** yeast transactivation and mammalian proliferation are independent
+  *platforms*, the mammalian side being the three Giacomelli conditions (Kotler enters only the
+  orientation check against the anchor). They agree ρ=0.49 overall, **+0.63 at the extremes, −0.05 in the
+  middle**, and cross-platform
   direction-agreement rises from 0.53 on near-ties (≈chance) to 0.85 when well-separated. The
   comparability skeleton is constitutive; both platforms are unsure on the *same* near-ties.
 - **Companion axis:** across all seven predictors, each scores 0.90–0.99 against curated ClinVar but
@@ -324,12 +343,14 @@ Concept: systemic inflammatory burden, quantified three ways on public data (ful
   middle (0.51). The correlation structure replicates across the two independent cycles at Spearman
   **0.995** — the strongest reproducibility in this work.
 - **Sepsis signatures (strong disagreement, weak reproducibility).** Five published blood signatures
-  (Hallmark inflammatory, Hallmark IFN-γ, SRS7, SRSq19, MARS8) on GSE65682 (802 samples), anchor 28-day
-  mortality. The Hallmark and SRS families are **near-independent (cross-family *r*=+0.02)** — two
+  (Hallmark inflammatory, Hallmark IFN-γ, SRS7 = Davenport 2016, SRSq19 = Cano-Gamez 2022, MARS8 =
+  Scicluna 2017) on GSE65682, scored on the 479 of 802 samples carrying 28-day mortality, which is also
+  the anchor. The Hallmark and SRS families are **near-independent (cross-family *r*=+0.02)** — two
   published "sepsis severity" signatures that barely agree. But cross-cohort (discovery vs validation)
   reproducibility of the detailed structure is **weak (Spearman 0.32)**, and is reported as such.
-- **Inflammaging clocks (thin).** Only two composite clocks (SImAge; ipAGE, recomputed) are publicly
-  reconstructable on shared samples (n=343); iAge/IMM-AGE are not. Reported as a qualitative check, not a
+- **Inflammaging clocks (thin).** Only two composite clocks (SImAge, Kalyakulina 2023, and a recomputed
+  ipAGE, Yusipov 2022) are publicly reconstructable on shared samples (n=343); iAge (Sayed 2021) and
+  IMM-AGE (Alpert 2019) are not. Reported as a qualitative check, not a
   full instance.
 
 The endotype-*labelling* problem (SRS vs MARS as partitions) is a clustering task, a different object
@@ -352,8 +373,8 @@ With the protocol's controls applied, the honest, reproducible findings are:
 3. **Reproducibility is what makes disagreement meaningful.** The one leg that promotes "these measures
    disagree here" to "the concept is silent here" is cross-cohort reproducibility (step 3). Its evidence
    is currently modest (two cohorts per domain; one with a disease confound) and we state it as such.
-4. **A single formula is valid, but the class centroid is better when the class can be explored.** The
-   required properties do not pick a unique measure — they characterize a *class*, precisely the linear
+4. **A single formula is valid, but the average rank over the class is better when the class can be
+   explored.** The required properties do not pick a unique measure — they characterize a *class*, precisely the linear
    extensions of the concept's comparable order (Appendix A). Two consequences:
    - **(i) any closed-form measure satisfying the properties is a legitimate representative** — usable,
      and per-object deployable. But it makes an *unavoidable arbitrary commitment on every incomparable
@@ -364,17 +385,22 @@ With the protocol's controls applied, the honest, reproducible findings are:
      is not a failure; it is the non-uniqueness theorem made tangible.
    - **(ii) when the admissible class can be explored — its linear extensions (approximately) sampled —
      a minimal-commitment summary is available and preferable: the average rank over the whole class**
-     (the average-rank canonical extension). It is parameter-free, privileges no tie-breaking, and on
-     each undecided pair reports how the admissible measures divide rather than forcing a side. In this
-     precise sense (ii) *dominates* (i): it is the centroid of exactly the space the properties define.
+     (the average-rank canonical extension). It is parameter-free, and on each undecided pair it settles
+     the order by mean rank rather than privileging either object. The finer summary that forces no side
+     at all is the mutual-rank-probability matrix, whose entry for a pair is the fraction of extensions
+     ranking one object above the other. In this precise sense (ii) *dominates* (i): the average rank is
+     the barycenter of the rank vectors of the linear extensions under the uniform distribution on them,
+     so it is built from exactly the space the properties define.
      We compute it here (kinase: 37% of pairs incomparable; average rank estimated by near-uniform
      linear-extension sampling; Gini/entropy proxy it best at ρ≈0.95, the ratio worst at 0.80 — a
      quantitative "ratio commits most beyond the consensus").
    Caveats: (ii) is canonical *relative to* the comparable skeleton `≽` (the reproducible consensus of the
    reasonable base measures), not in a vacuum — the choice of base set is real, pushed up one level, not
-   eliminated. "Explore the class" means *sample* it (exact counting is #P-complete; we use Bubley–Dyer),
+   eliminated. "Explore the class" means *sample* it (counting the linear extensions is #P-complete, so
+   exact average ranks are #P-hard; we use Bubley–Dyer),
    and (i) remains preferable when an object must be scored in isolation or an interpretable closed form
-   is required. So: use a single formula if you must, but if you can sample the class, report its centroid.
+   is required. So: use a single formula if you must, but if you can sample the class, report the average
+   rank over it.
 5. **The near-tie law is domain-general (the generality is earned, qualitatively).** Overlaying the
    separation→discordance decile curves across domains and measuring pairwise agreement
    (`analysis/transfer.py`; kinase, serotonin, clocks, smoking — different concepts, measures, object

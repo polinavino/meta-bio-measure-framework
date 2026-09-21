@@ -1,0 +1,12 @@
+T-sweep: orientation (vs entropy, + = correct) and D3 worst-case (want ~+1)
+   T | orig orient  orig D3 | fixed orient  fixed D3
+ 0.5 |      -0.880    0.935 |        1.000    -0.948
+ 1.0 |      -0.869    0.992 |        1.000    -0.940
+ 2.0 |      -0.868    0.999 |        1.000    -0.940
+ 3.0 |      -0.870    1.000 |        1.000    -0.942
+ 5.0 |      -0.872    1.000 |        1.000    -0.946
+
+Scale-free (per-compound-min anchor) variant:
+  orientation vs entropy: +0.507
+  D3 under global shift [-1,+1]: worst pairwise = +1.000
+  (compare fixed-candidate under global shift: -0.940; orig: +0.995)
