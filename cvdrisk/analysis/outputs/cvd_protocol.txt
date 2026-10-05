@@ -1,0 +1,102 @@
+
+########################################################################
+# 2015-16: N=2994  deaths=131  CVD deaths=30
+########################################################################
+  pce        median  7.53%  IQR  2.67-16.40%
+  fram_lab   median 11.68%  IQR  5.86-21.45%
+  fram_off   median 15.29%  IQR  7.36-28.88%
+
+=== Families: Spearman among 3 scores (2015-16, N=2994) ===
+                 pce  fram_lab  fram_off
+pce           +1.000    +0.934    +0.932
+fram_lab      +0.934    +1.000    +0.940
+fram_off      +0.932    +0.940    +1.000
+  fram_lab-fram_off      +0.940
+  pce-fram_lab           +0.934
+  pce-fram_off           +0.932
+
+=== Consensus poset (2015-16, N=600 subsample, 179,700 pairs) ===
+incomparable-pair fraction = 0.155
+  Spearman(pce      , consensus mean-rank) = +0.976
+  Spearman(fram_lab , consensus mean-rank) = +0.979
+  Spearman(fram_off , consensus mean-rank) = +0.979
+
+=== Near-tie law (2015-16, 1,999,000 pairs) ===
+  [separation axis = consensus mean-rank, built from the same three scores;
+   no independent concept-proxy axis is available here, so these are upper bounds]
+overall discordance rate: 0.110
+  |dsep| in [0.000,0.106]: discordance=0.444 (n=399,487)
+  |dsep| in [0.106,0.226]: discordance=0.099 (n=399,865)
+  |dsep| in [0.226,0.368]: discordance=0.008 (n=399,978)
+  |dsep| in [0.368,0.553]: discordance=0.000 (n=399,757)
+  |dsep| in [0.553,1.000]: discordance=0.000 (n=399,913)
+
+=== Orientation and anchor (2015-16) ===
+  CVD death (events=30):
+    pce        AUC=0.815  OK
+    fram_lab   AUC=0.787  OK
+    fram_off   AUC=0.804  OK
+    consensus  AUC=0.809  OK
+  all-cause death (events=131):
+    pce        AUC=0.775  OK
+    fram_lab   AUC=0.734  OK
+    fram_off   AUC=0.775  OK
+    consensus  AUC=0.768  OK
+
+=== Decision-threshold effect (2015-16) ===
+  threshold 0.075:  26.2% of adults get a different treat/no-treat call depending on the score (783 of 2994)
+  threshold 0.100:  25.9% of adults get a different treat/no-treat call depending on the score (775 of 2994)
+
+########################################################################
+# 2017-18: N=2913  deaths=53  CVD deaths=10
+########################################################################
+  pce        median  8.21%  IQR  3.11-17.64%
+  fram_lab   median 12.49%  IQR  6.29-22.48%
+  fram_off   median 16.98%  IQR  8.23-31.20%
+
+=== Families: Spearman among 3 scores (2017-18, N=2913) ===
+                 pce  fram_lab  fram_off
+pce           +1.000    +0.935    +0.935
+fram_lab      +0.935    +1.000    +0.946
+fram_off      +0.935    +0.946    +1.000
+  fram_lab-fram_off      +0.946
+  pce-fram_off           +0.935
+  pce-fram_lab           +0.935
+
+=== Consensus poset (2017-18, N=600 subsample, 179,700 pairs) ===
+incomparable-pair fraction = 0.157
+  Spearman(pce      , consensus mean-rank) = +0.977
+  Spearman(fram_lab , consensus mean-rank) = +0.981
+  Spearman(fram_off , consensus mean-rank) = +0.981
+
+=== Near-tie law (2017-18, 1,999,000 pairs) ===
+  [separation axis = consensus mean-rank, built from the same three scores;
+   no independent concept-proxy axis is available here, so these are upper bounds]
+overall discordance rate: 0.106
+  |dsep| in [0.000,0.106]: discordance=0.441 (n=399,497)
+  |dsep| in [0.106,0.226]: discordance=0.086 (n=399,838)
+  |dsep| in [0.226,0.368]: discordance=0.005 (n=400,015)
+  |dsep| in [0.368,0.553]: discordance=0.000 (n=399,726)
+  |dsep| in [0.553,1.000]: discordance=0.000 (n=399,924)
+
+=== Orientation and anchor (2017-18) ===
+  CVD death (events=10):
+    pce        AUC=0.755  OK
+    fram_lab   AUC=0.756  OK
+    fram_off   AUC=0.779  OK
+    consensus  AUC=0.771  OK
+  all-cause death (events=53):
+    pce        AUC=0.712  OK
+    fram_lab   AUC=0.691  OK
+    fram_off   AUC=0.703  OK
+    consensus  AUC=0.706  OK
+
+=== Decision-threshold effect (2017-18) ===
+  threshold 0.075:  26.6% of adults get a different treat/no-treat call depending on the score (775 of 2913)
+  threshold 0.100:  26.9% of adults get a different treat/no-treat call depending on the score (785 of 2913)
+
+=== Cross-cohort reproducibility (2015-16 vs 2017-18) ===
+inter-score correlation structure: Spearman(2015-vec, 2017-vec) = 0.500 (3 pairs); mean|dr| = 0.004
+  fram_lab-fram_off      2015 +0.940   2017 +0.946   d=+0.006
+  pce-fram_lab           2015 +0.934   2017 +0.935   d=+0.001
+  pce-fram_off           2015 +0.932   2017 +0.935   d=+0.003

@@ -1,0 +1,93 @@
+"""
+Build the manuscript figures from the stored analysis outputs.
+
+Every value plotted is parsed out of a file in */analysis/outputs/, which are the
+single source of truth for the paper's numbers. Nothing is hardcoded here, so a
+figure cannot drift from the text: if an analysis is rerun and a number changes,
+the figure changes with it.
+
+Outputs: figures/fig1_near_tie.png (and .pdf)
+"""
+import re
+from pathlib import Path
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+ROOT = Path(__file__).resolve().parent.parent
+FIGDIR = Path(__file__).resolve().parent / "figures"
+FIGDIR.mkdir(exist_ok=True)
+
+# Each block in a *pairwise.txt output opens with a header naming the separation
+# axis, then lists one "discordance=" line per separation bin.
+AXIS_RE = re.compile(r"^-+\s*separation axis\s*=\s*(.+?)\s*-+$", re.I)
+BIN_RE = re.compile(r"\|\s*(?:Δ|delta)\s*\S*\s*\|\s*in\s*\[.*?\]\s*:\s*discordance\s*=\s*([0-9.]+)", re.I)
+
+
+def parse_axes(path):
+    """Return {axis label: [discordance per separation bin]} from one output file."""
+    out, cur = {}, None
+    for line in Path(path).read_text().splitlines():
+        m = AXIS_RE.match(line.strip())
+        if m:
+            cur = m.group(1)
+            out.setdefault(cur, [])
+            continue
+        b = BIN_RE.search(line)
+        if b and cur is not None:
+            out[cur].append(float(b.group(1)))
+    return {k: v for k, v in out.items() if v}
+
+
+def parse_kinase(path):
+    """Kinase bins on |delta n_active|, which has no axis header line."""
+    vals = [float(m.group(1)) for m in
+            (BIN_RE.search(l) for l in Path(path).read_text().splitlines()) if m]
+    return vals[:5]
+
+
+def short(label):
+    low = label.lower()
+    if "consensus" in low:
+        return "consensus (circular)", "#c23b22", "--"
+    return f"independent ({label.split('(')[0].strip()})", "#2b6cb0", "-"
+
+
+def main():
+    tp53 = parse_axes(ROOT / "tp53/analysis/outputs/pairwise.txt")
+    infl = parse_axes(ROOT / "inflammation/analysis/outputs/pairwise.txt")
+    kin = parse_kinase(ROOT / "analysis/outputs/kinase_pairwise.txt")
+
+    panels = [
+        ("TP53 variant effect", tp53),
+        ("Inflammatory indices", infl),
+        ("Kinase selectivity", {"number of active targets": kin}),
+    ]
+
+    fig, axes = plt.subplots(1, 3, figsize=(11.5, 3.6), sharey=True)
+    for ax, (title, series) in zip(axes, panels):
+        for label, ys in series.items():
+            name, colour, style = short(label)
+            xs = [(i + 0.5) / len(ys) for i in range(len(ys))]
+            ax.plot(xs, ys, style, color=colour, marker="o", ms=4.5, lw=1.8, label=name)
+        ax.set_title(title, fontsize=10)
+        ax.set_xlabel("separation on the axis (quantile)", fontsize=8.5)
+        ax.set_ylim(0, 1.02)
+        ax.set_xlim(0, 1)
+        ax.grid(alpha=.25, lw=.6)
+        ax.legend(fontsize=7.5, frameon=False, loc="upper right")
+        ax.tick_params(labelsize=8)
+    axes[0].set_ylabel("inter-measure discordance", fontsize=9)
+    fig.tight_layout()
+    for ext in ("png", "pdf"):
+        fig.savefig(FIGDIR / f"fig1_near_tie.{ext}", dpi=300, bbox_inches="tight")
+
+    for title, series in panels:
+        for label, ys in series.items():
+            print(f"{title:24s} {label[:38]:40s} {ys[0]:.3f} -> {ys[-1]:.3f}  ({len(ys)} bins)")
+    print(f"\nwrote {FIGDIR/'fig1_near_tie.png'}")
+
+
+if __name__ == "__main__":
+    main()
