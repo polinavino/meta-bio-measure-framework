@@ -1,0 +1,30 @@
+PASS kinase table incomparability: manuscript=37.9; source=37.9
+PASS kinase Gini proxy: manuscript=0.949; source=0.949
+PASS kinase entropy proxy: manuscript=0.944; source=0.944
+PASS kinase ratio proxy: manuscript=0.817; source=0.817
+PASS kinase equal-count reversal: manuscript=77.2; source=77.2
+PASS kinase S-score-withheld reversal: manuscript=32.7; source=32.7
+PASS kinase R2: manuscript=0.1526; source=0.1526
+PASS TP53 median proxy: manuscript=0.955; source=0.955
+PASS TP53 ClinVar AUC: manuscript=0.996; source=0.996
+PASS TP53 closest consensus bin: manuscript=0.924; source=0.924
+PASS TP53 farthest consensus bin: manuscript=0.045; source=0.045
+PASS TP53 external first bin: manuscript=0.606; source=0.606
+PASS TP53 external last bin: manuscript=0.256; source=0.256
+PASS inflammatory single proxy: manuscript=0.844; source=0.844
+PASS inflammatory mean-rank proxy: manuscript=0.983; source=0.983
+PASS inflammatory consensus near: manuscript=0.984; source=0.984
+PASS inflammatory consensus far: manuscript=0.274; source=0.274
+PASS inflammatory age first: manuscript=0.735; source=0.735
+PASS inflammatory age last: manuscript=0.694; source=0.694
+PASS sepsis incomparability: manuscript=87.1; source=87.1
+PASS sepsis closest proxy: manuscript=0.613; source=0.613
+PASS sepsis frozen-sign reproduction: manuscript=0.976; source=0.976
+PASS serotonin incomparability: manuscript=75.4; source=75.44
+PASS serotonin floor scenario: manuscript=56.1; source=56.09
+PASS Davis retention: manuscript=0.758; source=0.758
+PASS Davis conditional rho: manuscript=0.917; source=0.917
+PASS Davis pair recovery: manuscript=0.509; source=0.509
+PASS kinase matched-set overlap: manuscript=0.294; source=0.294
+PASS kinase matched direction: manuscript=0.954; source=0.954
+Verified 29 registered quantitative claims (rounding-aware).

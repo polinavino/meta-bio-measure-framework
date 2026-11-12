@@ -3,47 +3,48 @@
 A methods/Perspective paper: **a protocol for comparing competing measures of a latent biological
 concept.** When several formally distinct measures each claim to quantify one concept (kinase
 *selectivity*, *biological age*, *exposure*, a *disease signature*) and disagree, the field usually
-benchmarks them to pick a winner. This paper argues that is mis-specified and gives a better procedure,
-justified with established measurement theory and demonstrated across six domains.
+benchmarks them to pick a winner. This project separates the choice of definition from prediction benchmarks and gives a comparison
+protocol, grounded in established measurement theory and demonstrated across seven domains.
 
 ## In plain language
 
-Lots of things in biology are measured by more than one formula at the same time. How "selective" a
-drug is has at least four competing scores; someone's "biological age" has a dozen different "clocks";
-smoking exposure or a disease has several rival molecular signatures. These aren't different versions of
-one agreed formula — they are genuinely different formulas, and run on the same data they often **rank
-the same things differently.**
+Competing biological formulas can rank the same objects differently. This project gives a protocol for
+finding out how much of that disagreement survives changes in implementation, eligibility, panels,
+missing-data conventions and cohorts. Stable disagreement is an observable result; attributing it to the
+biological concept itself additionally requires assumptions about which formulas are admissible and
+controls for systematic artifacts.
 
-The usual reaction is to treat this as a contest: benchmark the formulas and declare one the winner. We
-think that's the wrong move, because the disagreement usually isn't a sign that one formula is broken.
-It's a sign that **the concept itself doesn't fully decide the answer.** At the extremes everyone agrees
-— a drug that hits one target and nothing else *is* selective; a newborn *is* biologically younger than
-a 90-year-old. But in the messy middle — a drug with two strong targets and five weak ones, a
-middle-aged person — the concept is genuinely silent about who ranks higher, and each formula quietly
-makes its own arbitrary call. So "which formula is correct?" is the wrong question. The useful questions
-are: *where does the concept actually decide, where is it silent, and is that pattern real (does it show
-up again in a fresh dataset) or just noise?*
+Where all admitted measures weakly agree, the consensus retains that comparison. A strict reversal makes
+a pair incomparable; a tie in one measure and a strict comparison in another does not. If a scalar summary
+is needed, we average class ranks over uniform linear extensions of the consensus quotient poset. This
+is an explicit aggregation convention that can resolve incomparable pairs. It has no measure-specific
+weights, but does not eliminate choices about the base set or the distribution over rankings.
 
-**Combining multiple measures (the part worth explaining).** Once you accept that no single formula is
-"the right one," the natural thing to do is not to pick one but to **combine all the reasonable ones into
-a consensus.** Think of the competing formulas as a panel of judges ranking contestants:
+## Current analysis status (November 2026)
 
-- Wherever **all** the judges agree that A beats B, that ordering is solid — keep it.
-- Wherever the judges **split** on A vs B, don't crown one judge as correct. Instead, consider *every*
-  possible full ranking that is consistent with everything the judges *did* agree on, and take each
-  contestant's **average position** across all of those rankings.
+The post-submission kinase revisions prompted a framework-wide correction. Current analyses preserve ties,
+report strict reversals separately, freeze data-derived sepsis preprocessing and directions on validation, and use four
+initially dispersed insertion-Gibbs chains for average ranks. Split R-hat and batch-means Monte Carlo
+precision must pass before aggregate benchmarks are reported. Identical indicator vectors are collapsed
+to classes before sampling; tied objects receive the same class score.
 
-That average is a single consensus ranking with two nice properties: it agrees with the formulas exactly
-where they agree, and on the cases they disagree about it reports the *balance of opinion* (how the
-formulas split) instead of forcing a coin-flip. It needs no weighting (you never have to declare one
-formula more important) and has no tuning knobs. When you genuinely need one number, this consensus is
-the honest one to report — it commits to nothing beyond what the measures actually agree on. (The formal
-name is the *average rank over the linear extensions of the consensus order*; the panel-of-judges picture
-is exactly what that computes.)
+- Kinase: 37.9% incomparable under the declared parameter-median implementations; fixed-default formula
+  and floor scenarios are separate sensitivity analyses. Active count is a shared-input proxy, with a
+  S-score-withheld control. Matched-panel incomparable-set Jaccard is 0.294 across 40 shared eligible compounds.
+- TP53: median-of-eight agreement with the checked aggregate is 0.955, replacing the insufficiently mixed
+  estimate of 0.987. Population and endpoint shifts also limit interpretation of the ClinVar/VUS comparison.
+- Inflammatory indices: the checked aggregate agrees with SII at 0.844; mean rank agrees at 0.983. CRP/CAR
+  correlate at 0.998 but are not exactly rank-identical.
+- Sepsis: these are gene-set proxies, not official classifier reconstructions. Frozen discovery signs give
+  matrix-structure reproducibility 0.976, with participant-bootstrap interval [0.684, 0.988].
+- Serotonin: observed receptor panels vary; missing receptors remain unknown in the primary analysis.
+  Entropy strongly tracks panel size, and a fixed-panel control changes the apparent clustering.
+- CVD: common numerical cutoffs are classification sensitivity checks. The PCE and Framingham endpoints
+  differ, so discrepancies are not interpreted as treatment changes or calibration error.
 
-A single formula is still fine and often more convenient — you can compute it on one item in isolation,
-and it can have an intuitive physical meaning. But if you're able to look at the whole space of
-reasonable formulas at once, the consensus is the less arbitrary summary.
+`paper/manuscript.md` is authoritative. Outputs in `analysis/outputs/reaudit.txt` and the domain output
+directories document validation; `paper/check_claims.py` checks registered quantitative claims against
+stored results. Older working notes are historical wherever they conflict.
 
 ## Repo map
 - **`paper/manuscript.md`** — **the canonical submission draft** (Journal of Theoretical Biology).
@@ -57,8 +58,8 @@ reasonable formulas at once, the consensus is the less arbitrary summary.
 - **`paper/related-work.md`** — prior-art notes.
 - **`synthesis/repo-findings.md`** — verified ground truth from the four source repos; **§6** has the
   controlled re-analyses, prior-art map, and decision log. **Start here** for provenance.
-- **`analysis/`** — the controlled re-analyses behind §4.1 to §4.4 and §5. `run_all.sh` regenerates every
-  file in `analysis/outputs/`, which is the source of truth for those numbers. The scripts read the four
+- **`analysis/`** — the controlled re-analyses behind §4.1 to §4.4 and §5. `run_all.sh` regenerates the current core scientific
+  results in `analysis/outputs/` (the initial audit report is historical), which is the source of truth for those numbers. The scripts read the four
   source repos by absolute path, so those must be cloned as siblings.
 - **`tp53/`** — TP53 variant effect (§4.5), computed end-to-end on public data (ProteinGym DMS +
   AlphaMissense + NCI/Kato transactivation + ClinVar). `tp53/README.md` writeup, `tp53/analysis/run_all.sh`
@@ -69,8 +70,8 @@ reasonable formulas at once, the consensus is the less arbitrary summary.
   and the base-set/completeness caveat. `inflammation/analysis/run_all.sh` regenerates its outputs.
 - **`paper/framework-core.md`**, **`meta-paper-plan.md`** — SUPERSEDED / historical (old "new-math" framing).
 
-### The six domains and where each one lives
-Four of the six instances were computed in separate sibling repositories, which have to be archived
+### The seven domains and where each one lives
+Four of the original instances were computed in separate sibling repositories, which have to be archived
 alongside this one for the paper's data-availability statement to hold.
 
 | § | Domain | Instance repository |
@@ -81,8 +82,9 @@ alongside this one for the paper's data-availability statement to hold.
 | 4.4 | Methylation exposure biomarkers | `../methylation-biomarker-agreement` |
 | 4.5 | TP53 variant effect | `tp53/` (this repo) |
 | 4.6 | Inflammatory burden | `inflammation/` (this repo) |
+| 4.7 | Cardiovascular risk | `cvdrisk/` (this repo) |
 
-## Status (2026-09)
+## Historical status (2026-09; see November corrections above)
 Re-scoped from a new-mathematics claim to a methods/Perspective paper after three adversarial referees
 and controlled re-analyses. Core empirical claims are honest and controlled (near-ties, not a
 "consequential middle"; detection-floor instability; cross-cohort reproducibility). Formalism is
@@ -91,52 +93,26 @@ borrowed prior art (Patil–Taillie; RMT; Szpilrajn; average-rank canonical exte
 `paper/references-formatted.md` in its reference style. The venue survey below is retained as the
 reasoning behind that choice and as a fallback list; it is not a live recommendation.
 
-## Refinements from the kinase cross-dataset validation — FOLDED IN ✓
+## Analysis controls imported from the kinase revisions
 
-The kinase candidate was validated across all four datasets (orientation correct everywhere, D4 100%,
-T-robust, gate-necessity shown by the un-gated inversion). That work surfaced protocol/framework
-refinements. **All four are written into the paper:** #1 → `paper/manuscript.md` §3 step 1 + the
-"Sharpening the desiderata" note (G2); #2, #3 → same note (G3, G1) + `synthesis/repo-findings.md` §2.5
-table; #4 → `paper/formal-spine.md` §1.1. **#1 and #4 are now DEMONSTRATED across all four domains**
-(not just kinase-asserted) via `analysis/external_anchor.py` — every standard measure correctly oriented
-against its external anchor, the un-gated candidate control caught, and consensus–anchor agreement +0.65
-to +0.94 (stronger at the extremes); see `paper/manuscript.md` §5 point 6 and
-`analysis/outputs/external_anchor.txt`. The notes below are the rationale/record.
+The protocol now declares the biological target unit, exact formula, affinity weighting, missingness,
+undefined scores, eligibility and parameter contexts before interpreting disagreements. Published and
+modified entropy forms are compared explicitly. Boundary locality, robustness to boundary crossings,
+orientation and panel recovery are distinct properties; construction guarantees state their domain and
+scale conditions. The current kinase candidate is gated exponential entropy, with T >= tau* - x0 for the
+weak-addition guarantee. Historical softplus/hinge experiments retain their old criterion numbering only
+as records of exploration.
 
-1. **Orientation check against an external anchor → sharpen G2 (monotonicity in the concept).**
-   The kinase candidate passed stability, monotonicity, and panel-convergence while being *oriented
-   backwards* (it measured promiscuity, not selectivity); the internal desiderata missed it, a crude
-   external proxy (n_active) caught it. Lesson: **verify G2 against a theory-light external proxy of the
-   concept's direction, not just internal consistency** — n_active (selectivity), chronological age
-   (clocks), self-reported pack-years (smoking). This also breaks a circularity: `≽` is currently
-   estimated purely as the consensus of the measures, so a collectively mis-oriented set would go
-   uncaught; an external anchor is the independent check. (Motivating example: the un-gated inversion,
-   −0.943 vs the distribution family.)
+Recovery reports eligibility retention, conditional rank agreement and pair recovery that counts lost
+eligibility as zero credit. Base-set omissions, participant/compound bootstraps, fixed-panel serotonin
+controls and matched-compound kinase comparisons expose sensitivity. Replication establishes stability
+conditional on these choices, not the cause of disagreement. Uniform extension averaging is a stated
+convention, not a uniquely valid biological measure.
 
-2. **Distinguish apparatus-fixed vs analyst-chosen nuisance parameters → sharpen G3 (ordinal stability
-   under nuisance).** The D3 "is the floor a free baseline or a fixed physical constant?" confusion is
-   general. **G3 should require robustness only to analyst-chosen parameters; apparatus-fixed ones
-   (detection floor, assay type) are declared context, not things to vary.** Conflating them cuts both
-   ways — dinging a measure for a parameter that isn't free, or "passing" it by testing the wrong knob.
-   Empirical wrinkle worth stating: boundary-sensitivity is itself data-dependent (Anastassiadis +0.91
-   vs Klaeger −0.93), because it depends on how many objects sit near the boundary.
-
-3. **Reliability gate (G1) can be load-bearing for correctness, not just a "flag unreliable" nicety.**
-   Without the gate the kinase measure doesn't merely get noisy at low signal — it *inverts*. So G1 is
-   more central than "report NA below threshold": gating the low-signal region can be what keeps a
-   measure correctly oriented at all.
-
-4. **(Bonus) External anchor also validates the consensus order.** The same external proxy (idea 1) can
-   check that the consensus `≽` agrees with a crude independent proxy at the extremes (where both should
-   be unambiguous) — an external-validity check on the skeleton, complementing the internal cross-cohort
-   reproducibility test.
-
-Also: the cross-dataset validation turns "a valid closed-form candidate exists" (option i) into
-"validated across four assay technologies," which strengthens the (i)-vs-(ii) framing in §5.
-
-Placement when written up: #1 → §2 protocol (an orientation step) + the §2 "Sharpening the desiderata" note (G2); #2, #3 → that same §2 note (G3, G1);
-#4 → the `≽`-estimation / reproducibility discussion (formal-spine §1.1). Running illustration: the
-kinase inversion + cross-dataset validation (`selectivity/candidate_validation.py`).
+Run the full local workflow with `bash analysis/run_framework.sh`. Python with numpy/pandas/scipy/sklearn,
+R with dplyr, and `clang++` for the small native sampler are required; source data and sibling repositories
+must already be present. No source-domain repository is modified by this workflow. Input/code SHA256 hashes
+and sibling HEAD revisions are recorded by `analysis/provenance.py`.
 
 ---
 

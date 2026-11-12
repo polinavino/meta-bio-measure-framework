@@ -1,0 +1,164 @@
+
+=== broader panel: N=949, tested receptors=4..12, available columns=13 ===
+Observed-only, log gap: eligible/defined=898; incomparable=0.5661; tie-only=0.0967
+  S-score : rho(score, measured receptors)=+0.054
+  entropy : rho(score, measured receptors)=-0.831
+  Gini    : rho(score, measured receptors)=+0.097
+  ratio   : rho(score, measured receptors)=-0.082
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.344  0.752  0.300
+entropy  0.344    1.000  0.423  0.330
+Gini     0.752    0.423  1.000  0.529
+ratio    0.300    0.330  0.529  1.000
+Floor-imputed scenario, log gap: eligible/defined=898; incomparable=0.4450; tie-only=0.1131
+  S-score : rho(score, measured receptors)=-0.571
+  entropy : rho(score, measured receptors)=-0.831
+  Gini    : rho(score, measured receptors)=-0.796
+  ratio   : rho(score, measured receptors)=-0.082
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.783  0.800  0.268
+entropy  0.783    1.000  0.991  0.330
+Gini     0.800    0.991  1.000  0.378
+ratio    0.268    0.330  0.378  1.000
+Observed-only, source pKi quotient: eligible/defined=895; incomparable=0.5579; tie-only=0.0956
+  S-score : rho(score, measured receptors)=+0.059
+  entropy : rho(score, measured receptors)=-0.831
+  Gini    : rho(score, measured receptors)=+0.102
+  ratio   : rho(score, measured receptors)=-0.104
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.337  0.750  0.350
+entropy  0.337    1.000  0.417  0.359
+Gini     0.750    0.417  1.000  0.545
+ratio    0.350    0.359  0.545  1.000
+Paired observed/floor-imputed ranking correlations: [np.float64(0.7453), np.float64(1.0), np.float64(0.4835), np.float64(1.0)]
+Exactly 4 measured receptors (identities still vary): eligible/defined=549; incomparable=0.3564; tie-only=0.1947
+  S-score : rho(score, measured receptors)=+nan
+  entropy : rho(score, measured receptors)=+nan
+  Gini    : rho(score, measured receptors)=+nan
+  ratio   : rho(score, measured receptors)=+nan
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.798  0.796  0.354
+entropy  0.798    1.000  0.995  0.573
+Gini     0.796    0.995  1.000  0.603
+ratio    0.354    0.573  0.603  1.000
+Exactly 5 measured receptors (identities still vary): eligible/defined=113; incomparable=0.4256; tie-only=0.1686
+  S-score : rho(score, measured receptors)=+nan
+  entropy : rho(score, measured receptors)=+nan
+  Gini    : rho(score, measured receptors)=+nan
+  ratio   : rho(score, measured receptors)=+nan
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.718  0.703  0.196
+entropy  0.718    1.000  0.992  0.478
+Gini     0.703    0.992  1.000  0.512
+ratio    0.196    0.478  0.512  1.000
+Exactly 6 measured receptors (identities still vary): eligible/defined=78; incomparable=0.5208; tie-only=0.1392
+  S-score : rho(score, measured receptors)=+nan
+  entropy : rho(score, measured receptors)=+nan
+  Gini    : rho(score, measured receptors)=+nan
+  ratio   : rho(score, measured receptors)=+nan
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.513  0.532  0.051
+entropy  0.513    1.000  0.986  0.398
+Gini     0.532    0.986  1.000  0.398
+ratio    0.051    0.398  0.398  1.000
+Largest identical observed receptor panel: n=359; receptors=4
+Identical observed receptor panel: eligible/defined=332; incomparable=0.3165; tie-only=0.1724
+  S-score : rho(score, measured receptors)=+nan
+  entropy : rho(score, measured receptors)=+nan
+  Gini    : rho(score, measured receptors)=+nan
+  ratio   : rho(score, measured receptors)=+nan
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.859  0.858  0.506
+entropy  0.859    1.000  0.996  0.623
+Gini     0.858    0.996  1.000  0.654
+ratio    0.506    0.623  0.654  1.000
+
+=== 2A/2B covered subset: N=297, tested receptors=4..12, available columns=13 ===
+Observed-only, log gap: eligible/defined=285; incomparable=0.7544; tie-only=0.0702
+  S-score : rho(score, measured receptors)=+0.328
+  entropy : rho(score, measured receptors)=-0.943
+  Gini    : rho(score, measured receptors)=+0.433
+  ratio   : rho(score, measured receptors)=+0.073
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000   -0.131  0.677  0.149
+entropy -0.131    1.000 -0.148  0.029
+Gini     0.677   -0.148  1.000  0.334
+ratio    0.149    0.029  0.334  1.000
+Floor-imputed scenario, log gap: eligible/defined=285; incomparable=0.5609; tie-only=0.0839
+  S-score : rho(score, measured receptors)=-0.622
+  entropy : rho(score, measured receptors)=-0.943
+  Gini    : rho(score, measured receptors)=-0.908
+  ratio   : rho(score, measured receptors)=+0.073
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.731  0.755  0.053
+entropy  0.731    1.000  0.990  0.029
+Gini     0.755    0.990  1.000  0.078
+ratio    0.053    0.029  0.078  1.000
+Observed-only, source pKi quotient: eligible/defined=285; incomparable=0.7491; tie-only=0.0697
+  S-score : rho(score, measured receptors)=+0.328
+  entropy : rho(score, measured receptors)=-0.943
+  Gini    : rho(score, measured receptors)=+0.433
+  ratio   : rho(score, measured receptors)=+0.051
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000   -0.131  0.677  0.193
+entropy -0.131    1.000 -0.148  0.054
+Gini     0.677   -0.148  1.000  0.331
+ratio    0.193    0.054  0.331  1.000
+Paired observed/floor-imputed ranking correlations: [np.float64(0.4691), np.float64(1.0), np.float64(-0.0454), np.float64(1.0)]
+Exactly 4 measured receptors (identities still vary): eligible/defined=85; incomparable=0.4507; tie-only=0.3303
+  S-score : rho(score, measured receptors)=+nan
+  entropy : rho(score, measured receptors)=+nan
+  Gini    : rho(score, measured receptors)=+nan
+  ratio   : rho(score, measured receptors)=+nan
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.583  0.560 -0.080
+entropy  0.583    1.000  0.993  0.357
+Gini     0.560    0.993  1.000  0.389
+ratio   -0.080    0.357  0.389  1.000
+Exactly 5 measured receptors (identities still vary): eligible/defined=47; incomparable=0.4635; tie-only=0.1795
+  S-score : rho(score, measured receptors)=+nan
+  entropy : rho(score, measured receptors)=+nan
+  Gini    : rho(score, measured receptors)=+nan
+  ratio   : rho(score, measured receptors)=+nan
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.652  0.641  0.184
+entropy  0.652    1.000  0.990  0.357
+Gini     0.641    0.990  1.000  0.386
+ratio    0.184    0.357  0.386  1.000
+Exactly 6 measured receptors (identities still vary): eligible/defined=37; incomparable=0.5691; tie-only=0.1336
+  S-score : rho(score, measured receptors)=+nan
+  entropy : rho(score, measured receptors)=+nan
+  Gini    : rho(score, measured receptors)=+nan
+  ratio   : rho(score, measured receptors)=+nan
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.480  0.545 -0.060
+entropy  0.480    1.000  0.987  0.221
+Gini     0.545    0.987  1.000  0.192
+ratio   -0.060    0.221  0.192  1.000
+Largest identical observed receptor panel: n=41; receptors=4
+Identical observed receptor panel: eligible/defined=37; incomparable=0.3889; tie-only=0.3063
+  S-score : rho(score, measured receptors)=+nan
+  entropy : rho(score, measured receptors)=+nan
+  Gini    : rho(score, measured receptors)=+nan
+  ratio   : rho(score, measured receptors)=+nan
+  Spearman matrix (concept-positive):
+             S  entropy   Gini  ratio
+S        1.000    0.659  0.643  0.247
+entropy  0.659    1.000  0.981  0.470
+Gini     0.643    0.981  1.000  0.538
+ratio    0.247    0.470  0.538  1.000
+
+Active count is a shared-input proxy, not an external anchor. Sparse panels and selection preclude a general serotonin family claim.

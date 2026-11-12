@@ -12,6 +12,11 @@ inflammatory burden / older). Anchor = chronological age. Data: SImAge cohort (n
 This is a smaller, more heterogeneous panel than the other two topics — treated as a qualitative check,
 not a strong instance. See README limits.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analysis"))
+from order_utils import pair_disagreement, average_rank
 import numpy as np, pandas as pd
 from scipy.stats import rankdata, spearmanr
 from sklearn.linear_model import ElasticNetCV
@@ -64,9 +69,10 @@ print("  consensus vs age by tertile (mean age):",
 
 print("\n(near-tie) pairwise discordance among the 5 measures vs consensus separation:")
 Rk=np.column_stack([rankdata(X[:,k]) for k in range(len(names))])
-i,j=np.triu_indices(N,1); s0=np.sign(Rk[j,0]-Rk[i,0]); disc=np.zeros(len(i),bool)
-for k in range(1,len(names)): disc|=(np.sign(Rk[j,k]-Rk[i,k])!=s0)
-ax=cp; sep=np.abs(ax[i]-ax[j])
+i,j=np.triu_indices(N,1)
+disc, tie_only = pair_disagreement(Rk, i, j)
+print(f"Tie-only disagreement (comparable pairs): {tie_only.mean():.4f}")
+sep=np.abs(cp[i]-cp[j])
 print(f"  overall discordance {disc.mean():.3f}")
 for a,b in zip(np.quantile(sep,[0,.25,.5,.75])[:], np.quantile(sep,[.25,.5,.75,1.0])):
     m=(sep>=a)&(sep<=b); print(f"    sep [{a:.2f},{b:.2f}]: discordance {disc[m].mean():.3f}")

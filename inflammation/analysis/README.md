@@ -1,3 +1,9 @@
+> November 2026 status: earlier numerical and interpretive summaries below are historical.
+> Current authoritative results are in `paper/manuscript.md` (from the repository root) and the
+> regenerated analysis outputs. Sepsis directions are frozen from discovery; the scores are gene-set
+> proxies. Average ranks use checked insertion Gibbs on equivalence classes, and replication does not
+> establish a constitutive cause. See the root README and `analysis/outputs/reaudit.txt`.
+
 # Inflammation analysis scripts
 
 Three topics (see `../README.md`). Python `/Users/polina/miniforge3/bin/python`

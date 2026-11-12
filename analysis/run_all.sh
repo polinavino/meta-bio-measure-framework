@@ -15,9 +15,14 @@ mkdir -p outputs
 
 for s in kinase_concentration kinase_concentration2 kinase_pairwise avg_rank \
          candidate_bench candidate_fix candidate_fix2 candidate_fix3 \
-         external_anchor transfer repro_borrowed; do
+         external_anchor transfer repro_borrowed kinase_controls kinase_platform serotonin_controls protocol_controls; do
   echo "== $s"
   $PY "$s.py" > "outputs/$s.txt"
 done
 
 echo "All controlled re-analyses complete; tracked outputs in $(pwd)/outputs/"
+
+# Classification thresholds and cross-tissue AUCs are part of the manuscript evidence.
+Rscript smoking_control.R > outputs/smoking_control.txt
+Rscript fasd_auc.R > outputs/fasd_auc.txt
+$PY provenance.py

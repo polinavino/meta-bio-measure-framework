@@ -1,4 +1,6 @@
 """
+HISTORICAL EXPLORATION: superseded candidate/criterion numbering. These checks
+are not validation of the current exponential candidate; see kinase_controls.py.
 Benchmark the repo's EXACT softplus-entropy candidate against the other measures and the
 average-rank canonical extension. Investigate the suspected floor-domination inversion.
 Functions copied verbatim from selectivity/candidate_measure.py.
@@ -8,7 +10,7 @@ from scipy.stats import spearmanr, rankdata
 M = pd.read_csv("/Users/polina/Documents/BioInfStuff/selectivity/klaeger_matrix.csv", index_col=0).values.astype(float)
 n_drugs, n_kin = M.shape
 FLOOR, TAU_STAR, T = 5.0, 6.0, 1.0
-def to_ranks(s): return len(s) - s.argsort().argsort()   # repo's exact ranker (rank1 = largest value)
+def to_ranks(s): return rankdata(-s, method="average")   # repo's exact ranker (rank1 = largest value)
 
 # ---- verbatim repo functions ----
 def candidate(P, floor=FLOOR, T=T, eps=1e-10):

@@ -1,21 +1,10 @@
-"""
-Cross-domain demonstration of two protocol refinements:
+"""Dependence-aware orientation checks and mean-rank anchor associations.
 
-(1) ORIENTATION CHECK (G2). Each measure, oriented to "more of the concept", should track a crude,
-    theory-light EXTERNAL ANCHOR in the expected direction. This is the check that catches a measure
-    which is internally consistent (stable/monotone) yet points backwards. Control: the un-gated kinase
-    candidate, which FAILS it.
-(2) EXTERNAL ANCHOR VALIDATES THE CONSENSUS (formal-spine §1.1). The consensus order of the measures
-    should agree with the anchor especially at the EXTREMES (where both are unambiguous). We report the
-    overall Spearman and the Spearman restricted to anchor-extreme vs anchor-middle objects.
-
-Anchors:  kinase / serotonin selectivity -> n_active (fewer active targets = more selective; NEG expected)
-          clocks biological age           -> chronological age                     (POS expected)
-          smoking exposure                -> never<former<current ordinal          (POS expected)
-
-Concept-positive orientation of each measure uses its KNOWN convention (not the anchor -> non-circular):
-  selectivity: -s_score, -entropy, +gini, +ratio ;  clocks: +clock ;  smoking exposure: -signature.
-Deterministic.
+Directions are fixed by convention. Active count shares selectivity inputs, age
+trains position clocks, and smoking labels are metadata. These checks do not
+independently validate an entire consensus order. Clock summaries pool only the
+position type; serotonin leaves unmeasured receptors unknown. The historical
+ungated softplus is an explicitly obsolete negative control.
 """
 import numpy as np, pandas as pd
 from scipy.stats import rankdata, spearmanr
@@ -45,15 +34,16 @@ def load_kinase():
     M=pd.read_csv("/Users/polina/Documents/BioInfStuff/selectivity/klaeger_matrix.csv",index_col=0).values.astype(float)
     meas,na=selectivity_measures(M); return meas, na, "n_active", -1
 def load_serotonin():
-    df=pd.read_csv("/Users/polina/Documents/BioInfStuff/psychedelic-selectivity/data/serotonin_receptor_matrix.csv")
-    R=df.iloc[:,1:].to_numpy(float); keep=(~np.isnan(R)).sum(1)>=4      # >=4 receptors measured -> N=949 (broader than §4.3's 297-compound 2A/2B-overlap set)
-    R=R[keep]; Rf=np.where(np.isnan(R),5.0,R)                            # missing = non-binding floor (pKi 5)
-    meas,na=selectivity_measures(Rf); return meas, na, "n_active(pKi>6)", -1
+    from serotonin_controls import observed_anchor
+    x, na, measured = observed_anchor()
+    meas = dict(zip(["S-score", "entropy", "Gini", "ratio"], x.T))
+    return meas, na, "observed n_active (shared-input proxy; variable coverage)", -1
 def load_clocks():
     co=pd.read_parquet("/Users/polina/Documents/BioInfStuff/epigenetic-clock-desiderata/data/clock_outputs.parquet")
     ins=pd.read_parquet("/Users/polina/Documents/BioInfStuff/epigenetic-clock-desiderata/data/instability_scores.parquet")
     age=ins["age"].reindex(co.index).to_numpy(float); ok=~np.isnan(age)
-    meas={c: co[c].to_numpy(float)[ok] for c in co.columns}             # clocks: higher = older (concept-positive)
+    # A scalar consensus is formed only within the position-clock type.
+    meas={c: co[c].to_numpy(float)[ok] for c in ["Horvath", "Hannum"]}
     return meas, age[ok], "chronological age", +1
 def load_smoking():
     a=pd.read_csv("/Users/polina/Documents/BioInfStuff/meta-bio-measure-framework/analysis/data/smoke50660.csv")
@@ -67,6 +57,8 @@ def load_smoking():
 
 DOMAINS={"kinase":load_kinase,"serotonin":load_serotonin,"clocks":load_clocks,"smoking":load_smoking}
 
+print("Anchors: active count shares inputs with selectivity scores; age is a clock training target.")
+print("Smoking labels are external metadata. Correlation checks orientation, not causal validity.")
 print("="*78)
 print("(1) ORIENTATION CHECK — each concept-positive measure vs the external anchor")
 print("    expected sign: kinase/serotonin NEG (more targets=less selective); clocks/smoking POS")
@@ -95,7 +87,7 @@ print(f"\nCONTROL — un-gated kinase candidate (intended 'more selective', expe
 print(f"   vs n_active: {sr(cand_ungated(Mk),na_k):+.3f}   -> POSITIVE = MIS-ORIENTED (the check catches it)")
 
 print("\n"+"="*78)
-print("(2) EXTERNAL ANCHOR VALIDATES THE CONSENSUS — agreement, esp. at the extremes")
+print("(2) ANCHOR ASSOCIATIONS OF A MEAN-RANK SUMMARY — dependence must be declared")
 print("="*78)
 def fmt(x): return "n/a (constant)" if x is None or np.isnan(x) else f"{x:+.3f}"
 for name,(cons,anchor,exp,aname) in consensus_store.items():
@@ -112,5 +104,15 @@ for name,(cons,anchor,exp,aname) in consensus_store.items():
     print(f"   mean consensus-pct by anchor tertile:  bottom {pm(lo)} | middle {pm(mid)} | top {pm(hi)}  (monotone = tracks)")
     print(f"   agreement Spearman:  extremes (n={ext.sum()}) {fmt(s_ext)} | middle (n={mid.sum()}) {fmt(s_mid)}")
     if mid.sum()==0: print("   (anchor too discrete/tied to form a middle tertile — see per-tertile bottom/top)")
-print("\n(Expect: strong overall agreement; monotone consensus across anchor tertiles;")
-print(" and higher agreement at the extremes than in the middle — the concept decides the extremes.)")
+    # Pooling bottom+top spans the whole anchor range while the middle spans one third,
+    # and Spearman is attenuated by range restriction, so the pooled contrast above is
+    # partly an artifact of the split. Each tertile alone carries the same restriction.
+    _per = []
+    for _nm, _m in [("bottom", lo), ("middle", mid), ("top", hi)]:
+        _r = sr(cp[_m], anchor[_m]) if _m.sum() > 2 else float("nan")
+        _per.append(f"{_nm} {fmt(_r)} (n={_m.sum()})")
+    print(f"   per-tertile (comparable range restriction):  " + " | ".join(_per))
+print("\n(Expect: strong overall agreement and a monotone consensus across anchor tertiles.")
+print(" The pooled extremes-vs-middle gap is read against the per-tertile line: where one")
+print(" extreme agrees no better than the middle, the gap is a floor or ceiling effect at the")
+print(" other end rather than a symmetric extremes-versus-middle pattern.)")

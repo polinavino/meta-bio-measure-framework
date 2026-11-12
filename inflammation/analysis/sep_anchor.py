@@ -10,6 +10,7 @@ rank, is the right tool; noted honestly). Deterministic.
 """
 import numpy as np, pandas as pd
 from scipy.stats import rankdata, spearmanr
+from sepsis_orientation import discovery_signs
 
 import sys as _sys
 _OUT = "/Users/polina/Documents/BioInfStuff/meta-bio-measure-framework/inflammation/analysis/outputs/sepsis_anchor.txt"
@@ -25,10 +26,10 @@ D = pd.read_csv("/Users/polina/Documents/BioInfStuff/meta-bio-measure-framework/
 Dm = D[D["mortality"].notna()].reset_index(drop=True); y = Dm["mortality"].to_numpy().astype(int)
 print(f"=== Sepsis anchor + endotype caveat (N={len(Dm)}, deaths={y.sum()}) ===\n")
 
-print("(1) each signature vs mortality (raw AUC and the orientation sign it implies):")
-signs={}
+print("(1) each signature vs mortality (raw AUC and the frozen discovery orientation sign):")
+signs=discovery_signs(D, SIG)
 for s in SIG:
-    a=auc(Dm[s].to_numpy(float),y); signs[s]=1 if a>=0.5 else -1
+    a=auc(Dm[s].to_numpy(float),y)
     print(f"  {s:12s} raw AUC={a:.3f}  -> orient {'+' if signs[s]>0 else '-'}  (|AUC-0.5|={abs(a-0.5):.3f})")
 print("  (Signatures differ in how strongly they track outcome; some barely beat chance — they do not")
 print("   agree on who is high-risk, the same disagreement seen in the family structure.)")

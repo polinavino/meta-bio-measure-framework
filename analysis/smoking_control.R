@@ -18,8 +18,8 @@ norm_status <- function(df){
 s50 <- norm_status(s50); s42 <- norm_status(s42)
 
 ## ---- (1)+(2) classification agreement, per cohort, threshold sweep ----
-agree_tab <- function(df, mult){
-  never <- df[df$grp=="never",]
+agree_tab <- function(df, mult, reference=df){
+  never <- reference[reference$grp=="never",]
   thr <- sapply(sigs, function(s) mean(never[[s]],na.rm=TRUE) - mult*sd(never[[s]],na.rm=TRUE))
   # classify "smoker" if score below threshold (lower=more exposure)
   cls <- sapply(sigs, function(s) df[[s]] < thr[s])
@@ -30,6 +30,9 @@ agree_tab <- function(df, mult){
 cat("=== (1) Per-cohort C3 agreement at threshold never_mean - 2*SD ===\n")
 cat("GSE50660:\n"); print(as.data.frame(agree_tab(s50,2)))
 cat("GSE42861:\n"); print(as.data.frame(agree_tab(s42,2)))
+cat("\n=== Frozen GSE50660 never-smoker thresholds applied to GSE42861 (mult=2) ===\n")
+print(as.data.frame(agree_tab(s42,2,reference=s50)))
+cat("Cohort-specific thresholds above are descriptive; this frozen-threshold table tests transfer.\n")
 
 cat("\n=== (2) Threshold robustness (never/current/former agreement, both cohorts) ===\n")
 cat("mult | GSE50660 never curr former | GSE42861 never curr former\n")

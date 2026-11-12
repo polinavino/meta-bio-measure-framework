@@ -1,11 +1,18 @@
 === Cross-platform reproducibility (yeast promoters vs mammalian DMS), N=2308 ===
 
-  (Giacomelli conditions sign-aligned to the yeast consensus; alignment signs: ['-1', '-1', '-1'] — negative confirms the ProteinGym 'fitness' convention is opposite to deleteriousness.)
+  Giacomelli signs fixed in advance: [-1, -1, -1] (fitness -> deleteriousness)
 
 (1) Spearman(consensus_yeast, consensus_mammalian):
     overall +0.487 | extremes +0.627 | middle -0.054
-    (High overall + stronger at the extremes = the comparability skeleton is constitutive;
-     the middle is where BOTH platforms lose resolution — the concept is silent there.)
+    per-tertile (same range restriction in each, so comparable):
+      bottom (functional)    +0.008  (n=770)
+      middle                 -0.054  (n=768)
+      top (deleterious)      +0.561  (n=770)
+    pooled extremes - middle: +0.681  bootstrap 95% CI [+0.605, +0.760]
+    mean(functional,deleterious) - middle: +0.338  bootstrap 95% CI [+0.254, +0.423]
+    (The agreement at the extremes is carried by the deleterious end; the functional
+     end agrees no better than the middle, so this is a floor effect shared by both
+     platforms, not a symmetric extremes-versus-middle pattern.)
 
 (2) Direction agreement between platforms, by yeast-platform separation:
     |Δconsensus_yeast| in [0.000,0.106]: cross-platform agreement=0.533  (n=531,975)
@@ -13,6 +20,6 @@
     |Δconsensus_yeast| in [0.226,0.368]: cross-platform agreement=0.647  (n=532,427)
     |Δconsensus_yeast| in [0.368,0.553]: cross-platform agreement=0.697  (n=532,491)
     |Δconsensus_yeast| in [0.553,0.998]: cross-platform agreement=0.850  (n=532,468)
-    (Agreement ~chance for yeast near-ties, ->~1.0 for well-separated pairs: the two independent
-     platforms AGREE exactly where the concept decides and BOTH are unsure on the same near-ties.
-     The incomparable set is reproducible => constitutive, not an artifact of either assay.)
+    These are direction-agreement summaries of two scalar consensuses, not a direct
+    replication test of their incomparable sets. Near-chance agreement cannot distinguish
+    biological ambiguity from assay resolution and measurement error.

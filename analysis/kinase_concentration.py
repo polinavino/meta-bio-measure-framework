@@ -54,7 +54,7 @@ def ratio_selectivity(P, top_n=1):  # higher=selective
 s_thr = np.arange(5.5, 8.25, 0.25)          # 11
 base  = np.arange(5.0, 6.75, 0.25)          # 7
 def to_rank(sel_score):  # higher sel_score -> rank 1
-    return len(sel_score) - rankdata(sel_score, method="ordinal") + 1
+    return len(sel_score) - rankdata(sel_score, method="average") + 1
 
 meas_ranks = {}
 meas_ranks["s_score"] = np.median([to_rank(-s_score(M,t)) for t in s_thr], axis=0)
@@ -130,6 +130,6 @@ print(f"\n  Interior-concentration slope (Spearman disagreement~middleness):")
 print(f"     observed = {obs:.3f}")
 print(f"     independence null: mean={null.mean():.3f}, 2.5-97.5% = [{np.percentile(null,2.5):.3f},{np.percentile(null,97.5):.3f}]")
 print(f"     observed exceeds null: {obs > np.percentile(null,97.5)}")
-print("\n  Interpretation: if observed >> null, interior concentration is structural,")
-print("  not a boundary-compression artifact. If observed within null band, the")
-print("  'middle' pattern is mechanical and the concentration claim must be downgraded.")
+print("\n  Interpretation: this tests one independence null for rank-boundary effects.")
+print("  A value inside its band supplies no evidence beyond that null; a value outside")
+print("  it would not by itself identify a biological or concept-level cause.")

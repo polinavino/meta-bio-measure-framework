@@ -21,11 +21,12 @@ recomputed ipAGE: ElasticNet on 300 controls, 37/46 nonzero coefs; ipAGE vs age 
   consensus vs age by tertile (mean age): bottom 36.5 | middle 52.0 | top 71.9
 
 (near-tie) pairwise discordance among the 5 measures vs consensus separation:
-  overall discordance 0.549
-    sep [0.00,0.13]: discordance 0.957
-    sep [0.13,0.30]: discordance 0.716
-    sep [0.30,0.50]: discordance 0.402
-    sep [0.50,1.00]: discordance 0.120
+Tie-only disagreement (comparable pairs): 0.0076
+  overall discordance 0.541
+    sep [0.00,0.13]: discordance 0.953
+    sep [0.13,0.30]: discordance 0.706
+    sep [0.30,0.50]: discordance 0.391
+    sep [0.50,1.00]: discordance 0.114
 
 (consensus poset) incomparable fraction = 0.541  (5 measures, n=343)
 

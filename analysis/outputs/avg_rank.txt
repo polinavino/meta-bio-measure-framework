@@ -1,18 +1,20 @@
-Gated-in compounds N=206; incomparable-pair fraction in consensus poset = 0.372
-Running two independent Bubley-Dyer chains ...
-Chain convergence: Spearman(chain1, chain2) = 0.9968  (want ~1.0)
+Gated-in compounds N=200; incomparable-pair fraction in consensus poset = 0.379
+Kinase consensus: 200 objects, 200 equivalence classes; tied objects share class rank
+Insertion Gibbs: 4 dispersed chains; burn=512 sweeps; draws=1024; thin=2; max split-Rhat=1.01365; max MCSE=0.600 ranks (0.003000 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=1024 sweeps; draws=2048; thin=2; max split-Rhat=1.00839; max MCSE=0.627 ranks (0.003134 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=2048 sweeps; draws=4096; thin=2; max split-Rhat=1.00497; max MCSE=0.364 ranks (0.001822 of classes); PASS
 
 Spearman of each existing measure's ranking vs canonical average-rank extension:
-  S-score  : +0.869
-  entropy  : +0.950
-  Gini     : +0.955
-  ratio    : +0.796
+  S-score  : +0.813
+  entropy  : +0.944
+  Gini     : +0.949
+  ratio    : +0.817
 
 Mean |rank - canonical| (rank units, N compounds):
-  S-score  :  22.2
-  entropy  :  13.6
-  Gini     :  13.0
-  ratio    :  29.0
+  S-score  :  24.4
+  entropy  :  13.4
+  Gini     :  12.9
+  ratio    :  26.7
 
 Interpretation: the measure closest to the canonical average-rank extension is the
-best single proxy for the weight-free consensus aggregate; large gaps = commits beyond consensus.
+best single proxy for the weight-free consensus aggregate; large gaps = lower similarity to this chosen aggregate.

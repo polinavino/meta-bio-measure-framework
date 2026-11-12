@@ -1,18 +1,22 @@
 Consensus poset over N=600 NHANES participants (7 indices): incomparable fraction = 0.728
-Running two Bubley-Dyer chains ...
-Chain convergence: Spearman = 0.9846
+Inflammation consensus: 600 objects, 600 equivalence classes; tied objects share class rank
+Insertion Gibbs: 4 dispersed chains; burn=512 sweeps; draws=1024; thin=2; max split-Rhat=1.00558; max MCSE=3.576 ranks (0.005961 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=1024 sweeps; draws=2048; thin=2; max split-Rhat=1.00297; max MCSE=2.612 ranks (0.004354 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=2048 sweeps; draws=4096; thin=2; max split-Rhat=1.00131; max MCSE=2.684 ranks (0.004473 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=4096 sweeps; draws=8192; thin=2; max split-Rhat=1.00071; max MCSE=1.702 ranks (0.002837 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=8192 sweeps; draws=16384; thin=2; max split-Rhat=1.00037; max MCSE=0.797 ranks (0.001328 of classes); PASS
 
 Spearman(index ranking, canonical average-rank):
-  SII                      rho=+0.983
-  [equal-weight mean rank] rho=+0.899
-  NLR                      rho=+0.839
-  SIRI                     rho=+0.726
-  PLR                      rho=+0.721
-  MLR                      rho=+0.515
-  CRP                      rho=+0.335
-  CAR                      rho=+0.331
+  [equal-weight mean rank] rho=+0.983
+  SII                      rho=+0.844
+  NLR                      rho=+0.795
+  SIRI                     rho=+0.764
+  MLR                      rho=+0.680
+  PLR                      rho=+0.645
+  CRP                      rho=+0.565
+  CAR                      rho=+0.563
 
-Mortality AUC (n=600, deaths=25):  canonical=0.657
+Mortality AUC (n=600, deaths=25):  canonical=0.731
   NLR   0.710
   PLR   0.643
   MLR   0.770

@@ -4,8 +4,14 @@ signatures; separation axis = the consensus mean-rank. (No strong independent co
 here — age is a weak proxy in sepsis — so this is the consensus-coordinate view only, noted honestly.)
 All mortality-labelled samples. Deterministic.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analysis"))
+from order_utils import pair_disagreement, average_rank
 import numpy as np, pandas as pd
 from scipy.stats import rankdata, spearmanr
+from sepsis_orientation import discovery_signs
 from numpy.linalg import lstsq
 
 import sys as _sys
@@ -19,11 +25,12 @@ _sys.stdout = _Tee(_OUT)
 SIG = ["Inflammatory","IFNg","SRS7","SRSq19","MARS8"]
 D = pd.read_csv("/Users/polina/Documents/BioInfStuff/meta-bio-measure-framework/inflammation/data/sepsis_scores.csv")
 D = D[D["mortality"].notna()].reset_index(drop=True); y=D["mortality"].to_numpy().astype(int)
-signs={s:(1 if spearmanr(D[s],y).correlation>=0 else -1) for s in SIG}
+signs = discovery_signs(D, SIG)
 Rk = np.column_stack([rankdata(signs[s]*D[s]) for s in SIG]); N=len(D)
 
-i,j=np.triu_indices(N,1); s0=np.sign(Rk[j,0]-Rk[i,0]); disc=np.zeros(len(i),bool)
-for k in range(1,len(SIG)): disc|=(np.sign(Rk[j,k]-Rk[i,k])!=s0)
+i,j=np.triu_indices(N,1)
+disc, tie_only = pair_disagreement(Rk, i, j)
+print(f"Tie-only disagreement (comparable pairs): {tie_only.mean():.4f}")
 print(f"=== Sepsis pairwise discordance among 5 signatures (N={N}, {len(i):,} pairs) ===")
 print(f"overall discordance rate: {disc.mean():.3f}\n")
 ax=(rankdata(Rk.mean(1))-1)/(N-1); sep=np.abs(ax[i]-ax[j]); midpos=1-2*np.abs((ax[i]+ax[j])/2-0.5)

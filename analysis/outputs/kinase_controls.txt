@@ -1,0 +1,103 @@
+CURRENT KINASE CONTROLS — concept-positive scores, average ties, explicit eligibility
+Source candidate SHA256: 8a6bb65dbe6057d759f32e8806e98fc9444f1b3f9bbb819c0a84fa87041fb31a
+Panel curation: Davis 433->363 constructs/reference targets; Klaeger 343->217; Anastassiadis 300->291; Metz 172
+
+=== Davis: 68 compounds x 363 targets; eligible=68; floor=5; tau=6; T=1 ===
+Fixed-default implementation sensitivity; raw scores, ties retained
+  log entropy : n=68; incomparable=0.3885; rho(ent,S)=+0.976; rho(ent,ratio)=+0.387
+  Ka excluded : n=68; incomparable=0.4359; rho(ent,S)=+0.720; rho(ent,ratio)=+0.722
+  Ka included : n=68; incomparable=0.5404; rho(ent,S)=+0.349; rho(ent,ratio)=+0.536
+Eligibility-threshold sensitivity: scores compared on intersection, with T changed to tau-floor
+  tau=5.5: eligible=68; common=68; candidate rho=0.8525
+  tau=6: eligible=68; common=68; candidate rho=1.0000
+  tau=6.5: eligible=68; common=68; candidate rho=0.9795
+  tau=7: eligible=65; common=65; candidate rho=0.9726
+Criteria checks: D1 explicit max>tau eligibility; D2 no-crossing max score change=1.78e-15; D3 observed weak-addition violations=0; D4 equal-strength orientation=True
+Random subpanels: mean eligibility retention; conditional Spearman; unconditional pair recovery
+Pair denominator: sampled full-panel eligible pairs with a strict full-score order; lost eligibility=0 credit, new tie=0.5; intervals are panel 2.5/97.5% quantiles
+  targets= 20 log entropy : retention=0.758; rho=0.917 [0.862,0.949]; pair=0.509
+  targets= 20 Ka excluded : retention=0.758; rho=0.392 [0.201,0.600]; pair=0.370
+  targets= 20 candidate   : retention=0.758; rho=0.854 [0.780,0.913]; pair=0.484
+  targets= 50 log entropy : retention=0.880; rho=0.966 [0.943,0.980]; pair=0.718
+  targets= 50 Ka excluded : retention=0.880; rho=0.466 [0.276,0.661]; pair=0.521
+  targets= 50 candidate   : retention=0.880; rho=0.909 [0.872,0.944]; pair=0.679
+  targets=100 log entropy : retention=0.939; rho=0.985 [0.976,0.992]; pair=0.842
+  targets=100 Ka excluded : retention=0.939; rho=0.622 [0.452,0.788]; pair=0.655
+  targets=100 candidate   : retention=0.939; rho=0.941 [0.915,0.966]; pair=0.799
+  targets=363 log entropy : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+  targets=363 Ka excluded : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+  targets=363 candidate   : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+
+=== Klaeger: 222 compounds x 217 targets; eligible=200; floor=5; tau=6; T=1 ===
+Fixed-default implementation sensitivity; raw scores, ties retained
+  log entropy : n=200; incomparable=0.3972; rho(ent,S)=+0.953; rho(ent,ratio)=+0.363
+  Ka excluded : n=200; incomparable=0.4219; rho(ent,S)=+0.733; rho(ent,ratio)=+0.711
+  Ka included : n=200; incomparable=0.6533; rho(ent,S)=-0.156; rho(ent,ratio)=+0.372
+Eligibility-threshold sensitivity: scores compared on intersection, with T changed to tau-floor
+  tau=5.5: eligible=213; common=200; candidate rho=0.8705
+  tau=6: eligible=200; common=200; candidate rho=1.0000
+  tau=6.5: eligible=189; common=189; candidate rho=0.9898
+  tau=7: eligible=157; common=157; candidate rho=0.9841
+Criteria checks: D1 explicit max>tau eligibility; D2 no-crossing max score change=1.78e-15; D3 observed weak-addition violations=0; D4 equal-strength orientation=True
+Random subpanels: mean eligibility retention; conditional Spearman; unconditional pair recovery
+Pair denominator: sampled full-panel eligible pairs with a strict full-score order; lost eligibility=0 credit, new tie=0.5; intervals are panel 2.5/97.5% quantiles
+  targets= 20 log entropy : retention=0.469; rho=0.787 [0.674,0.878]; pair=0.179
+  targets= 20 Ka excluded : retention=0.469; rho=0.457 [0.259,0.621]; pair=0.150
+  targets= 20 candidate   : retention=0.469; rho=0.750 [0.639,0.839]; pair=0.176
+  targets= 50 log entropy : retention=0.712; rho=0.907 [0.853,0.939]; pair=0.446
+  targets= 50 Ka excluded : retention=0.712; rho=0.608 [0.491,0.729]; pair=0.374
+  targets= 50 candidate   : retention=0.712; rho=0.877 [0.809,0.914]; pair=0.435
+  targets=100 log entropy : retention=0.876; rho=0.963 [0.945,0.975]; pair=0.708
+  targets=100 Ka excluded : retention=0.876; rho=0.771 [0.690,0.848]; pair=0.624
+  targets=100 candidate   : retention=0.876; rho=0.945 [0.918,0.962]; pair=0.695
+  targets=217 log entropy : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+  targets=217 Ka excluded : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+  targets=217 candidate   : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+
+=== Anastassiadis: 178 compounds x 291 targets; eligible=133; floor=20; tau=50; T=30 ===
+Fixed-default implementation sensitivity; raw scores, ties retained
+  log entropy : n=133; incomparable=0.2938; rho(ent,S)=+0.954; rho(ent,ratio)=+0.638
+Eligibility-threshold sensitivity: scores compared on intersection, with T changed to tau-floor
+  tau=40: eligible=140; common=133; candidate rho=0.9947
+  tau=50: eligible=133; common=133; candidate rho=1.0000
+  tau=60: eligible=125; common=125; candidate rho=0.9992
+  tau=70: eligible=116; common=116; candidate rho=0.9988
+Criteria checks: D1 explicit max>tau eligibility; D2 no-crossing max score change=1.78e-15; D3 observed weak-addition violations=0; D4 equal-strength orientation=True
+Random subpanels: mean eligibility retention; conditional Spearman; unconditional pair recovery
+Pair denominator: sampled full-panel eligible pairs with a strict full-score order; lost eligibility=0 credit, new tie=0.5; intervals are panel 2.5/97.5% quantiles
+  targets= 20 log entropy : retention=0.586; rho=0.886 [0.791,0.950]; pair=0.298
+  targets= 20 candidate   : retention=0.586; rho=0.878 [0.788,0.941]; pair=0.296
+  targets= 50 log entropy : retention=0.766; rho=0.948 [0.907,0.973]; pair=0.533
+  targets= 50 candidate   : retention=0.766; rho=0.945 [0.908,0.968]; pair=0.531
+  targets=100 log entropy : retention=0.884; rho=0.978 [0.963,0.987]; pair=0.737
+  targets=100 candidate   : retention=0.884; rho=0.977 [0.963,0.985]; pair=0.735
+  targets=291 log entropy : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+  targets=291 candidate   : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+
+=== Metz: 704 compounds x 172 targets; eligible=699; floor=4; tau=6; T=2 ===
+Fixed-default implementation sensitivity; raw scores, ties retained
+  log entropy : n=699; incomparable=0.5340; rho(ent,S)=+0.803; rho(ent,ratio)=+0.072
+  Ka excluded : n=699; incomparable=0.6128; rho(ent,S)=+0.361; rho(ent,ratio)=+0.538
+  Ka included : n=699; incomparable=0.6210; rho(ent,S)=+0.314; rho(ent,ratio)=+0.532
+Eligibility-threshold sensitivity: scores compared on intersection, with T changed to tau-floor
+  tau=5.5: eligible=704; common=699; candidate rho=0.9899
+  tau=6: eligible=699; common=699; candidate rho=1.0000
+  tau=6.5: eligible=690; common=690; candidate rho=0.9976
+  tau=7: eligible=680; common=680; candidate rho=0.9950
+Criteria checks: D1 explicit max>tau eligibility; D2 no-crossing max score change=2.66e-15; D3 observed weak-addition violations=0; D4 equal-strength orientation=True
+Random subpanels: mean eligibility retention; conditional Spearman; unconditional pair recovery
+Pair denominator: sampled full-panel eligible pairs with a strict full-score order; lost eligibility=0 credit, new tie=0.5; intervals are panel 2.5/97.5% quantiles
+  targets= 20 log entropy : retention=0.970; rho=0.720 [0.471,0.825]; pair=0.722
+  targets= 20 Ka excluded : retention=0.970; rho=0.337 [0.153,0.521]; pair=0.581
+  targets= 20 candidate   : retention=0.970; rho=0.714 [0.458,0.823]; pair=0.719
+  targets= 50 log entropy : retention=0.989; rho=0.856 [0.710,0.916]; pair=0.822
+  targets= 50 Ka excluded : retention=0.989; rho=0.546 [0.381,0.726]; pair=0.685
+  targets= 50 candidate   : retention=0.989; rho=0.847 [0.691,0.907]; pair=0.817
+  targets=100 log entropy : retention=0.996; rho=0.947 [0.882,0.970]; pair=0.900
+  targets=100 Ka excluded : retention=0.996; rho=0.785 [0.616,0.902]; pair=0.810
+  targets=100 candidate   : retention=0.996; rho=0.943 [0.870,0.967]; pair=0.896
+  targets=172 log entropy : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+  targets=172 Ka excluded : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+  targets=172 candidate   : retention=1.000; rho=1.000 [1.000,1.000]; pair=1.000
+
+Construction guarantees are conditional on the stated domain and T bound; recovery is a separate empirical result.

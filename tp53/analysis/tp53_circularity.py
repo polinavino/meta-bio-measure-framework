@@ -80,4 +80,4 @@ for name,s in scorers(lab).items():
     a_fx,n = auc(Sv[name], func_lof)
     print(f"    {name:28s} {a_cv:.3f}      | {a_fx:.3f}  (n={n})        {a_cv-a_fx:+.3f}")
 print("    Every predictor scores lower against experimental truth on the VUS than against curated")
-print("    ClinVar labels — the curated benchmark overstates skill on the decision-relevant variants.")
+print("    ClinVar labels. The endpoints and populations differ; this does not isolate training leakage or inflation.")

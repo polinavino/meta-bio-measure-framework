@@ -1,24 +1,30 @@
 === (i) Gate-cutoff sensitivity (active defined as pKd > cutoff) ===
-  cutoff pKd>5.5: #zero-active=  3 | disagreement zero-active= 92.0 vs active= 25.2
-  cutoff pKd>6.0: #zero-active= 16 | disagreement zero-active= 65.9 vs active= 23.1
-  cutoff pKd>6.5: #zero-active= 26 | disagreement zero-active= 54.8 vs active= 22.3
-  cutoff pKd>7.0: #zero-active= 59 | disagreement zero-active= 40.4 vs active= 21.0
+  cutoff pKd>5.5: #zero-active=  9 | disagreement zero-active= 91.3 vs active= 26.4
+  cutoff pKd>6.0: #zero-active= 22 | disagreement zero-active= 75.4 vs active= 23.9
+  cutoff pKd>6.5: #zero-active= 33 | disagreement zero-active= 63.2 vs active= 23.0
+  cutoff pKd>7.0: #zero-active= 65 | disagreement zero-active= 45.8 vs active= 22.0
+Tie-only disagreement (comparable pairs): 0.0243
 
-=== (ii) Pairwise discordance (gated-in n=206, 21115 pairs) ===
+=== (ii) Pairwise discordance (gated-in n=200, 19900 pairs) ===
   discordance rate by n_active separation (near-ties should dominate):
-    |Δn_active| in [  0,  0]: discordance=0.757  (n_pairs=1113)
-    |Δn_active| in [  1,  2]: discordance=0.666  (n_pairs=3583)
-    |Δn_active| in [  3,  5]: discordance=0.467  (n_pairs=3189)
-    |Δn_active| in [  6, 15]: discordance=0.332  (n_pairs=5938)
-    |Δn_active| in [ 16,999]: discordance=0.186  (n_pairs=7292)
+    |Δn_active| in [  0,  0]: discordance=0.772  (n_pairs=1239)
+    |Δn_active| in [  1,  2]: discordance=0.605  (n_pairs=4020)
+    |Δn_active| in [  3,  5]: discordance=0.421  (n_pairs=3301)
+    |Δn_active| in [  6, 15]: discordance=0.310  (n_pairs=6224)
+    |Δn_active| in [ 16,999]: discordance=0.162  (n_pairs=5116)
 
   Among NEAR-TIE pairs (|Δn_active|<=2), discordance by middle-position of the pair:
-    ends     (midpos 0.00-0.33): discordance=0.740  (n_pairs=886)
-    mid-ish  (midpos 0.33-0.66): discordance=0.658  (n_pairs=2393)
-    center   (midpos 0.66-1.01): discordance=0.705  (n_pairs=1417)
+    ends     (midpos 0.00-0.33): discordance=0.644  (n_pairs=1023)
+    mid-ish  (midpos 0.33-0.66): discordance=0.603  (n_pairs=2553)
+    center   (midpos 0.66-1.01): discordance=0.708  (n_pairs=1683)
 
-  Linear-prob model: R^2 sep-only=0.1639, sep+midpos=0.1664
-  midpos coefficient (added value beyond separation): -0.1060
+  Linear-prob model: R^2 sep-only=0.1526, sep+midpos=0.1534
+  midpos coefficient (added value beyond separation): -0.0594
 
-  If discordance is dominated by small |Δn_active| and midpos adds ~0 beyond separation,
-  then disagreement = near-ties (wherever they fall), NOT a concept-level 'middle'.
+  Shared-input check: exclude S-score from the discordance panel (same gated population).
+    without S-score |Δn_active| [0,0]: strict=0.327; tie-only=0.101
+    without S-score |Δn_active| [1,2]: strict=0.373; tie-only=0.011
+    without S-score |Δn_active| [3,5]: strict=0.321; tie-only=0.005
+    without S-score |Δn_active| [6,15]: strict=0.274; tie-only=0.004
+    without S-score |Δn_active| [16,999]: strict=0.162; tie-only=0.003
+  An active-count axis is not an independent anchor. Report these associations descriptively.

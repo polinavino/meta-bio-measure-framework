@@ -1,0 +1,11 @@
+CID-resolved overlap=46; shared curated genes=201; eligible on both=40
+  same-definition cross-platform rho, S-score  = 0.7372
+  same-definition cross-platform rho, entropy  = 0.8487
+  same-definition cross-platform rho, Gini     = 0.8428
+  same-definition cross-platform rho, ratio    = 0.4574
+Pairs=780; incomparable Davis=0.3090, Klaeger=0.4077
+Incomparable-set Jaccard=0.2940; intersection=127, union=432
+Direction agreement on pairs comparable and strict on both=0.9540 (pairs=348)
+Matched-compound bootstrap Jaccard 95% CI [0.2054, 0.3829]
+The compound and gene panels are harmonized; assay technologies, censoring and errors still differ.
+This directly measures pair-set replication for this selected overlap, without attributing it uniquely to the concept.

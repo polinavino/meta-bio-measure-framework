@@ -1,4 +1,6 @@
 """
+HISTORICAL EXPLORATION: superseded candidate/criterion numbering. These checks
+are not validation of the current exponential candidate; see kinase_controls.py.
 Bounded attempt at a candidate that satisfies ALL of D1-D4:
 baseline-FREE (per-compound-anchored) concentration measures. A per-compound anchor is invariant to a
 global additive shift of the profile, so D3 (baseline invariance) is satisfied by construction (there is
@@ -19,7 +21,7 @@ def gini(P,b=5.0):
     for r in sh:
         rs=np.sort(r);n=len(rs);t=rs.sum();o.append(0.0 if t==0 else (2*np.sum(np.arange(1,n+1)*rs))/(n*t)-(n+1)/n)
     return np.array(o)
-def rk(s): return len(s)-rankdata(s,method="ordinal")+1
+def rk(s): return len(s)-rankdata(s,method="average")+1
 # consensus selectivity order = mean rank of the 3 established distribution measures
 na=(M>6.0).sum(1); g=na>0
 cons_g = np.mean([rk(-s_score(M,6.0))[g], rk(ent(M))[g], rk(gini(M))[g]],axis=0)

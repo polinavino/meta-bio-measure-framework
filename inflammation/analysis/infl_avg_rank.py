@@ -2,12 +2,17 @@
 Clinical inflammatory indices, protocol step 7 (consensus poset + average-rank canonical aggregate).
 
 7 concept-positive indices (higher = more inflammation). Consensus poset: a dominates b iff every index
-scores a >= b. Canonical measure = mean rank over uniformly-sampled linear extensions (Bubley-Dyer;
+scores a >= b. Canonical measure = mean rank over uniformly-sampled linear extensions (insertion Gibbs;
 same sampler as ../../analysis/avg_rank.py and ../../tp53/). Computed on a fixed random subsample of the
 NHANES 2015-16 complete panel (the O(N^2) poset is impractical on all ~5000). Benchmarks each index and
 the equal-weight mean-rank score against the canonical, and checks mortality discrimination.
 Deterministic (seeded subsample + chains).
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analysis"))
+from order_utils import pair_disagreement, average_rank
 import numpy as np, pandas as pd
 from scipy.stats import rankdata, spearmanr
 
@@ -34,22 +39,7 @@ comparable = geq | geq.T; np.fill_diagonal(comparable, True)
 frac_incomp = 1 - (comparable.sum()-N)/(N*(N-1))
 print(f"Consensus poset over N={N} NHANES participants (7 indices): incomparable fraction = {frac_incomp:.3f}")
 
-def sample_avg_rank(seed, burn=400_000, nsamp=2000, gap=500):
-    rng = np.random.default_rng(seed)
-    order = list(np.argsort(-X.mean(1)))
-    rank_sum = np.zeros(N); ns = 0
-    for step in range(burn + nsamp*gap):
-        i = rng.integers(N-1); a=order[i]; b=order[i+1]
-        if not comparable[a,b] and rng.random() < 0.5:
-            order[i],order[i+1] = b,a
-        if step>=burn and (step-burn)%gap==0:
-            for p,x in enumerate(order): rank_sum[x]+=(p+1)
-            ns+=1
-    return rank_sum/ns
-print("Running two Bubley-Dyer chains ...")
-ar1=sample_avg_rank(1); ar2=sample_avg_rank(2)
-print(f"Chain convergence: Spearman = {spearmanr(ar1,ar2).correlation:.4f}")
-avg_rank = (ar1+ar2)/2                                     # 1 = most inflamed
+avg_rank = average_rank(X, "Inflammation consensus")
 
 def drank(s): return rankdata(-s, method="average")        # 1 = most inflamed
 print("\nSpearman(index ranking, canonical average-rank):")

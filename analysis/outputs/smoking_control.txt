@@ -1,0 +1,47 @@
+=== (1) Per-cohort C3 agreement at threshold never_mean - 2*SD ===
+GSE50660:
+      grp     agree   n
+1 current 0.9090909  22
+2  former 0.7756654 263
+3   never 0.9497207 179
+GSE42861:
+         grp     agree   n
+1    current 0.7600000 200
+2     former 0.6622807 228
+3      never 0.9637306 193
+4 occasional 0.8636364  66
+5       <NA> 0.5000000   2
+
+=== Frozen GSE50660 never-smoker thresholds applied to GSE42861 (mult=2) ===
+         grp     agree   n
+1    current 0.8850000 200
+2     former 0.6491228 228
+3      never 0.8186528 193
+4 occasional 0.7424242  66
+5       <NA> 0.5000000   2
+Cohort-specific thresholds above are descriptive; this frozen-threshold table tests transfer.
+
+=== (2) Threshold robustness (never/current/former agreement, both cohorts) ===
+mult | GSE50660 never curr former | GSE42861 never curr former
+1.0  |   0.804 0.955 0.768  |   0.788 0.880 0.640
+1.5  |   0.899 0.909 0.795  |   0.912 0.820 0.662
+2.0  |   0.950 0.909 0.776  |   0.964 0.760 0.662
+2.5  |   0.966 0.864 0.772  |   0.974 0.620 0.768
+3.0  |   0.972 0.864 0.810  |   0.984 0.560 0.816
+
+=== (3) Threshold-free inter-signature rank spread (std of 4 ranks), per cohort ===
+GSE50660:
+      grp mean_spread   n
+1 current    19.45366  22
+2  former    32.23756 263
+3   never    48.76890 179
+GSE42861:
+         grp mean_spread   n
+1    current    40.99679 200
+2     former    58.64794 228
+3      never    69.92435 193
+4 occasional    61.41777  66
+5       <NA>    62.31730   2
+
+(If former-smoker spread is NOT elevated vs never/current here, the C3 U-shape is a
+ threshold artifact; if it IS elevated and reproduces across cohorts, concentration is real.)

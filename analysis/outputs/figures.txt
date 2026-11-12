@@ -1,0 +1,8 @@
+TP53 variant effect      8-promoter consensus (consensus coord)   0.924 -> 0.045  (5 bins)
+TP53 variant effect      AlphaMissense (independent of the prom   0.606 -> 0.256  (5 bins)
+Inflammatory indices     consensus mean-rank (consensus coord)    0.984 -> 0.274  (5 bins)
+Inflammatory indices     chronological age (external to the ind   0.735 -> 0.694  (5 bins)
+Kinase selectivity       active count (shared input)              0.772 -> 0.162  (5 bins)
+Kinase selectivity       active count without S-score             0.327 -> 0.162  (5 bins)
+
+wrote /Users/polina/Documents/BioInfStuff/meta-bio-measure-framework/paper/figures/fig1_near_tie.png

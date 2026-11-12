@@ -7,8 +7,13 @@ across cycles, so (as in the smoking domain) we test whether the DISAGREEMENT ST
   (b) mean inter-index agreement,
   (c) the near-tie slope (discordance falls with separation),
   (d) the anchor orientation (each index vs mortality).
-Structure that reproduces across independent cohorts is constitutive, not sampling noise. Deterministic.
+Replication describes stability conditional on the selected formulas; shared bias can replicate. Deterministic.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analysis"))
+from order_utils import pair_disagreement, average_rank
 import numpy as np, pandas as pd
 from scipy.stats import rankdata, spearmanr
 
@@ -43,8 +48,8 @@ print("\n(c) near-tie slope (discordance by consensus-separation quintile), per 
 def slope(D):
     D = D.iloc[np.random.default_rng(0).choice(len(D),size=min(2000,len(D)),replace=False)].reset_index(drop=True)
     N=len(D); Rk=np.column_stack([rankdata(D[c]) for c in IDX])
-    i,j=np.triu_indices(N,1); s0=np.sign(Rk[j,0]-Rk[i,0]); disc=np.zeros(len(i),bool)
-    for k in range(1,len(IDX)): disc|=(np.sign(Rk[j,k]-Rk[i,k])!=s0)
+    i,j=np.triu_indices(N,1)
+    disc, tie_only = pair_disagreement(Rk, i, j)
     ax=(rankdata(Rk.mean(1))-1)/(N-1); sep=np.abs(ax[i]-ax[j])
     qs=np.quantile(sep,[0,.2,.8,1.0])
     near=(sep>=qs[0])&(sep<qs[1]); far=(sep>=qs[2])
@@ -59,5 +64,5 @@ for c in IDX:
     aa=auc(a[c].to_numpy(float),a["mortstat"].to_numpy().astype(int))
     bb=auc(b[c].to_numpy(float),b["mortstat"].to_numpy().astype(int))
     print(f"    {c:5s}  {aa:.3f}  {bb:.3f}")
-print("\nReading: matching correlation structure, near-tie slopes, and anchor orientation across two")
-print("independent cohorts => the disagreement structure is a property of the indices, not one sample.")
+print("\nReading: the selected indices have similar structure in independent population samples.")
+print("This does not rule out shared formula artifacts or establish concept-level incomparability.")

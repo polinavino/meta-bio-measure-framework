@@ -1,5 +1,5 @@
 """
-TP53 domain, protocol step 7: the weight-free minimal-commitment canonical aggregate
+TP53 domain, protocol step 7: the uniform average-class-rank aggregate
 (average rank over the linear extensions of the consensus poset; De Loof / Bruggemann / Patil-Taillie),
 demonstrated on the N=2314 complete-panel TP53 variants.
 
@@ -7,16 +7,21 @@ Panel of 9 competing measures, concept-positive (higher = more deleterious):
   8 Ishioka transactivation promoters (negated %WT) + AlphaMissense.
 Consensus poset:  a dominates b  iff  every measure scores a >= b (Patil-Taillie dominance).
 Canonical measure = mean rank of each variant over uniformly-sampled linear extensions
-(Bubley-Dyer lazy adjacent-transposition chain; convergence via two independent chains).
+(checked insertion Gibbs chains; convergence via four dispersed chains and MCSE).
 
 We then benchmark, against the canonical order:
-  - each of the 9 measures (which best proxies the weight-free consensus? which strays most?)
+  - each of the 9 measures (which best proxies the chosen consensus aggregate? which is least similar?)
   - the FIELD'S PROPOSED formula: median of the 8 promoters (Kato/Ishioka) — does the naive field
-    consensus match the principled minimal-commitment one?
+    consensus match the chosen uniform class-rank convention?
   - the 6 other computational predictors (EVE, ESM1b, REVEL, CADD, PrimateAI, BayesDel), kept external
     to the poset, to show how far the whole computational family sits from the experimental consensus.
   - whether the canonical aggregate predicts ClinVar at least as well as any single measure.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analysis"))
+from order_utils import pair_disagreement, average_rank
 import numpy as np, pandas as pd
 from scipy.stats import rankdata, spearmanr
 
@@ -53,26 +58,9 @@ print(f"Consensus poset over N={N} TP53 variants (9 measures): "
       f"incomparable-pair fraction = {frac_incomp:.3f}")
 
 # ---- Bubley-Dyer uniform linear-extension sampler (same machinery as analysis/avg_rank.py) ----
-def sample_avg_rank(seed, burn=1_000_000, nsamp=2000, gap=2000):
-    rng = np.random.default_rng(seed)
-    order = list(np.argsort(-X.mean(1)))      # most-deleterious first; valid linear extension of dominance
-    rank_sum = np.zeros(N); ns = 0
-    total = burn + nsamp*gap
-    for step in range(total):
-        i = rng.integers(N-1); a = order[i]; b = order[i+1]
-        if not comparable[a,b]:                # only adjacent incomparable pairs may swap (lazy)
-            if rng.random() < 0.5:
-                order[i], order[i+1] = b, a
-        if step >= burn and (step-burn) % gap == 0:
-            for p,x in enumerate(order): rank_sum[x] += (p+1)   # rank 1 = most deleterious
-            ns += 1
-    return rank_sum/ns
-
-print("Running two independent Bubley-Dyer chains (this takes ~1-2 min for N=2314) ...")
-ar1 = sample_avg_rank(1); ar2 = sample_avg_rank(2)
-conv = spearmanr(ar1, ar2).correlation
-print(f"Chain convergence: Spearman(chain1, chain2) = {conv:.4f} (want ~1.0)")
-avg_rank = (ar1+ar2)/2                          # canonical measure, 1 = most deleterious
+avg_rank = average_rank(X, "TP53 consensus")
+class_count = len(np.unique(X, axis=0))
+aggregate_pct = (avg_rank-1)/max(class_count-1, 1)
 
 # ---- benchmark each measure vs the canonical order ----
 # measure ranks with 1 = most deleterious (match avg_rank orientation)
@@ -81,18 +69,18 @@ print("\nSpearman(existing measure's ranking, canonical average-rank extension):
 rows = []
 for n in names:
     rho = spearmanr(delet_rank(cols[n]), avg_rank).correlation
-    mad = np.abs(delet_rank(cols[n]) - avg_rank).mean()
+    mad = 100*np.abs((delet_rank(cols[n])-1)/(N-1) - aggregate_pct).mean()
     rows.append((n, rho, mad))
 # field's proposed consensus formula: median of 8 promoters (negated -> concept-positive)
 field_med = -D[prom].median(axis=1).to_numpy()
 rho_med = spearmanr(delet_rank(field_med), avg_rank).correlation
-mad_med = np.abs(delet_rank(field_med) - avg_rank).mean()
+mad_med = 100*np.abs((delet_rank(field_med)-1)/(N-1) - aggregate_pct).mean()
 rows.append(("[field] median-of-8", rho_med, mad_med))
 rows.sort(key=lambda r:-r[1])
 for n,rho,mad in rows:
-    print(f"  {n:22s} rho={rho:+.3f}   mean|rank-canonical|={mad:6.1f}")
-print(f"\nBest single proxy for the weight-free consensus: {rows[0][0]} (rho={rows[0][1]:+.3f})")
-print(f"Strays most (commits beyond the consensus / outlier): {rows[-1][0]} (rho={rows[-1][1]:+.3f})")
+    print(f"  {n:22s} rho={rho:+.3f}   mean absolute percentile difference={mad:6.2f} pp")
+print(f"\nBest single proxy for the chosen consensus aggregate: {rows[0][0]} (rho={rows[0][1]:+.3f})")
+print(f"Least similar to this chosen aggregate: {rows[-1][0]} (rho={rows[-1][1]:+.3f})")
 
 # ---- the wider computational predictor family (external to the poset) vs the canonical order ----
 # The poset/canonical are built from the 9 core measures (8 experimental + AlphaMissense). Here we ask

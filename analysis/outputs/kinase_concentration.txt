@@ -1,33 +1,33 @@
-Klaeger matrix: 222 compounds x 343 kinases
+Klaeger matrix: 222 compounds x 217 kinases
 
 [1/2] Reliability-gate resolution of the 'extreme counterexample'
-  zero-active (n_active==0): 16 compounds
+  zero-active (n_active==0): 22 compounds
   inter-measure disagreement (std of rank across 4 measures):
-     ungated (zero-active): mean=65.9
-     gated-in   (active)  : mean=23.1
-  repo 30-config rank_std: ungated=72.6, gated-in=31.6  (expect ~74 vs ~32)
+     ungated (zero-active): mean=75.4
+     gated-in   (active)  : mean=23.9
+  repo 30-config rank_std: ungated=76.6, gated-in=32.4  (expect ~74 vs ~32)
 
-[3] Concentration test on gated-in set (n=206)
+[3] Concentration test on gated-in set (n=200)
   decile | mean disagreement | n
-    0    |    22.47         | 21
-    1    |    22.37         | 20
-    2    |    22.43         | 21
-    3    |    23.71         | 20
-    4    |    25.62         | 21
-    5    |    26.01         | 20
-    6    |    30.29         | 21
-    7    |    28.20         | 20
-    8    |    20.91         | 21
-    9    |     9.04         | 21
+    0    |    22.99         | 20
+    1    |    20.59         | 20
+    2    |    23.50         | 20
+    3    |    23.04         | 20
+    4    |    28.16         | 20
+    5    |    25.19         | 20
+    6    |    32.93         | 20
+    7    |    30.92         | 20
+    8    |    20.72         | 20
+    9    |    10.98         | 20
 
-  Spearman(disagreement, middleness): raw r=0.265 (p=1.15e-04)
-  Partial Spearman controlling n_active,max_act: r=0.315 (p=4.13e-06)
+  Spearman(disagreement, middleness): raw r=0.270 (p=1.08e-04)
+  Partial Spearman controlling n_active,max_act: r=0.333 (p=1.45e-06)
 
   Interior-concentration slope (Spearman disagreement~middleness):
-     observed = 0.265
-     independence null: mean=0.299, 2.5-97.5% = [0.175,0.423]
+     observed = 0.270
+     independence null: mean=0.314, 2.5-97.5% = [0.185,0.429]
      observed exceeds null: False
 
-  Interpretation: if observed >> null, interior concentration is structural,
-  not a boundary-compression artifact. If observed within null band, the
-  'middle' pattern is mechanical and the concentration claim must be downgraded.
+  Interpretation: this tests one independence null for rank-boundary effects.
+  A value inside its band supplies no evidence beyond that null; a value outside
+  it would not by itself identify a biological or concept-level cause.

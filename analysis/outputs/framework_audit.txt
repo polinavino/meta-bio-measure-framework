@@ -1,0 +1,52 @@
+SOURCE PROVENANCE
+selectivity HEAD: acd37a52ef8f28e6a645a15a29e3127ec2c0b212
+comparison baseline: ad5cdd2 (2026-09-21, 'uploaded to wiley')
+klaeger_matrix.csv SHA256: e9d1566807303bf1f2dce128df3a25f286913169197bc279cf34a1f2d7afec06
+matrix=(222, 217); gated compounds=200
+
+1. ROW ORDER AND TIES (same legacy parameter sweeps)
+legacy ordinal: incomparable/strict reversal=0.3857; sign-mismatch=0.3924; tie-only=0.0067
+tie-preserving average: incomparable/strict reversal=0.3788; sign-mismatch=0.4031; tie-only=0.0243
+reversed-row ordinal, mapped back: incomparable/strict reversal=0.4029; sign-mismatch=0.4102; tie-only=0.0073
+ordinal: rows with changed measure ranks=182; pairs changing comparability=2153 / 19900
+average: rows with changed measure ranks=0; pairs changing comparability=0 / 19900
+
+2. FORMULA IMPLEMENTATION (fixed default parameters, ties preserved)
+baseline-subtracted log entropy: incomparable/strict reversal=0.3972; sign-mismatch=0.4330; tie-only=0.0358
+  rho(entropy, S)=+0.9528; rho(entropy, ratio)=+0.3630
+Ka entropy, floor excluded: incomparable/strict reversal=0.4219; sign-mismatch=0.4573; tie-only=0.0354
+  rho(entropy, S)=+0.7329; rho(entropy, ratio)=+0.7107
+Ka entropy, floor included: incomparable/strict reversal=0.6533; sign-mismatch=0.6840; tie-only=0.0307
+  rho(entropy, S)=-0.1560; rho(entropy, ratio)=+0.3716
+rho(n_active, S-score at tau=6)=-1.0000 (same information; not an independent anchor)
+
+3. ACTIVE-COUNT SEPARATION, EXCLUDING THE S-SCORE
+all four measures
+  separation 0-0: strict=0.7950; sign-mismatch=0.8701; pairs=1239
+  separation 1-2: strict=0.6408; sign-mismatch=0.6806; pairs=4020
+  separation 3-5: strict=0.4308; sign-mismatch=0.4553; pairs=3301
+  separation 6-15: strict=0.3229; sign-mismatch=0.3363; pairs=6224
+  separation 16-999: strict=0.1620; sign-mismatch=0.1642; pairs=5116
+entropy/Gini/ratio only
+  separation 0-0: strict=0.3358; sign-mismatch=0.4415; pairs=1239
+  separation 1-2: strict=0.3781; sign-mismatch=0.3878; pairs=4020
+  separation 3-5: strict=0.3190; sign-mismatch=0.3254; pairs=3301
+  separation 6-15: strict=0.2755; sign-mismatch=0.2783; pairs=6224
+  separation 16-999: strict=0.1618; sign-mismatch=0.1640; pairs=5116
+
+4. TIE-ONLY DISCORDANCE IN OTHER DOMAINS
+TP53 8-promoter panel: incomparable/strict reversal=0.4778; sign-mismatch=0.4817; tie-only=0.0038
+NHANES 7-index panel (existing 2000-person subset): incomparable/strict reversal=0.7260; sign-mismatch=0.7364; tie-only=0.0104
+
+5. TP53 SAMPLER INITIALIZATION DIAGNOSTIC (not a convergence proof)
+rho(saved canonical, common starting order)=0.999451
+mean absolute displacement from starting order=17.55 ranks
+rho(median8, starting order)=0.987672
+rho(median8, saved canonical)=0.986907
+rho(common start, start after AlphaMissense x1000)=0.897961
+Both starts respect the same dominance order. Re-run chains from dispersed starts, with monotone-rescaling checks and Monte Carlo errors, before treating agreement between same-start chains as convergence.
+Alternate-start chain: same 1,000,000 burn-in + 2,000 x 2,000 steps as TP53 script
+rho(alternate-start mean ranks, stored canonical)=0.896875
+rho(alternate-start mean ranks, alternate start)=0.998958
+rho(median8, alternate-start mean ranks)=0.890152
+mean absolute difference from stored canonical=213.57 ranks

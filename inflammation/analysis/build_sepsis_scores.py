@@ -12,13 +12,14 @@ External anchor = 28-day mortality. Cohorts = MARS discovery vs validation (inde
 
 NOTE (honest): mean-z over a gene SET is an approximation. It is the right object for co-directional
 Hallmark sets; for SRS/SRSq/MARS (mixed-direction classifier genes) it is a proxy, not the official
-PCA-based SRSq or the MARS classifier. We sign-align each score to the panel consensus in the analyses
-and report the approximation. Deterministic.
+PCA-based SRSq or the MARS classifier. Gene standardization is fitted on discovery; score signs are fitted to discovery mortality
+and frozen on validation. These remain explicit gene-set proxies, not official classifier reconstructions. Deterministic.
 
 Output: inflammation/data/sepsis_scores.csv (one row per sample).
 """
 import json
 import numpy as np, pandas as pd
+from sepsis_preprocessing import discovery_standardize
 
 DATA = "/Users/polina/Documents/BioInfStuff/meta-bio-measure-framework/inflammation/data"
 
@@ -44,14 +45,16 @@ sym = expr.groupby(level=0).mean()                                  # genes x sa
 ALIAS = {"ADGRE3":"EMR3", "ARL14EP":"C11orf46", "GLTSCR2":"GLTSCR2", "NOP53":"GLTSCR2"}
 def resolve(g): return g if g in sym.index else ALIAS.get(g, g)
 
-Z = sym.sub(sym.mean(1), axis=0).div(sym.std(1).replace(0, np.nan), axis=0)   # gene z across samples
+discovery_samples = pheno.loc[pheno["endotype_cohort"] == "discovery", "gsm"]
+Z, discovery_center, discovery_scale = discovery_standardize(sym, discovery_samples)
 def score(genes):
     present = [resolve(g) for g in genes if resolve(g) in Z.index]
-    return Z.loc[present].mean(0), len(present), len(genes)
+    return Z.loc[present].mean(axis=0), len(present), len(genes)
 
 out = pd.DataFrame(index=sym.columns)
 print("=== Sepsis signature scoring (GSE65682) ===")
 print(f"expr {expr.shape[0]} probe-rows -> {sym.shape[0]} symbols x {sym.shape[1]} samples\n")
+print(f"Gene centers/scales fitted on {len(sym.columns.intersection(discovery_samples))} discovery samples; frozen for validation")
 name_map = {"HALLMARK_INFLAMMATORY_RESPONSE":"Inflammatory","HALLMARK_INTERFERON_GAMMA_RESPONSE":"IFNg",
             "SRS_Davenport_7gene":"SRS7","SRSq_SepstratifieR_19gene":"SRSq19","MARS_endotype_bisignature":"MARS8"}
 for key,short in name_map.items():

@@ -1,0 +1,46 @@
+
+Kinase parameter-median ranks (gated population): objects=200, full incomparable=0.3788; tie-only=0.0243
+  omit S-score         : incomparable=0.2761
+  omit entropy         : incomparable=0.3755
+  omit Gini            : incomparable=0.3770
+  omit ratio           : incomparable=0.1287
+
+TP53: objects=2314, full incomparable=0.5663; tie-only=0.0027
+  omit waf1            : incomparable=0.5545
+  omit mdm2            : incomparable=0.5468
+  omit bax             : incomparable=0.5590
+  omit h1433s          : incomparable=0.5624
+  omit aip1            : incomparable=0.5545
+  omit gadd45          : incomparable=0.5565
+  omit noxa            : incomparable=0.5517
+  omit p53r2           : incomparable=0.5392
+  omit AlphaMissense   : incomparable=0.4778
+TP53 experiment/prediction blocks are approximate correlation clusters, not asserted exact ordinal equivalence classes.
+NHANES 2015: complete-index population=6197; with mortality=5327
+NHANES 2017: complete-index population=5882; with mortality=5104
+
+NHANES complete-index subsample: objects=600, full incomparable=0.7413; tie-only=0.0101
+  omit NLR             : incomparable=0.7286
+  omit PLR             : incomparable=0.6433
+  omit MLR             : incomparable=0.6957
+  omit SII             : incomparable=0.7324
+  omit SIRI            : incomparable=0.7314
+  omit CRP             : incomparable=0.7388
+  omit CAR             : incomparable=0.7363
+CRP/CAR full-population rho=0.99818629; exactly identical rank vectors=False
+
+NHANES index structure: N=6197/5882; indicator pairs=21; matrix-vector rho=0.9948; mean|delta r|=0.0128
+  Independent participant bootstrap, 95% percentile intervals:
+    matrix-vector rho [0.9688, 0.9987]
+    mean|delta r| [0.0081, 0.0269]
+  This quantifies cohort sampling uncertainty conditional on the chosen formulas; shared bias can replicate.
+
+Sepsis: fit orientation on discovery and freeze on validation: {'Inflammatory': np.int64(-1), 'IFNg': np.int64(-1), 'SRS7': np.int64(-1), 'SRSq19': np.int64(-1), 'MARS8': np.int64(1)}
+
+Sepsis fixed-orientation structure: N=263/216; indicator pairs=10; matrix-vector rho=0.9758; mean|delta r|=0.0428
+  Independent participant bootstrap, 95% percentile intervals:
+    matrix-vector rho [0.6842, 0.9879]
+    mean|delta r| [0.0397, 0.1501]
+  This quantifies cohort sampling uncertainty conditional on the chosen formulas; shared bias can replicate.
+
+Reproducible differences are descriptive. Constitutive attribution additionally needs independent evidence of admissibility and controls for systematic artifacts.

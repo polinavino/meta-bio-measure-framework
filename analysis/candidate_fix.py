@@ -1,4 +1,6 @@
 """
+HISTORICAL EXPLORATION: superseded candidate/criterion numbering. These checks
+are not validation of the current exponential candidate; see kinase_controls.py.
 Candidate FIX: pedestal-subtracted softplus hinge.
 
 Problem (found): w_i = T*softplus((x_i-floor)/T) has a pedestal T*ln2 at x=floor that never
@@ -11,11 +13,11 @@ For floored data (x_i >= floor) this is >= 0, so no clamp needed. Keeps D1 (gate
 D3 (smooth, no hard cutoff), D4 (sub-floor adds ~0). Verify all + un-inversion + panel convergence.
 """
 import numpy as np, pandas as pd
-from scipy.stats import spearmanr
+from scipy.stats import spearmanr, rankdata
 M = pd.read_csv("/Users/polina/Documents/BioInfStuff/selectivity/klaeger_matrix.csv", index_col=0).values.astype(float)
 n_drugs, n_kin = M.shape
 FLOOR, TAU_STAR, T = 5.0, 6.0, 1.0
-def to_ranks(s): return len(s) - s.argsort().argsort()
+def to_ranks(s): return rankdata(-s, method="average")
 
 # ORIGINAL (broken) and FIXED candidates
 def candidate_orig(P, floor=FLOOR, T=T, eps=1e-10):
@@ -76,7 +78,7 @@ print("\n=== (5) FIXED candidate vs average-rank canonical (gated-in) — should
 # quick canonical via mean of the 4 established measures' ranks on gated-in (proxy for the sampled avg-rank)
 na=(M>6.0).sum(1); g=na>0
 from scipy.stats import rankdata
-def rk(s): return len(s)-rankdata(s,method="ordinal")+1
+def rk(s): return len(s)-rankdata(s,method="average")+1
 cons=np.mean([rk(entropy(M))[g],rk(gini(M))[g],rk(s_score(M))[g]],axis=0)
 print(f"  Spearman(FIXED candidate, consensus-of-3 distribution measures) = "
       f"{spearmanr(rk(candidate_fixed(M))[g], cons).correlation:+.3f}")

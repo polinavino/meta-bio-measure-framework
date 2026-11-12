@@ -45,37 +45,21 @@ computational predictors, mean *r* = 0.76 (0.56–0.93); between the two blocks,
 the experimental block best (0.56), CADD worst (0.43). This is the TP53 analog of kinase's family
 structure: experimental function and computational prediction induce different orders of the same concept.
 
-**Step 7 — consensus poset + canonical aggregate (`tp53_avg_rank.py`).** The consensus poset over the 9
-base measures (the 8 promoters plus AlphaMissense)
-is **56.6% incomparable** — those nine jointly order fewer pairs than kinase's four did (37%). The
-weight-free average-rank-over-linear-extensions canonical measure (Bubley–Dyer sampler, two chains
-ρ=0.998) is best proxied by **the field's own proposed formula — the median of the 8 promoters
-(ρ=0.987)** — and worst by **AlphaMissense (ρ=0.597)**, quantifying that the predictor commits most
-beyond the consensus. The other computational predictors sit in the same range (ρ 0.46–0.59: EVE 0.59,
-REVEL/BayesDel 0.54, PrimateAI 0.52, ESM1b 0.50, CADD 0.46) — the whole computational family diverges
-from the experimental consensus, consistent with the family split. Notably the field's Kato/ClinGen
-median-of-8 rule *already is* an excellent approximation of the principled minimal-commitment aggregate:
-the protocol here vindicates existing practice rather than overturning it. Canonical and median both
-discriminate ClinVar at AUC ≈ 0.99.
+**Steps 4 and 7 — current numerical results.** Strict promoter reversals fall from 0.924 to 0.045
+across consensus-separation quintiles, and from 0.606 to 0.256 across AlphaMissense-separation quintiles.
+The latter score is outside the promoter panel, but a residual does not identify a biological mechanism.
+The nine-measure poset is 56.6% incomparable and contains 2,313 equivalence classes among 2,314 variants.
+Four dispersed insertion-Gibbs chains pass split-R-hat and batch-MCSE criteria. Median-of-eight agreement
+with the uniform average-class-rank aggregate is 0.955, and computational predictors range 0.572–0.729.
+The same-start adjacent-swap estimates are superseded. This is similarity to a chosen aggregate, not
+an independent biological-validity benchmark.
 
-**Step 4 — locate disagreement, controlled (`tp53_pairwise.py`).** Discordance among the 8 promoters
-(2.68M pairs; overall 0.48) is **dominated by separation** (near-tie-ness): 0.93 for the closest
-separation quintile → 0.05 for the widest. Unlike kinase, a **modest residual middle effect survives**
-(mid-axis near-ties disagree more than end near-ties): midpos coefficient +0.33 on the consensus axis,
-shrinking to **+0.10 on the independent AlphaMissense axis**. Honest reading: the near-tie law holds and
-dominates, but TP53 retains a small *genuine* middle component — the partial-LOF / separation-of-function
-variants — that kinase did not. A real, interpretable cross-domain difference; not the retired P3
-"consequential middle."
-
-**Step 3 — constitutive vs artifactual, cross-platform (`tp53_reproducibility.py`).** Yeast
-transactivation vs mammalian proliferation — different organism, readout, lab. The mammalian side is the
-**3 Giacomelli conditions** (sign-aligned), not all four screens: Kotler enters the orientation check
-against ClinVar and nothing else, because its overlap with the core panel is only 973 variants.
-Consensus orders agree
-**ρ=0.49 overall, +0.63 at the extremes, −0.05 in the middle**; cross-platform direction-agreement
-rises from **0.53 on near-ties (≈chance) to 0.85 on well-separated pairs**. The comparability skeleton is
-reproducible across independent platforms (**constitutive**); both platforms lose resolution on the
-*same* near-ties (the concept is genuinely silent there), rather than one assay's noise.
+**Step 3 — cross-platform replication.** Giacomelli directions are fixed to the declared fitness
+convention, not fitted to yeast agreement. The yeast and mammalian scalar consensuses agree overall at
+0.49. Their per-tertile structure is asymmetric: functional-end agreement is near chance, while the
+deleterious end agrees more strongly. Direction agreement by separation does not directly test whether
+the platforms reproduce the same incomparable sets. Replication establishes descriptive stability and
+does not distinguish concept ambiguity from shared assay resolution or systematic error.
 
 **Companion axis — evaluation overstatement (`tp53_circularity.py`).** Two findings, one an honest null.
 (i) A hotspot-codon holdout (ClinGen PM1 set 175/245/248/249/273/282) shows **no inflation** for any
@@ -84,7 +68,7 @@ pathogenic variants), so the scaffold-memorization analogy does not bite in this
 null. (ii) The real gap holds **across all seven predictors**: each scores 0.90–0.99 against curated
 ClinVar but 0.79–0.89 against the experimentally-independent functional truth (Kato ≤20% rule) on the 988
 VUS where prediction is actually used — a gap of +0.09 to +0.12 (e.g. AlphaMissense 0.988→0.889, REVEL
-0.971→0.866, CADD 0.928→0.813). The curated benchmark overstates skill on the decision-relevant variants.
+0.971→0.866, CADD 0.928→0.813). The endpoints and variant populations differ, so this gap does not isolate benchmark inflation or training leakage.
 This is the TP53 face of the ADMET "evaluations overstate performance" sibling result.
 
 ## Honest limits / next steps
@@ -103,18 +87,14 @@ This is the TP53 face of the ADMET "evaluations overstate performance" sibling r
   CRISPR RFS, 9,225 variants — a third, mechanistically distinct platform), **Boettcher 2019**
   (dominant-negative), and the **Fayer 2021** integrated consensus are the obvious next cohorts.
 - **Anchor caveat.** AlphaMissense is trained on ClinVar-adjacent signal, so its agreement with ClinVar
-  is partly circular; the consensus-vs-ClinVar 0.997 is safe because it is carried by the 8
-  experimentally-independent transactivation measures.
+  is partly circular; the consensus-vs-ClinVar 0.997 is descriptive of the selected labelled variants and is not an independent validation of the aggregate.
 - **Field-formula provenance.** Kato median-of-8 cutoffs (non-functional ≤20%, functional >75%),
   Giacomelli DNE+LOF (z≥0.61 & z≤−0.21), Kotler RFS≥−1.0, and PM1 hotspots are the ClinGen TP53 VCEP
   specifications (Fortuno et al. 2021); used here for orientation of the field's own consensus rule.
 
 ## What this adds to the meta-paper
-A **fifth, independent, clinically-hot domain** where the protocol runs end to end on public data, with
-an unusually strong anchor (ClinVar + experimental function) and a genuine cross-*platform* (not just
-cross-cohort) reproducibility test. It reproduces the near-tie law and a two-family structure,
-vindicates a field-standard aggregation formula as an approximation of the principled canonical measure,
-and — via the VUS-vs-functional-truth gap — reconnects the definitions axis to the ADMET evaluations
-axis. It also contributes one honest null (no hotspot inflation) and one honest cross-domain *difference*
-(a small genuine middle residual absent in kinase), both of which strengthen rather than dilute the
-protocol's credibility.
+
+A variant-level example with experimental and predictive agreement clusters, explicit anchor and
+selection caveats, and cross-platform scalar comparisons. The corrected sampler supports a useful
+median-of-eight approximation, with lower agreement than the earlier insufficiently mixed estimate.
+Current numbers are in `analysis/outputs/`; `paper/manuscript.md` gives the controlled interpretation.

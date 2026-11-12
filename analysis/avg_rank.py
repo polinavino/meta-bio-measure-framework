@@ -1,15 +1,12 @@
-"""
-Average-rank-over-linear-extensions canonical measure (Patil-Taillie; Bruggemann/De Loof),
-demonstrated on the kinase (Klaeger) selectivity domain.
+"""Tie-preserving gated kinase consensus and uniform average class ranks.
 
-Consensus poset M-hat: a >= b iff all 4 canonical measures rank a at least as selective as b.
-Canonical measure = mean rank of each compound over uniformly-sampled linear extensions of
-that poset (weight-free, commits no further than the consensus order forces).
-
-Sampler: Bubley-Dyer lazy adjacent-transposition Markov chain (uniform over linear extensions).
-Convergence checked by two independent chains. Then benchmark the 4 existing measures and the
-repo's reliability-gated softplus-entropy candidate against the canonical average-rank.
+The parameter-median score conventions are explicit; alternative fixed-default
+implementations are evaluated separately in kinase_controls.py. Insertion Gibbs
+sampling is accepted only after dispersed-start R-hat and MCSE checks. Similarity
+to this aggregate is descriptive of this base set and aggregation convention.
 """
+
+from order_utils import pair_disagreement, average_rank
 import numpy as np, pandas as pd
 from scipy.stats import rankdata, spearmanr
 
@@ -28,14 +25,7 @@ def ratio(P,k=1):
     for r in P:
         sd=np.sort(r)[::-1]; o.append(sd[0]-5.0 if (len(sd)<=k or sd[k]<=5.0) else sd[0]-sd[k])
     return np.array(o)
-def softplus_entropy(P, floor=5.0, tau_star=6.0, T=1.0):
-    # repo candidate: reliability gate + softplus hinge; higher = more selective (neg entropy)
-    w = T*np.logaddexp(0.0,(P-floor)/T); rs=w.sum(1,keepdims=True); rs=np.where(rs==0,1e-10,rs)
-    p=w/rs; H=-(p*np.where(p>0,np.log2(p+1e-12),0)).sum(1)
-    val = -H                                  # higher = more selective
-    val[P.max(1)<=tau_star] = np.nan          # D1 gate
-    return val
-def to_rank(s): return len(s)-rankdata(s,method="ordinal")+1  # 1 = most selective (highest score)
+def to_rank(s): return len(s)-rankdata(s,method="average")+1  # 1 = most selective (highest score)
 
 s_thr=np.arange(5.5,8.25,.25); base=np.arange(5.0,6.75,.25)
 # gate to active compounds
@@ -54,27 +44,7 @@ np.fill_diagonal(comparable, True)
 frac_incomp = 1 - (comparable.sum()-N)/(N*(N-1))
 print(f"Gated-in compounds N={N}; incomparable-pair fraction in consensus poset = {frac_incomp:.3f}")
 
-def sample_avg_rank(seed, burn=200_000, nsamp=2000, gap=1000):
-    rng=np.random.default_rng(seed)
-    order=list(np.argsort(R.mean(1)))          # mean-rank sort = valid linear extension
-    pos_of=np.empty(N,int);
-    for p,x in enumerate(order): pos_of[x]=p
-    rank_sum=np.zeros(N); ns=0; step=0; total=burn+nsamp*gap
-    for step in range(total):
-        i=rng.integers(N-1); a=order[i]; b=order[i+1]
-        if not comparable[a,b]:                # incomparable -> lazy swap
-            if rng.random()<0.5:
-                order[i],order[i+1]=b,a
-        if step>=burn and (step-burn)%gap==0:
-            for p,x in enumerate(order): rank_sum[x]+=(p+1)   # 1=most selective
-            ns+=1
-    return rank_sum/ns
-
-print("Running two independent Bubley-Dyer chains ...")
-ar1=sample_avg_rank(1); ar2=sample_avg_rank(2)
-conv=spearmanr(ar1,ar2).correlation
-print(f"Chain convergence: Spearman(chain1, chain2) = {conv:.4f}  (want ~1.0)")
-avg_rank=(ar1+ar2)/2                          # canonical measure (1=most selective)
+avg_rank = average_rank(-R, "Kinase consensus")
 
 # benchmark: Spearman of each measure's ranking vs canonical average-rank
 print("\nSpearman of each existing measure's ranking vs canonical average-rank extension:")
@@ -89,4 +59,4 @@ print("\nMean |rank - canonical| (rank units, N compounds):")
 for name,rk in [("S-score",r_s),("entropy",r_e),("Gini",r_g),("ratio",r_r)]:
     print(f"  {name:9s}: {np.abs(rk-avg_rank).mean():5.1f}")
 print("\nInterpretation: the measure closest to the canonical average-rank extension is the")
-print("best single proxy for the weight-free consensus aggregate; large gaps = commits beyond consensus.")
+print("best single proxy for the weight-free consensus aggregate; large gaps = lower similarity to this chosen aggregate.")

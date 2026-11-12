@@ -23,7 +23,7 @@ incomparable-pair fraction = 0.155
 
 === Near-tie law (2015-16, 1,999,000 pairs) ===
   [separation axis = consensus mean-rank, built from the same three scores;
-   no independent concept-proxy axis is available here, so these are upper bounds]
+   no independent concept-proxy axis is available here; descriptive association only]
 overall discordance rate: 0.110
   |dsep| in [0.000,0.106]: discordance=0.444 (n=399,487)
   |dsep| in [0.106,0.226]: discordance=0.099 (n=399,865)
@@ -44,8 +44,11 @@ overall discordance rate: 0.110
     consensus  AUC=0.768  OK
 
 === Decision-threshold effect (2015-16) ===
-  threshold 0.075:  26.2% of adults get a different treat/no-treat call depending on the score (783 of 2994)
-  threshold 0.100:  25.9% of adults get a different treat/no-treat call depending on the score (775 of 2994)
+  cutoff 0.075:  26.2% of adults get a different above/below-cutoff classification (783 of 2994)
+    same-endpoint Framingham lab/office discrepancy: 10.0%
+  cutoff 0.100:  25.9% of adults get a different above/below-cutoff classification (775 of 2994)
+    same-endpoint Framingham lab/office discrepancy: 11.1%
+  PCE predicts hard ASCVD and Framingham general CVD; shared-cutoff differences mix endpoint and formula differences and do not identify calibration error or treatment changes.
 
 ########################################################################
 # 2017-18: N=2913  deaths=53  CVD deaths=10
@@ -71,7 +74,7 @@ incomparable-pair fraction = 0.157
 
 === Near-tie law (2017-18, 1,999,000 pairs) ===
   [separation axis = consensus mean-rank, built from the same three scores;
-   no independent concept-proxy axis is available here, so these are upper bounds]
+   no independent concept-proxy axis is available here; descriptive association only]
 overall discordance rate: 0.106
   |dsep| in [0.000,0.106]: discordance=0.441 (n=399,497)
   |dsep| in [0.106,0.226]: discordance=0.086 (n=399,838)
@@ -92,8 +95,11 @@ overall discordance rate: 0.106
     consensus  AUC=0.706  OK
 
 === Decision-threshold effect (2017-18) ===
-  threshold 0.075:  26.6% of adults get a different treat/no-treat call depending on the score (775 of 2913)
-  threshold 0.100:  26.9% of adults get a different treat/no-treat call depending on the score (785 of 2913)
+  cutoff 0.075:  26.6% of adults get a different above/below-cutoff classification (775 of 2913)
+    same-endpoint Framingham lab/office discrepancy: 10.3%
+  cutoff 0.100:  26.9% of adults get a different above/below-cutoff classification (785 of 2913)
+    same-endpoint Framingham lab/office discrepancy: 11.6%
+  PCE predicts hard ASCVD and Framingham general CVD; shared-cutoff differences mix endpoint and formula differences and do not identify calibration error or treatment changes.
 
 === Cross-cohort reproducibility (2015-16 vs 2017-18) ===
 inter-score correlation structure: Spearman(2015-vec, 2017-vec) = 0.500 (3 pairs); mean|dr| = 0.004

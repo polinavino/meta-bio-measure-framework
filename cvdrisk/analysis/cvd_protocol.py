@@ -6,14 +6,18 @@ poset and incomparability, near-tie law, orientation and anchor validation, and
 cross-cohort reproducibility.
 
 The near-tie law here is computed on the consensus axis only (see near_tie), so
-its decline is an upper bound on the constitutive component rather than an
-estimate of it, as in inflammation/analysis/sep_pairwise.py.
+its decline is descriptive and does not identify a constitutive component, as in inflammation/analysis/sep_pairwise.py.
 
 Cohorts: NHANES 2015-16 and 2017-18, adults 40-79 with complete risk factors.
 Anchor: cause-specific cardiovascular death (UCOD_LEADING 001 or 005) from the
 NHANES Linked Mortality File, with all-cause death reported alongside because
 the CVD-specific event count is small.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analysis"))
+from order_utils import pair_disagreement, average_rank
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -28,8 +32,8 @@ DATA = HERE.parent / "data"
 OUT = HERE / "outputs"
 OUT.mkdir(exist_ok=True)
 NAMES = list(MEASURES)
-# Statin-eligibility thresholds written into guidelines, used to locate the
-# decision boundary the protocol predicts is a source of artefactual disagreement.
+# Shared numerical cutoffs for sensitivity only. PCE and Framingham predict
+# different endpoints, so these are not interchangeable treatment thresholds.
 THRESHOLDS = [0.075, 0.10]
 
 
@@ -84,8 +88,8 @@ def near_tie(d, label, fh):
     strong independent concept-proxy axis exists here: the only candidates in the
     feature table (age, SBP) are themselves inputs to all three scores, so an
     "independent" axis would be no less circular. This is therefore the
-    consensus-coordinate view only, and the decline below is an upper bound on
-    the constitutive component, not an estimate of it.
+    consensus-coordinate view only, and the decline below is descriptive; no mathematical bound on a constitutive
+    component has been established.
     """
     X = d[NAMES].to_numpy()
     rng = np.random.default_rng(1)
@@ -96,12 +100,12 @@ def near_tie(d, label, fh):
     R = np.array([rankdata(Y[:, k]) for k in range(Y.shape[1])])
     disc = np.zeros(len(i), dtype=float)
     for a, b in combinations(range(len(NAMES)), 2):
-        disc += np.sign(R[a][i] - R[a][j]) != np.sign(R[b][i] - R[b][j])
+        disc += (R[a][i] - R[a][j]) * (R[b][i] - R[b][j]) < 0
     disc /= len(list(combinations(range(len(NAMES)), 2)))
     print(f"\n=== Near-tie law ({label}, {len(i):,} pairs) ===", file=fh)
     print("  [separation axis = consensus mean-rank, built from the same three scores;",
           file=fh)
-    print("   no independent concept-proxy axis is available here, so these are upper bounds]",
+    print("   no independent concept-proxy axis is available here; descriptive association only]",
           file=fh)
     print(f"overall discordance rate: {disc.mean():.3f}", file=fh)
     qs = np.quantile(sep, [0, .2, .4, .6, .8, 1.0])
@@ -131,15 +135,19 @@ def anchor(d, label, fh):
 
 
 def boundary(d, label, fh):
-    """Does disagreement concentrate at the guideline decision threshold?"""
+    """Shared-cutoff disagreement; no inferred treatment-eligibility decisions."""
     print(f"\n=== Decision-threshold effect ({label}) ===", file=fh)
     for t in THRESHOLDS:
         calls = {n: (d[n] >= t).astype(int) for n in NAMES}
         C = np.array([calls[n] for n in NAMES])
         disagree = (C.sum(0) > 0) & (C.sum(0) < len(NAMES))
-        print(f"  threshold {t:.3f}: {disagree.mean()*100:5.1f}% of adults get a "
-              f"different treat/no-treat call depending on the score "
+        print(f"  cutoff {t:.3f}: {disagree.mean()*100:5.1f}% of adults get a "
+              f"different above/below-cutoff classification "
               f"({int(disagree.sum())} of {len(d)})", file=fh)
+        same_endpoint = calls["fram_lab"] != calls["fram_off"]
+        print(f"    same-endpoint Framingham lab/office discrepancy: {same_endpoint.mean()*100:.1f}%", file=fh)
+    print("  PCE predicts hard ASCVD and Framingham general CVD; shared-cutoff differences mix",
+          "endpoint and formula differences and do not identify calibration error or treatment changes.", file=fh)
     return None
 
 

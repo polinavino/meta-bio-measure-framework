@@ -14,7 +14,7 @@ inflammation), from routine CBC + CRP + albumin:
 Two independent NHANES cycles (2015-16, 2017-18) are kept separate = two cohorts for the reproducibility
 test. External anchor = all-cause mortality (linked mortality file) + chronological age. Deterministic.
 
-Output: inflammation/data/indices_2015.csv, indices_2017.csv (one row per adult with a usable CBC).
+Output: inflammation/data/indices_2015.csv, indices_2017.csv (one row per participant with a usable CBC; mortality eligibility is handled separately).
 """
 import numpy as np, pandas as pd
 

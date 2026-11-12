@@ -1,34 +1,37 @@
 Consensus poset over N=2314 TP53 variants (9 measures): incomparable-pair fraction = 0.566
-Running two independent Bubley-Dyer chains (this takes ~1-2 min for N=2314) ...
-Chain convergence: Spearman(chain1, chain2) = 0.9979 (want ~1.0)
+TP53 consensus: 2314 objects, 2313 equivalence classes; tied objects share class rank
+Insertion Gibbs: 4 dispersed chains; burn=512 sweeps; draws=1024; thin=2; max split-Rhat=1.01269; max MCSE=13.981 ranks (0.006045 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=1024 sweeps; draws=2048; thin=2; max split-Rhat=1.00431; max MCSE=10.631 ranks (0.004596 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=2048 sweeps; draws=4096; thin=2; max split-Rhat=1.00196; max MCSE=7.311 ranks (0.003161 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=4096 sweeps; draws=8192; thin=2; max split-Rhat=1.00082; max MCSE=4.911 ranks (0.002123 of classes); PASS
 
 Spearman(existing measure's ranking, canonical average-rank extension):
-  [field] median-of-8    rho=+0.987   mean|rank-canonical|=  74.9
-  TA:h1433s              rho=+0.943   mean|rank-canonical|= 160.9
-  TA:bax                 rho=+0.928   mean|rank-canonical|= 185.0
-  TA:aip1                rho=+0.898   mean|rank-canonical|= 214.6
-  TA:waf1                rho=+0.897   mean|rank-canonical|= 220.1
-  TA:gadd45              rho=+0.895   mean|rank-canonical|= 203.0
-  TA:noxa                rho=+0.874   mean|rank-canonical|= 228.1
-  TA:mdm2                rho=+0.861   mean|rank-canonical|= 249.7
-  TA:p53r2               rho=+0.822   mean|rank-canonical|= 266.1
-  AlphaMissense          rho=+0.597   mean|rank-canonical|= 452.5
+  [field] median-of-8    rho=+0.955   mean absolute percentile difference=  5.99 pp
+  TA:h1433s              rho=+0.907   mean absolute percentile difference=  8.76 pp
+  TA:waf1                rho=+0.895   mean absolute percentile difference=  9.58 pp
+  TA:bax                 rho=+0.890   mean absolute percentile difference=  9.72 pp
+  TA:aip1                rho=+0.871   mean absolute percentile difference= 10.38 pp
+  TA:gadd45              rho=+0.865   mean absolute percentile difference= 10.50 pp
+  TA:noxa                rho=+0.863   mean absolute percentile difference= 10.47 pp
+  TA:mdm2                rho=+0.852   mean absolute percentile difference= 11.53 pp
+  TA:p53r2               rho=+0.828   mean absolute percentile difference= 11.69 pp
+  AlphaMissense          rho=+0.729   mean absolute percentile difference= 15.75 pp
 
-Best single proxy for the weight-free consensus: [field] median-of-8 (rho=+0.987)
-Strays most (commits beyond the consensus / outlier): AlphaMissense (rho=+0.597)
+Best single proxy for the chosen consensus aggregate: [field] median-of-8 (rho=+0.955)
+Least similar to this chosen aggregate: AlphaMissense (rho=+0.729)
 
 Other computational predictors (external to the poset) vs the canonical order:
-  EVE          rho=+0.593  (n=1942)
-  ESM1b        rho=+0.501  (n=2314)
-  REVEL        rho=+0.540  (n=2314)
-  CADD         rho=+0.460  (n=2314)
-  PrimateAI    rho=+0.524  (n=2086)
-  BayesDel     rho=+0.540  (n=2314)
+  EVE          rho=+0.672  (n=1942)
+  ESM1b        rho=+0.593  (n=2314)
+  REVEL        rho=+0.639  (n=2314)
+  CADD         rho=+0.572  (n=2314)
+  PrimateAI    rho=+0.597  (n=2086)
+  BayesDel     rho=+0.636  (n=2314)
   (All computational predictors, like AlphaMissense, sit well below the experimental measures'
    agreement with the consensus — the computational family as a block diverges from it.)
 
 ClinVar discrimination (AUC path/benign, >=1 star; n=359, path=220):
-  canonical average-rank : 0.993
+  canonical average-rank : 0.996
   [field] median-of-8    : 0.994
   TA:waf1               : 0.991
   TA:mdm2               : 0.978

@@ -8,36 +8,37 @@ Correspondence: polina.vino@gmail.com. ORCID: 0000-0003-3271-3841.
 > Elsevier "Your Paper Your Way" allows flexible formatting at initial submission. A formatting pass to
 > JTB style (reference format, figure files) happens after the scientific draft is complete. This file
 > is the canonical submission draft. `main.md` and `formal-spine.md` are the working notes it draws on.
-> **All quantitative claims are copied from the stored analysis outputs** (`analysis/outputs/`,
-> `tp53/analysis/outputs/`, `inflammation/analysis/outputs/`), which are the single source of truth.
-> Each of those directories has a `run_all.sh` that regenerates every file in it. Figure 1 is built by
-> `paper/make_figures.py`, which parses those same outputs rather than restating their numbers, so the figure
-> cannot drift from the text.
+> Quantitative claims draw on stored outputs in `analysis/outputs/`, `tp53/analysis/outputs/`,
+> `inflammation/analysis/outputs/` and `cvdrisk/analysis/outputs/`. `bash analysis/run_framework.sh`
+> reproduces the local workflow, figures, registered numerical checks and post-remediation audit.
+> Figure values are parsed from stored outputs. `paper/check_claims.py` checks registered quantities;
+> it does not independently establish every biological interpretation or reference.
 
 ---
 
 ## Highlights
-- Competing biological measures of one concept are order-preserving extensions of a shared partial order.
+- Under admissibility, competing measures are order-preserving extensions of a shared partial order.
 - So disagreement is expected, and the output should say which pairs the concept orders, not pick a winner.
-- A protocol separates concept-level (constitutive) from artefactual disagreement.
+- A protocol tests reproducible disagreement while controlling implementation, coverage and sampling artifacts.
 - Demonstrated on seven domains: kinase and serotonin selectivity, ageing, exposure, TP53, inflammation,
   cardiovascular risk.
-- Cross-cohort reproducibility is the test of whether a disagreement is a property of the concept.
+- Replication establishes stability; concept-level attribution requires additional assumptions and controls.
 
 ## Abstract
-Many biological concepts are quantified by several competing formulas at once. Kinase-inhibitor selectivity,
-biological age, the functional impact of a TP53 variant and inflammatory burden each have multiple defensible
-measures that produce distinct rankings. The field's usual response is to benchmark them and choose a winner.
-We argue this is mis-specified, and that each measure should instead be read as an order-preserving
-representation of the concept's comparative structure. Admissible measures must agree wherever the concept's
-order is determined, and can differ only on pairs the concept leaves incomparable, so once incomparabilities
-exist no measure is canonical. What a comparison should report is where the concept decides and where it is
-silent. Our contribution is a reusable protocol that operationalizes this view, with the controls that
-separate constitutive disagreement (a concept property that survives cross-cohort reproducibility) from
-artefactual disagreement (near-ties, detection-floor noise, decision-threshold boundaries). When a single
-summary is unavoidable, we recommend the weight-free average rank over linear extensions, which commits no
-further than the consensus order forces. We demonstrate the protocol on public data across seven domains,
-reporting honestly where it is strong, where a domain differs, and where reproducibility is weak.
+Many biological concepts are quantified by several formulas that can produce distinct rankings. We give a
+measurement-theoretic protocol for comparing those formulas without assuming that one must be the correct
+measure. Conditional on admissibility, order-preserving measures can reverse only pairs the concept leaves
+incomparable; admissibility itself is a substantive assumption, not a consequence of agreement or replication.
+The protocol declares the biological object, formula implementation, measurement panel, missing-data convention
+and eligibility gate, computes weak consensus orders with ties preserved, and tests their stability across
+cohorts and analysis choices. We distinguish reproducible disagreement from its attribution: shared biases,
+threshold effects and coverage artifacts can also replicate. Public-data demonstrations across seven domains
+show how implementation and population choices change apparent agreement clusters, how separation patterns
+depend on the chosen axis, and how strong conditional rank recovery can coexist with poor eligibility
+retention. When a scalar summary is useful, uniform average ranks of consensus-order equivalence classes are
+one explicit aggregation convention, estimated with dispersed-chain convergence and Monte Carlo precision
+checks. The output is the observed comparative structure, its sensitivity and uncertainty, and the evidence
+still needed for concept-level interpretation.
 
 **Keywords:** measurement theory, partially ordered sets, convergent validity, rank aggregation,
 biomarkers, variant effect prediction
@@ -53,8 +54,8 @@ concepts several defensible numbers are in routine use. These are different form
 of one agreed formula, and on the same data they rank the same objects differently. Faced with this, the
 literature typically benchmarks the candidates against some reference and declares a winner.
 
-We argue that the benchmark question, *which measure is correct?*, is usually the wrong one, and that a
-better question follows from an old and well-established view of what a measurement is. In representational
+We distinguish outcome-specific prediction benchmarking from comparison of biological definitions. An
+established view of measurement provides a framework for the latter. In representational
 measurement theory (Krantz et al., 1971, Suppes et al., 1989, Luce et al., 1990), a measure is an
 order-preserving map from a concept's comparative structure into the real numbers. When several indicators
 target one concept, the orders consistent with all of them are exactly the *extensions* of the
@@ -63,12 +64,12 @@ bring this view to biological measurement as a usable protocol.
 
 Two consequences of the view are immediate and classical. First, any two admissible measures must agree
 wherever the concept's order is determined, and can disagree only on pairs the concept leaves
-**incomparable** (Section 2, Lemma 1). Second, whenever incomparabilities exist, the properties one would
-demand of a "good" measure determine a whole *class* of admissible measures, one per extension, and
-cannot single out a unique one (Szpilrajn, 1930, Section 2). So "no measure satisfies every requirement,
-and none is canonical" is a theorem, not a failure of the field's effort. The output should therefore report
-which pairs the concept orders, which it leaves incomparable, and, if a single number is unavoidable, what
-the minimal-commitment summary is.
+**incomparable** (Section 2, Lemma 1). Second, whenever incomparabilities exist, order preservation permits a whole *class* of admissible ordinal families, one per weak extension
+(Section 2), and does not single out a unique one. This is a non-uniqueness
+result, not an impossibility of satisfying all criteria; additional substantive criteria may distinguish
+particular measures. The output should therefore report
+which pairs the concept orders, which it leaves incomparable, and, if a single number is unavoidable, which
+explicit aggregation convention is being used.
 
 This reframing matters because the alternative is misleading. Benchmarking competing measures to a winner
 treats concept-level ambiguity as estimation error to be resolved, when it may instead be a correct
@@ -81,17 +82,18 @@ ranking hides these cases.
 
 1. **A protocol** (Section 3) that operationalizes this view for a working analyst who has several measures
    and some cohorts, including the controls needed to avoid over-interpretation.
-2. **A separation of constitutive from artefactual disagreement.** The situation is a *convergent-validity*
-   problem (Campbell and Fiske, 1959). Psychometrics treats mid-range divergence as method variance to be
-   removed. We show that part of it is *constitutive*, meaning the concept does not order some objects, and
-   we give the reproducibility test that tells the two apart (Section 3, step 3).
+2. **A separation of reproducibility from causal interpretation.** The situation is a *convergent-validity*
+   problem (Campbell and Fiske, 1959). Such divergence can be treated as method variance to be removed, but that is not the only possible
+   interpretation. We distinguish reproducible disagreement from a *constitutive* interpretation, which additionally
+   assumes admissibility and requires controls for systematic artifacts (Section 3, steps 3 and 4).
 3. **A cross-domain demonstration** on public data (Section 4) spanning kinase pharmacology, epigenetic
    ageing, serotonin pharmacology, methylation biomarkers, TP53 variant effect, inflammatory burden, and
    cardiovascular risk.
    Several of the seven domains yield null or negative results.
 
-Persistent disagreement among a concept's measures is the observable evidence that the concept does not
-totally order its objects.
+Persistent disagreement establishes a stable difference between the chosen operationalisations. It supports
+a concept-level partial-order interpretation only under the stated admissibility assumptions and after
+plausible shared artifacts have been examined.
 
 Section 2 states the measurement-theoretic foundations and what follows from each. Section 3 gives the
 protocol. Section 4 works through the seven domains. Section 5 reports what the demonstrations establish,
@@ -109,8 +111,9 @@ a finite set of objects Ω. Domain knowledge licenses *comparative judgments* a 
 b"). The empirical structure is (Ω, ≽) with ≽ a preorder that is **not** assumed total. Write a ∥ b when
 neither direction is supported, meaning a and b are *incomparable*. A *measure* f : Ω → ℝ is **admissible** if
 a ≽ b implies f(a) ≥ f(b) and a ≻ b implies f(a) > f(b), an order-preserving homomorphism, which is the
-representation condition of measurement theory. Two measures belong to the same **family** if they induce the
-same total preorder. A family is an equivalence class under strictly monotone reparameterization, that is, an
+representation condition of measurement theory. Two measures belong to the same exact **ordinal family** if they induce the
+same total preorder. Empirical high-correlation groups are called **agreement clusters** below; they need
+not be members of one exact ordinal family. A family is an equivalence class under strictly monotone reparameterization, that is, an
 *ordinal* class (Lemma 2). We adopt the multiple-indicators-to-partial-order-to-linear-extensions setup of
 Patil and Taillie (2004).
 
@@ -122,32 +125,32 @@ This justifies protocol step 2.
 **The order is estimated by consensus, and the estimate over-declares comparability.** The true ≽ is not
 observed. Given the set 𝓜 of measures experts actually use, define the consensus order a ≽𝓜 b iff
 f(a) ≥ f(b) for every f in 𝓜. Under the assumption that every reasonable measure is admissible, ≽ ⊆ ≽𝓜,
-so the consensus can mark a pair as comparable when the measures agree by coincidence though κ leaves
-it incomparable. Two checks make the estimate trustworthy. Cross-cohort reproducibility treats a
-disagreement that replicates across independent cohorts as a property of κ rather than of the sample
-(protocol step 3). A crude external anchor for the concept should agree with the consensus at the
-extremes, and disagreement there indicates that the whole set of measures is mis-oriented (step 1).
+so the consensus can mark a pair as comparable when the measures agree though κ leaves
+it incomparable. Replication tests stability conditional on the formulas and samples, not the admissibility
+assumption or the absence of shared bias. An external anchor can check direction, but its independence from
+inputs, training targets and fitted sign choices must be stated. Active-target count, for example, is the
+S-score numerator and is a shared-input proxy, not an independent external anchor.
 
-**No measure is canonical once incomparabilities exist.** On a finite (Ω, ≽), the class of admissible measures
-is non-empty (Szpilrajn, 1930) and, up to family, is in bijection with the extensions of ≽, with a
-unique element iff ≽ is total (standard order theory). If any pair is incomparable there are at least two
-order-distinct admissible measures, and no requirement that only entails order-preservation can single one
-out. This justifies step 6. Benchmarking to find the correct measure is mis-specified, and the correct output
-is the comparability skeleton plus the reproducible incomparable set. The same conclusion appears in social
-choice (Arrow, 1963) and truth-discovery axiomatics (Singleton and Booth, 2022).
+**Order preservation alone does not select a unique measure.** On the finite quotient of (Ω, ≽) by
+its equivalence relation, Szpilrajn's extension theorem gives a linear extension and hence an admissible
+measure. The admissible ordinal families correspond to the weak extensions, with a unique family iff ≽ is
+total. If a pair is incomparable, both strict directions occur in admissible extensions. This establishes
+non-uniqueness under order preservation alone, without excluding additional domain criteria that select a
+particular construction. Benchmarking can answer a stated prediction or decision question; it cannot, from
+rank agreement alone, identify the correct definition of a concept.
 
-**The minimal-commitment summary.** When a single number is unavoidable, the average rank of each object
-over the linear extensions of the consensus poset (Patil and Taillie, 2004, De Loof et al., 2008, 2011) is
-the barycenter of the rank vectors of those extensions under the uniform distribution on them. It agrees
-with every admissible measure on the comparable pairs, and on each incomparable pair it settles the order
-by mean rank instead of preferring either object. The finer summary, which settles no incomparable pair, is
-the mutual-rank-probability matrix, whose entry for a pair is the fraction of extensions ranking one object
-above the other. The average rank is weight-free and parameter-free. Counting the linear extensions of a
-finite poset is #P-complete (Brightwell and Winkler, 1991), so exact average ranks are #P-hard and are
-estimated by near-uniform sampling (Bubley and Dyer, 1999). This resolves the
-non-uniqueness above, and it justifies step 7. It is canonical *relative to*
-the chosen base set 𝓜, so the choice of which measures to admit is real and only lifted one level, not
-eliminated (Section 6).
+**An explicit scalar-summary convention.** When a single score is useful, we report the average rank of each
+equivalence class over the linear extensions of the consensus quotient poset, under the uniform distribution
+on those extensions. Objects tied on every admitted measure form one class and receive the same score. The
+aggregate preserves comparable class orderings but may order incomparable classes by their mean positions.
+The uniform law is an additional aggregation convention, not a consequence of admissibility, and does not
+imply that each incomparable pair has probability one-half in each direction. The mutual-rank-probability
+matrix retains more information about those pairs. No measure-specific weights are required, but the base
+set, class treatment and distribution over extensions remain explicit choices. Counting linear extensions
+is #P-complete (Brightwell and Winkler, 1991). We estimate average class ranks with an insertion Gibbs
+sampler, checking four dispersed chains, split R-hat and batch-means Monte Carlo error; same-start chain
+correlations are insufficient. Exact enumeration checks small cases. Failed diagnostics suppress aggregate
+benchmarks (Section 3, step 7).
 
 **A scale-type caution.** Families are ordinal classes only (Lemma 2). Two admissible measures being
 linearly related on one dataset does not establish a shared interval scale. A linear relation is expected,
@@ -164,43 +167,53 @@ Input: a latent concept κ, a set Ω of objects, candidate measures f₁ … f_k
 and ideally at least two independent cohorts. Each step names the established result that justifies it
 (Section 2, Appendix A).
 
-1. **Declare type and scale, and verify orientation against an external anchor.** State, for each measure,
-   what comparative structure it represents and its scale of measurement. Measures of different declared types
-   are not rival estimates of one number. Then check that each measure moves with a crude, theory-light
-   external proxy for the concept (number of active targets for selectivity, chronological age for clocks,
-   clinical labels for variant effect, mortality for inflammation). A measure can pass every internal
-   stability check and still be oriented the wrong way. Only an external anchor catches a set of measures that
-   are all mis-oriented.
-2. **Compute the consensus order and the disagreement set.** Form the partial order in which a ≽ b iff every
-   measure ranks a ≥ b. The pairs on which the measures disagree are the candidate incomparabilities (Lemma
-   1).
-3. **Test reproducibility, the constitutive/artefactual split.** Recompute the consensus order and the
-   disagreement set in each cohort separately. Disagreement that reproduces across independent cohorts is
-   evidence of concept-level incomparability (constitutive). Disagreement that does not is sampling noise or
-   method variance (artefactual). This is the step that distinguishes the protocol from a convergent-validity
-   audit.
-4. **Locate disagreement, with controls.** Before claiming disagreement concentrates anywhere, control for
-   object separation on the concept axis (near-ties trivially disagree), local density, distance to any
-   decision threshold, and rank-boundary compression. Report only what survives. The separation axis must be
-   chosen with care: a consensus axis built from the measures under comparison is partly circular, because
-   disagreement about a pair mechanically pulls that pair's consensus position together. Use an axis
-   independent of those measures where one exists, and where none does, report the consensus-axis result as an
-   upper bound on the constitutive component rather than as an estimate of it. In the two domains
-   where both axes are available, the consensus-axis decline is 2.5 and 16 times the independent-axis
-   decline.
-5. **Cluster measures into families and score them against desiderata.** Group measures by the order they
-   induce. Then fill a domain-independent checklist, recording which measures satisfy each criterion: a
-   reliability/domain gate, monotonicity in the concept against the anchor, ordinal stability under nuisance,
-   cross-cohort reproducibility, and intervention consistency.
-6. **Report the full structure, not a single winner.** Because no measure is canonical when incomparabilities
-   exist, report the consensus order, the reproducible incomparable set, the families, and which of the
-   step-5 desiderata each family satisfies.
-7. **If a single summary is unavoidable, use the minimal-commitment canonical aggregate.** Compute the average
-   rank over the linear extensions of the consensus poset. Benchmark existing measures against it to see which
-   is the best single proxy and which claim more than the consensus supports.
+1. **Declare the object, type, scale and implementation; check orientation.** State the biological unit,
+   target/feature panel, outcome definition, eligibility gate, exact formula, weights and parameter choices.
+   Separate unmeasured, censored and measured-low entries, and state how undefined scores are handled.
+   Compare published and modified implementations explicitly. Fix signs by declared conventions or on a
+   discovery sample, then freeze them for validation. Record whether an anchor is external metadata, a shared
+   input, a training target, or the outcome used to orient the scores. Correlation with a dependent anchor is
+   a consistency check, not independent validation.
+2. **Compute the weak consensus order, preserving ties.** A pair is incomparable iff at least one admitted
+   measure ranks it strictly in each direction. A tie versus a strict comparison remains weakly comparable
+   and is reported separately. Collapse identical indicator vectors into equivalence classes before
+   computing linear extensions. Verify invariance to object-row permutations and strictly increasing
+   reparameterisations.
+3. **Test reproducibility without identifying its cause by replication alone.** Freeze implementations,
+   eligibility and any fitted signs. On matched objects, compare pair relations directly; on disjoint
+   populations, compare correlation structures and separation curves without claiming replication of the
+   same incomparable pairs. Bootstrap independent objects or participants, retaining dependence among their
+   scores. Replication establishes stability conditional on these choices. Shared inputs, assay limits,
+   selection and systematic biases can also replicate; a constitutive interpretation needs additional
+   evidence that the measures are admissible and the disagreement survives plausible artifact controls.
+4. **Locate disagreement with explicit controls.** Examine separation, axis position, local density,
+   distance to decision thresholds and rank boundaries. Declare which scores share inputs with the axis.
+   Withhold a score that defines the proxy axis from the discordance panel as a sensitivity analysis; where
+   possible also use an external proxy. Consensus-axis declines are descriptive associations, not established
+   upper bounds on a constitutive component. Even an external-axis residual does not by itself identify a
+   biological cause. Pairwise regressions are descriptive unless uncertainty accounts for shared objects.
+5. **Describe agreement clusters and evaluate criteria.** Distinguish approximate correlation clusters from
+   exact ordinal families. Separate properties proved by construction from empirical robustness and recovery.
+   Declare apparatus context and analyst choices; test plausible alternative contexts without demanding
+   invariance where the scientific question changes. Report the domain, scale and boundary conditions under
+   which each guarantee holds. Boundary locality and stability across boundary crossings are different
+   properties.
+6. **Report structure, sensitivity and uncertainty.** Give the base measures, comparable and incomparable
+   fractions, tie-only disagreements, eligibility counts, and leave-one-measure-out sensitivity. Report
+   published-form and missingness scenarios. For reduced panels report eligibility retention, rank recovery
+   conditional on eligibility, and pair recovery that gives lost eligibility zero credit. Use a benchmark
+   winner only for a declared prediction or decision objective, with an appropriate endpoint.
+7. **If a scalar summary is useful, state its convention and validate its computation.** Average ranks of
+   equivalence classes under uniform linear extensions are one option. Use exact enumeration for small
+   posets or a sampler with dispersed starts, checks of rescaling/row invariance, split R-hat, Monte Carlo
+   errors and increasing run lengths. Here the numerical acceptance rules are maximum split R-hat <1.01
+   and maximum batch-means Monte Carlo SE <0.0025 times the number of classes. These are empirical checks,
+   not a proof of finite-time mixing. Suppress comparisons when diagnostics fail and avoid distinguishing
+   close proxies beyond numerical precision. Distance from this aggregate measures agreement with the
+   chosen convention, not overcommitment or biological error.
 
-The protocol's value is concentrated in steps 3 and 4. Without them, naive disagreement metrics
-report structure that disappears once the proper controls are applied (Section 5).
+Steps 1 to 4 distinguish implementation, eligibility, sampling and axis effects. Steps 5 to 7 make the
+remaining choices and numerical uncertainty explicit (Section 5).
 
 ---
 
@@ -212,47 +225,87 @@ developed. TP53 variant effect and inflammatory burden are the newest and most d
 below is copied from a stored analysis output in the project repository. Table 1 summarises the instances and
 the coverage of the protocol's steps across them.
 
-**Table 1.** The ten instances the protocol is applied to, grouped into the seven domains of this section.
+**Table 1.** The ten illustrative instances considered by the protocol, grouped into the seven domains of this section.
 *Incomparable* is the fraction of object pairs the consensus poset leaves unordered. *Best proxy* is the
-existing measure whose ranking correlates most strongly (Spearman) with the weight-free average rank over
+existing measure whose ranking correlates most strongly (Spearman) with the uniform average class rank over
 linear extensions. A dash marks a quantity not computed for that instance: the poset and average-rank steps
 were run where the object set was large enough to support them, and the remaining instances were used for the
-family-structure and orientation steps only. The inflammatory-index poset is computed on a fixed random
-subsample because pair counts scale quadratically. Every value is copied from a stored analysis output.
+agreement-cluster and orientation steps only. The inflammatory-index poset is computed on a fixed random
+subsample because pair counts scale quadratically. Every value is copied from a stored analysis output. Reproducibility summaries have different estimands:
+matched-pair overlap is reported for kinase, whereas matrix-vector correlations compare dependent
+indicator-pair correlations across disjoint cohorts; these should not be read as interchangeable tests.
 
 | Instance | Measures | Objects (poset) | Incomparable | Best proxy | Cross-cohort reproducibility |
 |---|---|---|---|---|---|
-| Kinase selectivity (4.1) | 4 | 206 gated compounds | 37.2% | Gini, 0.955 | not tested |
+| Kinase selectivity (4.1) | 4 | 200 gated compounds | 37.9% | Gini, 0.949 | matched-panel incomparable-set Jaccard 0.294 |
 | Blood clocks (4.2) | 5 | 1,385 samples | — | — | not tested |
 | Retinal clocks (4.2) | 5 | 85 samples | — | — | single cohort |
-| Serotonin selectivity (4.3) | 4 | 297 ligands | — | — | not tested |
+| Serotonin selectivity (4.3) | 4 | 285 eligible of 297 ligands | 75.4% | — | not tested |
 | Smoking signatures (4.4) | 4 | 464 and 689 samples | — | — | divergence replicates in both |
-| TP53 variant effect (4.5) | 9 | 2,314 variants | 56.6% | median-of-8 promoters, 0.987 | platforms agree at the extremes |
-| Inflammatory indices (4.6) | 7 | 600 of 5,327 participants | 72.8% | SII, 0.983 | Spearman 0.995 |
-| Sepsis signatures (4.6) | 5 | 479 samples | 79.2% | interferon-γ, 0.756 | Spearman 0.32 |
+| TP53 variant effect (4.5) | 9 | 2,314 variants | 56.6% | median-of-8 promoters, 0.955 | platforms agree at the extremes |
+| Inflammatory indices (4.6) | 7 | 600 of 5,327 mortality-linked participants | 72.8% | SII, 0.844 | matrix-vector Spearman 0.995 |
+| Sepsis gene-set proxies (4.6) | 5 | 479 samples | 87.1% | inflammatory, 0.613 | frozen-sign matrix-vector Spearman 0.976 |
 | Inflammaging clocks (4.6) | 5 | 343 samples | 54.1% | — | qualitative only |
 | Cardiovascular risk (4.7) | 3 | 600 of 2,994 adults | 15.5% | — | mean Δr 0.004 |
 
 
 ### 4.1 Kinase-inhibitor selectivity
-Concept: how concentrated an inhibitor's activity is across the kinome. Measures: the S-score, selectivity
-entropy, the Gini coefficient, and target-ratio, applied across four profiling datasets spanning three
-assay technologies (Davis et al., 2011, 68 compounds, Klaeger et al., 2017, 222, Anastassiadis et al.,
-2011, 178, Metz et al., 2011, 704, with prior comparisons of these metrics by Uitdehaag and Zaman, 2011,
-and Bosc et al., 2017). The measures split into two families. The S-score, entropy, and Gini quantify
-concentration across the panel and agree closely (within-family Spearman 0.72 to 1.00), while the
-target-ratio quantifies the gap to one off-target and is the consistent outlier (cross-family 0.14 to
-0.62). On the reliability-gated Klaeger compounds the consensus poset leaves **37.2% of pairs incomparable**,
-and against the weight-free average-rank aggregate the Gini (0.955) and entropy (0.950) are the best
-single proxies while the ratio (0.796) agrees least. Pairwise discordance is
-driven by separation measured on the number of active targets, an axis independent of the four measures
-(equal-active-count pairs are 76% discordant, well-separated pairs 19%), and axis position adds essentially
-nothing once separation is controlled (added R² about
-0.002). Compounds with no activity above the detection floor carry the largest instability (rank standard
-deviation 72.9 versus 31.3 for active compounds), which is why the reliability gate is the first
-desideratum. No existing measure satisfies the four selectivity desiderata we draw from these failures
-(a reliability gate, bounded gap sensitivity, distributional consistency, and monotonicity under weak
-off-target addition), while a gated smooth-hinge effective-target number does.
+Concept: concentration of an inhibitor's activity across a declared protein-kinase panel. The four sources
+span three assay technologies: Davis et al. (2011, 68 compounds), Klaeger et al. (2017, 222), Anastassiadis
+et al. (2011, 178) and Metz et al. (2011, 704). Following the revised companion analysis, Davis uses 363
+reference targets rather than 433 constructs, Klaeger 217 source-annotated protein kinases rather than 343
+captured targets, and Anastassiadis 291 non-duplicate entries rather than 300. Targets, constructs and
+co-captured proteins are distinct biological units; curation is part of the measurement definition.
+
+The primary Klaeger consensus uses the S-score, baseline-subtracted log-affinity entropy and Gini, and the
+top-off-target log-affinity gap. It retains the declared parameter-median summaries of the companion study,
+with average ranks for ties and eligibility max(pKd)>6 applied before ranking the 200 compounds.
+The sweeps use thresholds 5.5–8.0 and baselines 5.0–6.5 in 0.25 steps, and reference off-target indices
+1–5. This parameter-median comparison retains the companion convention of assigning zero to undefined
+zero-total-weight entropy/Gini configurations; it is therefore a convention-sensitive descriptive analysis.
+The fixed-default, floor-baseline controls below have defined weights on the eligible population. Under
+those implementations the consensus leaves **37.9% of pairs incomparable**. Gini (0.949) and entropy (0.944)
+are close proxies for the checked uniform average-class-rank aggregate; the ratio correlates at 0.817.
+These are agreement summaries conditional on this base set. Omitting the ratio reduces incomparability to
+12.9%, demonstrating material base-set dependence.
+
+Implementation changes the result. At fixed default parameters, replacing log-affinity entropy by published
+association-constant entropy changes Klaeger incomparability from 39.7% to 42.2% when floor-coded entries have
+zero weight, and to 65.3% when they retain floor weight. These fixed-default estimates answer a different
+question from the primary parameter-median estimate. Published and modified entropies therefore cannot be
+treated as interchangeable representatives of one empirical agreement cluster. The four-dataset controls
+report both forms wherever the assay is an affinity scale; exponentiating single-concentration percentage
+inhibition is not presented as association-constant entropy.
+
+Active-target count is a shared-input proxy: it exactly determines the S-score at the same threshold.
+With all four measures, strict discordance is 77.2% for equal-count pairs and 16.2% for widely separated
+pairs; withholding the S-score changes those figures to 32.7% and 16.2% (Figure 1). Thus the magnitude of the
+separation pattern depends strongly on the discordance panel. The fitted addition of axis position changes
+R² from 0.1526 to 0.1534, a descriptive result rather than an estimate of a concept-level component.
+Zero-active compounds remain unstable under the declared all-configuration conventions (rank standard
+deviation 76.6 versus 32.4), but those conventions include undefined-score assignments; this is evidence for
+explicit eligibility and undefinedness handling, not a universal property of low-signal biology.
+
+The current companion candidate is gated exponential entropy: weights are zero at or below the assay floor
+x₀ and exp((x−x₀)/T) above it, with an activity-eligibility gate max(x)>τ*. Its four current criteria are
+activity eligibility (D1), boundary locality (D2), monotonicity under weak-target addition (D3), and
+orientation on equally strong targets (D4). The D3 construction guarantee requires T≥τ*−x₀; T=τ*−x₀ is the
+default. Boundary locality means that moving a gate without crossing any value leaves the score unchanged;
+it does not promise stable rankings when values are crossed. The historical bounded-gap and distributional-
+consistency criteria, and the earlier smooth-hinge candidate, are not current validation claims.
+
+Panel recovery is evaluated separately from these construction properties. On Davis 20-target random panels,
+log-affinity entropy has mean conditional Spearman 0.917 but mean eligibility retention only 0.758 and
+unconditional pair recovery 0.509. The candidate on the same panels has conditional Spearman 0.854 and pair
+recovery 0.484. Pair recovery scores lost eligibility as zero and a new tie as one-half, on pairs strictly
+ordered and eligible on the full panel. High conditional rank recovery alone therefore overstates how much
+of the original comparison remains usable.
+
+A matched-platform control reuses 46 CID-resolved Davis/Klaeger compounds, 201 shared curated genes, and the
+40 compounds eligible on both platforms. Across 780 pairs, the incomparable-set Jaccard is 0.294 (matched-
+compound bootstrap 95% CI [0.205, 0.383]). Direction agreement is 0.954 among the 348 pairs strictly comparable
+on both platforms. This directly measures pair-set overlap, without inferring that either assay reveals the
+true concept order. Full results are in `kinase_controls.txt`, `kinase_platform.txt` and `protocol_controls.txt`.
 
 ### 4.2 Epigenetic clocks (biological age)
 Concept: biological age. Measures: DNA-methylation clocks of three declared *types*, which the protocol's
@@ -277,27 +330,34 @@ The clock idea is not specific to blood or to methylation. On a rat retinal bulk
 measures disagree sharply: the SenMayo and Fridman senescence signatures (Saul et al., 2022, Fridman and
 Tainsky, 2008), a Hallmark inflammatory inflammaging proxy, and a fitted elastic-net clock. Against true age
 they range from Spearman 0.98 for the fitted clock down to 0.13 for the Fridman senescence-up signature. The
-curated senescence signatures are weak age predictors on their own. The five measures split into a senescence
-and inflammaging family plus a distinct fitted-clock direction, with the Fridman senescence-down signature
+curated senescence signatures are weak age predictors on their own. The five measures form a senescence
+and inflammaging agreement cluster plus a distinct fitted-clock direction, with the Fridman senescence-down signature
 anti-correlated with the rest of the senescence block. The mean-rank consensus tracks age (Spearman 0.755) and
 mean age rises monotonically across consensus tertiles (9.7, 18.3, 22.7 months), and discordance falls with
 separation on the consensus axis as elsewhere, though even well-separated pairs still disagree about half the
 time. This is a single-cohort, rat, single-sex extension with the clock trained in-distribution, so it is
-qualitative, on par with the inflammaging clocks. It shows the clock family structure and the near-tie pattern
+qualitative, on par with the inflammaging clocks. It shows the clock agreement-cluster structure and the near-tie pattern
 recur in a new tissue and a new measurement modality. Full analysis is in the companion clock repository
 `epigenetic-clock-desiderata`, subdirectory `eye_aging/`.
 
 ### 4.3 Serotonin-receptor selectivity
-Concept: 5-HT2A versus 5-HT2B selectivity. The kinase selectivity measures transfer directly, on binding
-affinities from ChEMBL (Zdrazil et al., 2024, n=297) and on a hand-curated set of classical psychedelics
-scored against the NIMH Psychoactive Drug Screening Program Ki database (PDSP Ki Database, 2026, n=36). The
-family structure recurs. Here entropy is the outlier (its correlation with the others is near zero, while the
-S-score and Gini agree at +0.682 once both are oriented towards selectivity), whereas in kinase the ratio was
-the outlier. Across domains the consensus order still agrees with the external anchor (number of active
-targets, Spearman about 0.82, on the broader 949-compound set with at least four receptors measured).
-Cross-domain transfer is weakest in this domain: discordance stays high even for well-separated compounds, so
-the near-tie account explains less here than elsewhere. Separation is on the consensus axis, which inflates
-the effect in other domains, so that weakness is if anything understated.
+Concept: concentration of observed binding across a declared serotonin-receptor panel. This is distinct from
+selectivity for a designated 5-HT2A target over 5-HT2B. The ChEMBL-derived companion subset contains 297
+ligands with both receptors measured and at least four receptors tested, but their observed panels range
+from 4 to 12 of 13 available receptor columns. After requiring an observed target above pKi 6, 285 remain.
+We compare the observed-target S-score, log-affinity entropy and Gini, and a top-two log-affinity gap. Untested
+receptors remain unknown; floor imputation is a sensitivity scenario. The companion's quotient of its top two
+pKi values is a separate implementation, not the kinase log-affinity gap.
+
+On the 285-ligand subset the observed-only consensus leaves 75.4% of pairs incomparable, versus 56.1% under
+floor imputation. Entropy's relation to measured-panel size is strong (absolute Spearman 0.943). The broader
+949-ligand, at-least-four-tested-receptors set retains 898 eligible compounds; on its largest identical
+observed receptor panel, 332 eligible compounds remain and entropy/Gini correlate at 0.996. The apparent
+entropy-outlier pattern in variable panels therefore cannot be attributed confidently to a biological
+measure family. The observed-only mean-rank consensus correlates with observed active-target count at 0.740
+on the broader eligible set; that count shares assay inputs and coverage with the scores. A separate
+36-compound curated psychedelic panel in the companion repository is descriptive context only. Coverage,
+implementation and selection preclude a general cross-domain transfer claim from this instance.
 
 ### 4.4 Methylation exposure biomarkers
 Concept: environmental exposure or disease signature. Measures: competing smoking-exposure signatures (AHRR,
@@ -305,14 +365,16 @@ Breitling et al., 2011, EpiSmoke, Shenker et al., 2013, Joehanes, Joehanes et al
 Chamberlain et al., 2022) across two cohorts (GSE50660, Tsaprouni et al., 2014, n=464, and GSE42861,
 Liu et al., 2013, n=689). The signatures agree almost
 perfectly on never-smokers (96%) and well on current smokers (82%), and diverge on former smokers (71% pooled,
-78% and 66% per cohort). The divergence reproduces in both cohorts separately, which rules out sampling noise,
+78% and 66% per cohort). The divergence reproduces in both cohorts separately, indicating stable structure conditional on the analysis,
 but it is artefactual rather than constitutive: it is a threshold effect at the classification cutoff, and
 which group agrees worst changes when the cutoff changes, so it is not evidence of a concept-level
-"consequential middle" (Section 5). A cross-tissue arm (fetal alcohol spectrum disorder) shows why the
+"consequential middle" (Section 5). Freezing never-smoker thresholds from GSE50660 and applying them to
+GSE42861 changes never/former/current agreement to 0.819/0.649/0.885; cohort-specific threshold results
+are therefore descriptive, not a frozen-rule validation. A cross-tissue arm (fetal alcohol spectrum disorder) shows why the
 reliability gate is needed. Buccal-derived signatures (Portales-Casamar et al., 2016, Lussier et al., 2018)
-scored on blood transfer poorly (AUC 0.68 to 0.79), and the one strong blood-native episignature
+scored on blood transfer poorly (AUC 0.68 to 0.79), and the blood-native episignature
 (van der Laan et al., 2025, AUC 0.93 to 0.96) is non-independent of its evaluation cohort (shared laboratory
-and tissue, confirmed by the depositing author), so it is an upper bound only.
+and tissue, confirmed by the depositing author), so its apparent performance may be optimistic and does not supply independent validation.
 
 ### 4.5 TP53 variant effect Concept: the functional impact of a TP53 missense variant. Measures: eight
 Kato/Ishioka yeast transactivation readouts (Kato et al., 2003), seven computational pathogenicity predictors,
@@ -325,45 +387,63 @@ specifications (Fortuno et al., 2021) for the field's functional rules (core pan
 necessary here. The eight transactivation readouts and AlphaMissense are correctly oriented against ClinVar
 (AUC 0.96 to 0.99), while all four proliferation screens are mis-oriented (AUC 0.016 to 0.064) under the naive
 "higher fitness is worse" convention, so they must be flipped before use. The fifteen core-panel measures form
-two families by measurement basis, the eight transactivation readouts (within-family mean 0.78) and the seven
+two agreement clusters by measurement basis, the eight transactivation readouts (within-cluster mean 0.78) and the seven
 predictors (mean 0.76), agreeing less across the two blocks (mean 0.50) than within either. The proliferation
-screens are held out of the family analysis, and the three Giacomelli conditions serve instead as the
+screens are held out of the agreement-cluster analysis, and the three Giacomelli conditions serve instead as the
 independent mammalian platform in the reproducibility test below. The consensus poset over the nine base
-measures (the eight readouts plus AlphaMissense) is 56.6% incomparable, and the field's own
-median-of-eight-promoters rule is the best proxy for the average-rank aggregate (Spearman 0.987) while all
-seven predictors sit well below it (0.46 to 0.60). The consensus discriminates ClinVar labels at AUC 0.997.
-Disagreement is again separation-driven, but the size of the effect depends on how separation is measured. On
-the consensus axis, which is built from the same measures, discordance falls from 0.93 for near-ties to 0.05
-for well-separated pairs. On an independent AlphaMissense axis it falls only from 0.61 to 0.26 (Figure 1). The
-effect survives the removal of that circularity at about 40% of its apparent size, and we take the
-independent-axis figure as the size of the constitutive component. A modest genuine middle residual also
-survives control (mid-axis coefficient +0.33 on the consensus axis, +0.10 on the independent axis),
-corresponding to partial-loss-of-function variants. Two experimental *platforms*, yeast transactivation and
-mammalian proliferation, agree strongly at the extremes (+0.63) and not at all in the middle (−0.05), so the
-comparability skeleton is constitutive across platforms while the middle is genuinely undecided. Finally, all
+measures (the eight readouts plus AlphaMissense) is 56.6% incomparable. It contains 2,313 equivalence classes
+among 2,314 variants; the tied pair receives one shared class score. With four dispersed insertion-Gibbs
+chains passing the numerical criteria, the field's median-of-eight-promoters rule correlates with the
+uniform average-class-rank aggregate at Spearman 0.955, and computational predictors range from 0.572 to
+0.729. The aggregate discriminates the retained ClinVar labels at AUC 0.996; this is a descriptive benchmark
+on the selected labelled variants, not independent proof of biological validity. The earlier same-start
+adjacent-swap estimates were insufficiently mixed and are superseded.
+
+Strict discordance among the eight promoters falls from 0.924 to 0.045 across consensus-separation quintiles,
+and from 0.606 to 0.256 across AlphaMissense-separation quintiles (Figure 1). The fitted position coefficients
+are +0.362 and +0.119 respectively. AlphaMissense is outside this promoter discordance panel, but its residual
+association does not identify a constitutive component or prove a partial-loss-of-function mechanism.
+Two experimental *platforms*, yeast transactivation and
+mammalian proliferation, agree on the pooled extremes (+0.63) and not in the middle (−0.05), but that
+contrast is carried by one end: tertile by tertile the platforms agree on deleterious variants (+0.56) and no
+better than chance on functional ones (+0.01) or in the middle (−0.05). The shared pattern is asymmetric and consistent with resolution concentrated at one end; it does not
+establish a symmetric skeleton with an undecided middle. The gap
+from the middle does survive the fair comparison (mean of the two end tertiles minus the middle +0.34,
+bootstrap 95% CI [+0.25, +0.42]), so there is reproducible cross-platform structure, but it sits at the
+deleterious end alone. Finally, all
 seven predictors score 0.90 to 0.99 against curated ClinVar but only 0.79 to 0.89 against the independent
-functional truth on the variants of uncertain significance where prediction is actually used, so evaluation
-against curated labels overstates their performance (Section 5). A hotspot-codon holdout showed no inflation
+functional truth on the variants of uncertain significance where prediction is actually used, so benchmark performance depends on the selected population and endpoint (Section 5). These comparisons
+change both variant spectrum and reference labels; they do not isolate training leakage as the cause. A hotspot-codon holdout showed no inflation
 for any predictor, an honest null.
 
 ### 4.6 Inflammatory burden Concept: systemic inflammatory burden, quantified three ways of differing
-strength. **Clinical indices (strong):** seven routine indices (NLR, PLR, MLR, SII, SIRI, CRP, CRP-to-albumin)
-on two independent NHANES cycles, anchor all-cause mortality. Two families emerge by measurement basis,
-leukocyte-count ratios and CRP-protein, nearly independent of each other (between-family mean 0.19), and CRP
-and its albumin ratio are rank-identical (1.00), so one is redundant. The consensus discriminates mortality at
+strength and implementation fidelity. **Clinical indices (stable correlation structure):** seven routine indices (NLR, PLR, MLR, SII, SIRI, CRP, CRP-to-albumin)
+on two independent NHANES cycles, anchor all-cause mortality. Two agreement clusters emerge by measurement basis,
+leukocyte-count ratios and CRP-protein, weakly correlated with each other (between-cluster mean 0.19), and CRP
+and its albumin ratio are highly correlated (Spearman 0.998), but their rank vectors are not identical.
+Omitting either is therefore a sensitivity analysis, not removal of an exact duplicate. The consensus discriminates mortality at
 the extremes (AUC 0.69) but not the middle (0.51), and its inter-index correlation structure replicates across
-the two cycles at Spearman **0.995**, the strongest reproducibility in this work. Disagreement falls steeply
-with separation on the consensus axis (0.987 for near-ties to 0.285 for well-separated pairs) but is flat on
-the only independent axis available here, chronological age (0.748 to 0.704, R² 0.0015, Figure 1). Age is too
-weak a proxy for inflammatory burden to settle which reading is right, so we report both. **Sepsis signatures
-(strong disagreement, weak reproducibility):** five published blood signatures (the Hallmark inflammatory and
+the two cycles at Spearman **0.995** (participant-bootstrap 95% CI [0.969, 0.999]).
+These cohort summaries use 6,197 and 5,882 complete-index participants; the mortality-linked subsets contain
+5,327 and 5,104. The 600-person poset subsample is drawn from the former mortality-linked population.
+Its closest single index to the checked aggregate is SII (0.844), while the equal-weight mean-rank score
+agrees at 0.983. The correlation structure can reproduce because the indices share inputs and algebra;
+replication does not distinguish that mechanism from a concept-level partial order. Disagreement falls steeply
+with separation on the consensus axis (0.984 for near-ties to 0.274 for well-separated pairs) but is flat on
+the external-to-formula axis examined here, chronological age (0.735 to 0.694, R² 0.0013, Figure 1). Age is too
+weak a proxy for inflammatory burden to settle which reading is right, so we report both. **Sepsis gene-set proxies
+(strong disagreement, orientation-sensitive reproducibility):** five blood gene sets drawn from published signatures (the Hallmark inflammatory and
 interferon-γ sets, Liberzon et al., 2015, the SRS7 Sepsis Response Signature, Davenport et al., 2016, the
 SRSq19 SepstratifieR signature, Cano-Gamez et al., 2022, and the MARS8 endotype signature, Scicluna et al.,
-2017) on GSE65682, scored on the 479 of 802 samples carrying 28-day mortality, which is also the anchor. The
-Hallmark and SRS families are near-independent (cross-family mean +0.02), and the detailed structure
-replicates only weakly across the discovery and validation cohorts (Spearman 0.32). Four of the five
-mortality-orientation signs match across the two cohorts, while MARS8's flips, consistent with its near-chance
-raw AUC of 0.495. **Inflammaging clocks (thin):** only two composite clocks are publicly reconstructable on
+2017) on GSE65682, scored on the 479 of 802 samples carrying 28-day mortality, which is also the anchor. These scores are mean-z gene-set proxies, not reconstructions of the published SRSq or MARS classifiers.
+Gene-wise centers/scales and score directions are fitted on discovery and frozen on validation. With that rule the detailed correlation
+structure replicates at Spearman 0.976, versus the earlier 0.32 obtained by fitting directions independently
+in each cohort. The participant-bootstrap 95% interval is [0.684, 0.988], reflecting uncertainty in only ten
+indicator-pair correlations. The full frozen-sign consensus is 87.1% incomparable, with the inflammatory
+proxy closest to its checked aggregate (0.613). Hallmark and SRS proxy blocks remain weakly correlated
+(between-cluster mean +0.05). Four of five marginal mortality directions match; MARS8 flips and its pooled
+raw AUC is 0.505. The sign instability concerns outcome association, while the fixed-definition structure
+is considerably more stable. Neither observation establishes concept-level incomparability. **Inflammaging clocks (thin):** only two composite clocks are publicly reconstructable on
 shared samples, SImAge (Kalyakulina et al., 2023) and a recomputed ipAGE (Yusipov et al., 2022). Two further
 inflammaging clocks, iAge (Sayed et al., 2021) and IMM-AGE (Alpert et al., 2019), are not reconstructable
 here, so this is a qualitative check, not a full instance. Sepsis *endotype labels* (SRS versus MARS) are
@@ -380,126 +460,105 @@ alongside because the cardiovascular event count is small (30 and 10). All three
 against both anchors (cardiovascular-death AUC 0.755 to 0.815).
 
 This domain behaves unlike the others, and the contrast is the reason for including it. The three scores do
-not split into families: they agree on ranking almost perfectly (Spearman 0.932 to 0.946 in both cycles) and
+not split into distinct agreement clusters: they agree on ranking almost perfectly (Spearman 0.932 to 0.946 in both cycles) and
 that structure is the most stable in this work, reproducing across cycles to a mean absolute difference of
 0.004. The consensus poset still leaves 15.5% and 15.7% of pairs incomparable, the lowest of any instance in
-Table 1. Yet the three scores disagree on absolute risk by about a factor of two, with median ten-year risk
-7.5% under the Pooled Cohort Equations against 15.3% under the Framingham office model. Because treatment
-guidelines act on a threshold rather than on a ranking, that calibration gap converts near-identical orderings
-into opposite clinical decisions: at the 7.5% statin-eligibility threshold, **26.2% of adults in 2015-16 and
-26.6% in 2017-18 are classified differently depending on which score is used**, and the figures are
-essentially unchanged at the 10% threshold (25.9% and 26.9%).
+Table 1. The scores differ in their numerical risks: median ten-year values are
+7.5% under the Pooled Cohort Equations and 15.3% under the Framingham office model. Their endpoints also
+differ: PCE predicts hard ASCVD whereas the Framingham models predict broader general CVD (Goff et al., 2014;
+D'Agostino et al., 2008). Applying a common numerical cutoff therefore mixes endpoint and formula changes
+and cannot establish a calibration error or interchangeable treatment-eligibility decisions.
 
-The protocol's distinction explains the apparent paradox. Rank agreement and decision agreement are different
-properties, and a measure set can be nearly unanimous on the first while splitting on the second. Step 1's
-requirement to declare scale type is what catches this: these three scores agree ordinally but not on the
-interval or absolute scale the threshold rule presupposes, so the guideline treats as comparable a quantity
-the measures do not jointly determine. The disagreement here is artefactual in the protocol's sense, a
-decision-threshold boundary effect rather than concept-level incomparability, but it is the instance where an
-artefactual disagreement carries the largest practical cost. Discordance falls with separation as elsewhere
-(0.444 to 0.000), but the only available separation axis is the consensus, and age and blood pressure are
-inputs to all three scores, so no independent axis can be constructed here and that decline is an upper bound
-(Section 3, step 4). Analysis is in `cvdrisk/`.
+At a shared cutoff of 0.075, 26.2% and 26.6% of adults fall on different sides under at least one score;
+at 0.10 the figures are 25.9% and 26.9%. Among the two Framingham models, which share an endpoint, the 0.075
+classification discrepancies are 10.0% and 10.3%, and the 0.10 discrepancies are 11.1% and 11.6%. These are
+classification sensitivity results, not estimated changes in clinical management. Mortality during observed
+follow-up supplies an orientation check; it does not validate ten-year incident-event calibration. Strict
+indicator-pair discordance declines from 0.444 to 0.000 along the consensus axis, a descriptive result linked
+to that same score panel. This example illustrates why the protocol first requires matching outcomes and
+measurement types. Analysis is in `cvdrisk/`.
 
 ## 5. What the demonstrations establish
 
-With the protocol's controls applied, the honest and reproducible findings are the following. They are
-less sweeping than "one phenomenon recurs identically in seven domains."
+With the controls applied, the demonstrations support the following conditional findings.
 
-1. **Disagreement is concentrated in near-ties, by an amount that depends on how separation is measured.**
-   Discordance falls as objects separate on the concept axis in most domains, but both the size of the fall
-   and, in two domains, whether it falls at all depend on whether the separation axis is independent of the
-   measures being compared. On independent axes it falls from 76% to 19% in kinase (axis: number of active
-   targets) and from 0.61 to 0.26 in TP53 (axis: AlphaMissense). Figure 1 shows the two axes side by side. On
-   consensus axes, built from the same measures and so partly circular, the declines are larger: 0.93 to 0.05
-   in TP53, and 0.987 to 0.285 for the inflammatory indices, which have no strong independent axis and are
-   flat on the weak one available. Serotonin compounds disagree even when well separated. We therefore read
-   the independent-axis figures as the size of the constitutive component and the consensus-axis figures as
-   upper bounds. Once separation is controlled, axis position adds little or nothing, so the claim that
-   measures split on an "interesting middle" is largely a near-tie and rank-boundary artefact and we retire it
-   as a general law. TP53 retains a small genuine middle residual (partial-loss-of-function variants) that
-   shrinks but does not vanish on the independent axis.
+1. **Comparative structure depends on implementation and eligibility.** Under the primary parameter-median
+   kinase implementation, 37.9% of pairs are incomparable; fixed-default implementation and floor scenarios
+   give different estimates. Serotonin panel size strongly predicts entropy. These effects must be resolved
+   before assigning biological meaning to agreement clusters.
+2. **Separation associations depend on the axis and the discordance panel.** In TP53, strict discordance
+   falls from 0.924 to 0.045 on the consensus axis and from 0.606 to 0.256 on the external-to-panel
+   AlphaMissense axis. For inflammatory indices the consensus decline is 0.984 to 0.274, whereas age gives
+   0.735 to 0.694. In kinase, removing the S-score from an active-count-axis comparison changes equal-count
+   discordance from 77.2% to 32.7%, with wide-separation discordance remaining 16.2%. These are descriptive
+   sensitivity results, not estimates or bounds on a constitutive component. The TP53 position residual
+   warrants further biological investigation without identifying its cause.
 
-![Discordance against separation, on a consensus axis and on an axis independent of the measures.](figures/fig1_near_tie.png)
+![Strict reversals against separation, with external-proxy and shared-input controls.](figures/fig1_near_tie.png)
 
-**Figure 1.** Inter-measure discordance against object separation, for the three instances with an axis
-independent of the measures being compared. Each point is a quantile bin of pairs. Where the separation axis
-is the consensus mean-rank (red, dashed), it is built from the same measures whose discordance is plotted, so
-near-ties and disagreement are linked by construction as well as by the concept. Where the axis is independent
-of those measures (blue, solid), the decline is smaller in TP53 and absent for the inflammatory indices, whose
-only available independent axis, chronological age, is a weak proxy for the concept. For kinase only the
-independent axis was computed, so no consensus curve is shown. Generated by `paper/make_figures.py` directly
-from the stored analysis outputs.
+**Figure 1.** Strict inter-measure reversals versus pair separation. TP53 and inflammatory-index points are
+separation-quantile bins; consensus axes share the scores whose disagreement is plotted, whereas AlphaMissense
+and age are outside those discordance panels. Age is a weak inflammatory-burden proxy. Kinase bins are actual
+active-count differences (0, 1–2, 3–5, 6–15, ≥16), not separation quantiles. Active count defines the default
+S-score, so both the four-measure and S-score-withheld results are shown. Ties versus strict comparisons are
+reported separately in the stored outputs and are excluded from the reversal curves. Generated by
+`paper/make_figures.py` from those outputs.
 
-2. **Detection-floor and out-of-domain instability is real and gate-necessary.** The largest inter-measure
-   disagreement occurs where the signal is weakest, at the kinase detection floor (rank standard deviation
-   72.9 versus 31.3), and out-of-domain transfer degrades the measures themselves, with cross-tissue
-   methylation signatures falling to AUC 0.68 to 0.79. This is the region the reliability and domain gate
-   excludes.
+3. **Replication establishes stability conditional on the comparison.** NHANES correlation-structure
+   reproducibility is 0.995 with bootstrap interval [0.969, 0.999]. For sepsis proxies, freezing discovery gene-wise preprocessing and
+   directions gives 0.976 with interval [0.684, 0.988]; fitting signs independently had produced an artificial
+   impression of weak replication. In contrast, matched-compound kinase incomparable-set overlap is only
+   Jaccard 0.294 despite high direction agreement on pairs comparable on both assays. Matrix-vector
+   correlations, scalar-consensus agreement and direct pair-set overlap measure different things.
+4. **Aggregate benchmarks require convergence and an explicit convention.** The checked uniform class-rank
+   aggregate correlates with the TP53 median-of-eight rule at 0.955, with kinase Gini at 0.949, and with the
+   inflammatory-index mean-rank score at 0.983. These support useful descriptive approximations, not a claim
+   that an aggregate identifies the correct biology. The same-start sampler had substantially overstated
+   some agreements: SII's aggregate correlation changes from 0.983 to 0.844 after adequate mixing.
+5. **Recovery must include the objects that disappear.** Davis 20-target log-entropy recovery has conditional
+   Spearman 0.917 but eligibility retention 0.758 and pair recovery 0.509. Coverage, conditional accuracy,
+   unconditional pair recovery and their panel uncertainty answer different questions.
+6. **Orientation checks have differing independence.** Concept-positive scores have the expected signs
+   against the declared proxies, but active count shares inputs with selectivity, age trains position clocks,
+   and discovery mortality fits the sepsis signs. Smoking metadata and clinical labels supply different
+   kinds of evidence, with their own selection and curation limits. Pooling opposite extremes also creates a
+   range-restriction advantage over a middle tertile; the per-tertile checks do not establish a universal
+   symmetric extremes-versus-middle pattern.
 
-3. **Families recur, but the identity of the outlier does not.** Measures partition into a low-disagreement
-   cluster plus at least one categorically different measure in kinase, serotonin, TP53, and the inflammatory
-   indices. Which measure is the outlier is domain- and panel-dependent (the ratio in kinase, entropy in
-   serotonin, the computational block in TP53, the CRP-protein pair in the indices).
-
-4. **Field heuristics often approximate the minimal-commitment aggregate.** Where a field already uses an ad
-   hoc summary, it is frequently close to the weight-free average-rank aggregate. The TP53 community's
-   median-of-eight-promoters rule proxies it at Spearman 0.987, and in kinase the Gini and entropy proxy it at
-   about 0.95. The protocol here supports existing practice rather than overturning it, and quantifies which
-   measures sit furthest from the aggregate (the ratio in kinase at 0.796, the predictors in TP53 at 0.46 to
-   0.60).
-
-5. **Reproducibility is domain-dependent, and the test shows it.** The constitutive/artefactual test gives
-   sharply different verdicts across domains. The disagreement structure of the inflammatory indices
-   replicates across independent NHANES cycles at Spearman 0.995, while sepsis-signature structure replicates
-   only weakly (0.32) and one signature's orientation flips between cohorts. The test separates a stable
-   concept-level disagreement from a partly sample-specific one, and it cautions against assuming that any
-   single instance's reproducibility generalises.
-
-6. **External anchors confirm orientation and catch mis-orientation.** Across domains the consensus order
-   agrees with a crude external anchor (Spearman about 0.65 to 0.94). Where the anchor is continuous enough to
-   separate extremes from middle, agreement is stronger at the extremes than in the middle (kinase 0.92 versus
-   0.56, clocks 0.68 versus 0.36). The check flagged an un-gated kinase candidate whose orientation was
-   reversed, and it flagged all four TP53 proliferation screens as mis-oriented under the naive fitness
-   convention. Two anchors are training targets or coincide with the outcome used to orient (position
-   clocks against age, sepsis signatures against mortality), so those two checks are confirmatory rather
-   than independent.
-
-A related observation, established most cleanly in TP53 and in the QSAR setting, is that *evaluations*
-overstate performance when the benchmark overlaps the training signal. That is a different failure from
-*definitions* disagreeing, and we report it separately.
-
-The framing is not new. That multiple operationalisations of one construct disagree is convergent validity
-(Campbell and Fiske, 1959), and the raw "agree at the extremes, diverge in the middle" pattern is the
-textbook Bland-Altman range effect (Bland and Altman, 1995). What this paper adds is the reproducibility
-test that reclassifies a disagreement from method variance to a property of the concept, and the controls
-that decide which disagreement is which.
+The framework does not identify constitutive disagreement from replication alone. Its contribution is an
+explicit comparison and control procedure, with evidence for stability kept separate from attribution to a
+latent concept. Prediction benchmarks remain appropriate for a declared endpoint; comparing curated ClinVar
+labels with functional classifications on VUS changes both the reference and the variant population, so the
+observed AUC gap does not isolate training overlap or prove benchmark inflation. The formalism is borrowed
+from measurement and partial-order theory; the empirical contribution is the controlled application.
 
 ## 6. Discussion
 
 **Reporting practice.** The protocol implies concrete changes to how competing measures are reported. Declare
-each measure's type and scale, and verify its orientation against an external anchor, before any comparison
-(step 1). Report the reproducible incomparable set and the per-family desiderata verdicts rather than a single
+each measure's type and scale, and check its orientation against a declared anchor, with dependence recorded, before any comparison
+(step 1). Report the reproducible incomparable set and the per-measure or per-cluster criterion verdicts rather than a single
 ranking (step 6). Validate a measure in its native domain, tissue, or panel rather than assuming transfer (the
-reliability gate, Sections 4.4 and 4.6). When a single number is unavoidable, report the average-rank
-canonical aggregate and each measure's distance from it, rather than an arbitrary favourite (step 7).
+reliability gate, Sections 4.4 and 4.6). When a single number is unavoidable, report the
+chosen average-rank aggregate, its numerical uncertainty and each measure's agreement with it (step 7).
 
-**The conceptual claim.** Some disagreement among biological measures is not a defect to be benchmarked away.
-It reflects a concept that does not totally order its objects. The protocol's job is to find the part of the
-disagreement that is real and reproducible, and to stop arguments about the part that is not real. As a claim
-about biology: several important concepts, including selectivity, biological age, variant impact, and
-inflammatory burden, are only partially ordered by their own objects, and the persistent disagreement of
-their measures is evidence of that partial order.
+**The conceptual claim and its limits.** Partial orders offer a useful representation of competing
+biological quantifications, conditional on substantive admissibility assumptions. The observable findings
+here are disagreements among selected implementations and their sensitivity to populations, panels,
+missingness and computational choices. Replication strengthens confidence that a difference is stable; it
+does not establish that the latent concept itself leaves the pair unordered. The strongest defensible
+output is therefore a conditional comparative structure with explicit uncertainty and unresolved causes.
 
 **Limitations.** Four are substantive. First, the base set is a choice. The consensus order, the incomparable
 set, and the canonical aggregate are all defined relative to the set of measures admitted, and there is no
 closed enumeration of "all measures" of a biological concept. We mitigate this with a stated selection rule
 (measures in routine use, computable on the data, distinct in the order they induce), with robustness checks,
 and by reporting the base set explicitly, but the choice itself remains.
-Second, the reproducibility evidence is uneven. It is strong for population indices and thin or weak
-elsewhere, and one domain (sepsis) replicates only weakly. Third, two external anchors are not independent of
-the measures they check (chronological age is the training target of position clocks, mortality is used to
-orient the sepsis signatures), so those orientation checks are confirmatory. Fourth, the framework assumes a
+Second, replication estimands and evidence differ. Population correlation structures can be stable
+while individual pair relations transfer less well, and the sepsis proxy interval is wide despite a high
+fixed-sign point estimate. Official SRSq/MARS classifiers and an independent prospective validation of the
+proxy scores are not reconstructed here. Third, anchor independence varies: active-target count shares inputs with the selectivity scores,
+chronological age is a training target of position clocks, and sepsis mortality fits discovery signs.
+These checks are confirmatory or shared-input checks rather than independent validation. Fourth, the framework assumes a
 concept-level order exists and that reasonable measures respect it. This is one substantive assumption, argued
 rather than proved. It also restricts scope to scalar orders, so categorical *endotype* systems fall
 outside the protocol (Section 4.6).
@@ -514,8 +573,8 @@ extensions of a shared partial order. The partial-order approach has precedent i
 rank-aggregation methods that force a consensus (Dwork et al., 2001, Kolde et al., 2012) rather than
 preserve incomparability. An early biological example is the concordance among breast-cancer
 gene-expression predictors (Fan et al., 2006), which share few components yet agree where the concept is
-determined. Our contribution is the protocol, the constitutive/artefactual
-reproducibility test, and the cross-domain demonstration on public data. For a working analyst, it gives a
+determined. Our contribution is the protocol, its implementation, eligibility and replication controls,
+and the cross-domain demonstration on public data. For a working analyst, it gives a
 reusable procedure for the common situation where several defensible measures of one latent concept do not
 agree.
 
@@ -558,10 +617,10 @@ representational measurement theory. Write 𝓕(≽) for the admissible measures
 **Definition 3 (families, weak extensions, linear extensions).** A measure f induces a total preorder on Ω:
 write a ⪰_f b iff f(a) ≥ f(b), and write ≻_f for its strict part. Two measures are in the same *family* when
 they induce the same total preorder. A total preorder on Ω is a *weak extension* of ≽ when it preserves the
-concept's weak and strict comparisons alike: a ≽ b implies a ⪰_f b, and a ≻ b implies a ≻_f b. A weak
-extension that is antisymmetric, so that it leaves no two distinct objects tied, is a *linear extension* in
-the standard order-theoretic sense. On finite Ω, f ↦ ⪰_f maps 𝓕(≽) onto the weak extensions of ≽, and the
-linear extensions are the tie-free ones among them. The distinction matters because an admissible measure may
+concept's weak and strict comparisons alike: a ≽ b implies a ⪰_f b, and a ≻ b implies a ≻_f b. A *linear extension* in the standard order-theoretic sense is defined on the quotient Ω/~,
+where each equivalence class becomes one object. It preserves class comparisons and introduces no ties
+between distinct classes. On finite Ω, f ↦ ⪰_f maps 𝓕(≽) onto the weak extensions of ≽, and the
+linear extensions order the equivalence classes without further ties. The distinction matters because an admissible measure may
 assign two incomparable objects the same value, whereas the aggregate below averages over linear extensions
 only. Throughout, ≽ and ≻ are the concept's order and ⪰_f and ≻_f the order a measure induces. This is the
 multiple-indicators-to-partial-order setup of Patil and Taillie (2004).
@@ -569,9 +628,9 @@ multiple-indicators-to-partial-order setup of Patil and Taillie (2004).
 **Consensus (how ≽ is estimated).** Given the set 𝓜 of measures in use, define a ≽𝓜 b iff f(a) ≥ f(b) for
 every f in 𝓜. If every reasonable measure is admissible for the true ≽, then ≽ ⊆ ≽𝓜, so the consensus
 over-declares comparability. The comparable pairs of ≽𝓜 are an upper bound on the truly comparable pairs,
-and the incomparable pairs of ≽𝓜 are a lower bound on the truly incomparable pairs. Reproducibility across
-independent cohorts (protocol step 3) is the evidence that a reproducible incomparability is a property of
-κ and not an accident of one sample. An external anchor (step 1) is a second, independent check.
+and the incomparable pairs of ≽𝓜 are a lower bound on the truly incomparable pairs. Reproducibility across independent cohorts (protocol step 3) tests stability of this estimate under
+resampling populations, conditional on fixed implementations. It does not establish admissibility or
+exclude systematic artifacts. The independence of an anchor (step 1) must be examined separately.
 
 **Lemma 1 (disagreement lies in the incomparable set).** If f, g in 𝓕(≽) strictly disagree on a pair,
 meaning f(a) > f(b) while g(a) < g(b), then a ∥ b. *Proof.* If a ≽ b then admissibility of g gives
@@ -588,22 +647,25 @@ strictly increasing relation between two measures keeps them in the same family.
 diagnosed by rank agreement, not by the regression form relating two measures.
 
 **Proposition (non-uniqueness).** On finite (Ω, ≽): 𝓕(≽) is non-empty, the families are in bijection with
-the weak extensions of ≽, and there is a unique family iff ≽ is total. *Proof.* Szpilrajn's extension
-theorem gives a linear extension, which is a weak extension, and which on a finite set has a real
-representation and is admissible. Conversely a weak extension is realised by numbering its levels. A finite
+the weak extensions of ≽, and there is a unique family iff ≽ is total. *Proof.* Apply Szpilrajn's extension theorem to the finite quotient Ω/~. Numbering its classes in the
+resulting order and assigning each object's class number gives an admissible representation on Ω. Conversely a weak extension is realised by numbering its levels. A finite
 poset has a unique weak extension iff it is total. If a ∥ b, both a ≻ b and b ≻ a extensions
 exist. So when incomparabilities exist there are at least two order-distinct admissible measures, and no
 requirement that only entails order-preservation can single one out. This justifies step 6.
 
-**The canonical aggregate.** When a single summary is required, the average rank of each object over the
-linear extensions of ≽𝓜 (Patil and Taillie, 2004, De Loof et al., 2008) is the barycenter of the rank
-vectors {rank_⪰ : ⪰ ∈ Lin(≽𝓜)} under the uniform distribution on Lin(≽𝓜). It agrees with every admissible
-measure on the comparable pairs, and on each incomparable pair it breaks the tie by mean rank, favouring
-neither object. The finer summary is the mutual-rank-probability matrix, whose entry for a pair is the
-fraction of extensions ranking one object above the other. The average rank is weight-free and
-parameter-free. Counting the linear extensions of a finite poset is #P-complete (Brightwell and Winkler,
-1991), so exact average ranks are #P-hard and are estimated by near-uniform sampling (Bubley and Dyer,
-1999). The average rank is canonical relative to the chosen base set 𝓜. This justifies step 7.
+**The aggregate convention.** Form the quotient of ≽𝓜 by mutual comparability (identical indicator
+vectors on the observed objects). On this finite poset, assign every linear extension equal probability,
+and average each class's rank over those extensions. Copy the resulting score to every object in the class.
+This preserves strict comparisons and ties of the consensus preorder. It can order incomparable classes;
+the uniform distribution over extensions is an additional explicit convention. Mutual-rank probabilities
+retain pairwise uncertainty. Exact enumeration is used for small quotients. For larger ones an insertion
+Gibbs step selects a class uniformly, removes it, and reinserts it uniformly into the slots allowed by the
+other classes. Conditional on their order those slots have equal probability under the uniform extension
+law, so this update satisfies detailed balance. Adjacent swaps of incomparable classes are reachable, and
+self transitions give aperiodicity. Those stationary-distribution properties do not guarantee adequate
+finite-run mixing; the dispersed-start, split-R-hat and precision controls in Section 3 are required.
+Numerical acceptance is empirical and does not remove uncertainty about the base set or the aggregation
+convention.
 
 ## References
 

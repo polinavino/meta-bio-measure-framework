@@ -5,8 +5,8 @@
 (b) mean inter-index agreement:  2015 0.427  |  2017 0.427
 
 (c) near-tie slope (discordance by consensus-separation quintile), per cohort:
-    2015: near-tie discordance 0.987  ->  well-separated 0.285
-    2017: near-tie discordance 0.987  ->  well-separated 0.299
+    2015: near-tie discordance 0.984  ->  well-separated 0.274
+    2017: near-tie discordance 0.986  ->  well-separated 0.295
 
 (d) anchor orientation (index vs mortality AUC), per cohort:
     index   2015    2017
@@ -18,5 +18,5 @@
     CRP    0.608  0.597
     CAR    0.617  0.606
 
-Reading: matching correlation structure, near-tie slopes, and anchor orientation across two
-independent cohorts => the disagreement structure is a property of the indices, not one sample.
+Reading: the selected indices have similar structure in independent population samples.
+This does not rule out shared formula artifacts or establish concept-level incomparability.

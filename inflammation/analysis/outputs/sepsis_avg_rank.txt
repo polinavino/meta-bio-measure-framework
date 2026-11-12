@@ -1,17 +1,22 @@
-Consensus poset over N=479 samples (5 signatures): incomparable fraction = 0.792
-Running two Bubley-Dyer chains ...
-Chain convergence: Spearman = 0.9602
+Consensus poset over N=479 samples (5 signatures): incomparable fraction = 0.871
+Sepsis consensus: 479 objects, 479 equivalence classes; tied objects share class rank
+Insertion Gibbs: 4 dispersed chains; burn=512 sweeps; draws=1024; thin=2; max split-Rhat=1.00570; max MCSE=4.072 ranks (0.008501 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=1024 sweeps; draws=2048; thin=2; max split-Rhat=1.00275; max MCSE=3.121 ranks (0.006515 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=2048 sweeps; draws=4096; thin=2; max split-Rhat=1.00137; max MCSE=1.930 ranks (0.004029 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=4096 sweeps; draws=8192; thin=2; max split-Rhat=1.00096; max MCSE=1.315 ranks (0.002745 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=8192 sweeps; draws=16384; thin=2; max split-Rhat=1.00031; max MCSE=1.206 ranks (0.002519 of classes); RETRY
+Insertion Gibbs: 4 dispersed chains; burn=16384 sweeps; draws=32768; thin=2; max split-Rhat=1.00018; max MCSE=0.688 ranks (0.001436 of classes); PASS
 
 Spearman(signature ranking, canonical average-rank):
-  IFNg         rho=+0.756
-  MARS8        rho=+0.595
-  SRSq19       rho=+0.582
-  SRS7         rho=+0.568
-  Inflammatory rho=+0.473
+  Inflammatory rho=+0.613
+  SRS7         rho=+0.527
+  SRSq19       rho=+0.515
+  IFNg         rho=+0.490
+  MARS8        rho=+0.351
 
-Mortality AUC:  canonical=0.600
+Mortality AUC:  canonical=0.606
   Inflammatory 0.589
-  IFNg         0.597
+  IFNg         0.599
   SRS7         0.571
-  SRSq19       0.548
+  SRSq19       0.550
   MARS8        0.505

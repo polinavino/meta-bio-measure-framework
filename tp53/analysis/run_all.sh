@@ -6,11 +6,11 @@
 set -euo pipefail
 PY=/Users/polina/miniforge3/bin/python
 cd "$(dirname "$0")"
-$PY build_matrix.py          # writes ../data/tp53_matrix.csv          + outputs/build_matrix.txt
+if [[ "${SKIP_BUILD:-0}" != 1 ]]; then $PY build_matrix.py; fi
 $PY tp53_families.py         #                                          outputs/families.txt
 $PY tp53_anchor.py           #                                          outputs/anchor.txt
 $PY tp53_pairwise.py         #                                          outputs/pairwise.txt
 $PY tp53_reproducibility.py  #                                          outputs/reproducibility.txt
 $PY tp53_circularity.py      #                                          outputs/circularity.txt
-$PY tp53_avg_rank.py         # writes ../data/tp53_canonical.csv         + outputs/avg_rank.txt  (slow: Bubley-Dyer ~1-2 min)
+$PY tp53_avg_rank.py         # checked insertion Gibbs + class ranks; fails on inadequate diagnostics
 echo "All TP53 analyses complete; tracked outputs in $(pwd)/outputs/"

@@ -1,6 +1,6 @@
 """
-Robustness check: use an INDEPENDENT selectivity coordinate (n_active, a raw data
-property) instead of the mean-of-4-measures, to avoid coordinate/disagreement circularity.
+Robustness check: use a SHARED-INPUT selectivity coordinate (n_active, a raw data
+property) instead of the mean-of-4-measures, to examine coordinate/disagreement dependence.
 Test whether inter-measure disagreement peaks at intermediate n_active beyond a null that
 holds n_active fixed and permutes measure identities.
 """
@@ -26,7 +26,7 @@ def ratio(P,k=1):
         sd=np.sort(r)[::-1]
         o.append(sd[0]-5.0 if (len(sd)<=k or sd[k]<=5.0) else sd[0]-sd[k])
     return np.array(o)
-def to_rank(s): return len(s)-rankdata(s,method="ordinal")+1
+def to_rank(s): return len(s)-rankdata(s,method="average")+1
 
 s_thr=np.arange(5.5,8.25,.25); base=np.arange(5.0,6.75,.25)
 R=np.vstack([
@@ -39,7 +39,7 @@ g=n_active>0
 Rg=R[g]; na=n_active[g]; dis=Rg.std(1)
 
 # bin by n_active quantiles
-print("Disagreement vs n_active (independent coordinate), gated-in n=",g.sum())
+print("Disagreement vs n_active (shared-input coordinate), gated-in n=",g.sum())
 qs=np.quantile(na,[0,.2,.4,.6,.8,1.0])
 print(" n_active range | mean disagreement | n")
 for i in range(5):

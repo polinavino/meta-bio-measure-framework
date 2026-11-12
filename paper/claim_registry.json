@@ -1,0 +1,196 @@
+[
+  {
+    "name": "kinase table incomparability",
+    "source": "analysis/outputs/avg_rank.txt",
+    "source_pattern": "incomparable-pair fraction.*?= ([0-9.]+)",
+    "manuscript_pattern": "\\| Kinase selectivity.*?\\| ([0-9.]+)%",
+    "source_scale": 100,
+    "tolerance": 0.051
+  },
+  {
+    "name": "kinase Gini proxy",
+    "source": "analysis/outputs/avg_rank.txt",
+    "source_pattern": "Gini\\s*:\\s*\\+([0-9.]+)",
+    "manuscript_pattern": "Gini \\(([0-9.]+)\\)"
+  },
+  {
+    "name": "kinase entropy proxy",
+    "source": "analysis/outputs/avg_rank.txt",
+    "source_pattern": "entropy\\s*:\\s*\\+([0-9.]+)",
+    "manuscript_pattern": "entropy \\(([0-9.]+)\\)"
+  },
+  {
+    "name": "kinase ratio proxy",
+    "source": "analysis/outputs/avg_rank.txt",
+    "source_pattern": "ratio\\s*:\\s*\\+([0-9.]+)",
+    "manuscript_pattern": "the ratio correlates at ([0-9.]+)"
+  },
+  {
+    "name": "kinase equal-count reversal",
+    "source": "analysis/outputs/kinase_pairwise.txt",
+    "source_pattern": "\\[\\s*0,\\s*0\\]: discordance=([0-9.]+)",
+    "manuscript_pattern": "strict discordance is ([0-9.]+)%",
+    "source_scale": 100,
+    "tolerance": 0.051
+  },
+  {
+    "name": "kinase S-score-withheld reversal",
+    "source": "analysis/outputs/kinase_pairwise.txt",
+    "source_pattern": "without S-score.*?\\[0,0\\]: strict=([0-9.]+)",
+    "manuscript_pattern": "withholding the S-score changes those figures to ([0-9.]+)%",
+    "source_scale": 100,
+    "tolerance": 0.051
+  },
+  {
+    "name": "kinase R2",
+    "source": "analysis/outputs/kinase_pairwise.txt",
+    "source_pattern": "R\\^2 sep-only=([0-9.]+)",
+    "manuscript_pattern": "R\u00b2 from ([0-9.]+) to"
+  },
+  {
+    "name": "TP53 median proxy",
+    "source": "tp53/analysis/outputs/avg_rank.txt",
+    "source_pattern": "\\[field\\] median-of-8\\s+rho=\\+([0-9.]+)",
+    "manuscript_pattern": "aggregate at Spearman ([0-9.]+)"
+  },
+  {
+    "name": "TP53 ClinVar AUC",
+    "source": "tp53/analysis/outputs/avg_rank.txt",
+    "source_pattern": "canonical average-rank\\s*:\\s*([0-9.]+)",
+    "manuscript_pattern": "ClinVar labels at AUC ([0-9.]+)"
+  },
+  {
+    "name": "TP53 closest consensus bin",
+    "source": "tp53/analysis/outputs/pairwise.txt",
+    "source_pattern": "\\|\u0394axis\\| in \\[[^\\n]*?: discordance=([0-9.]+)",
+    "manuscript_pattern": "promoters falls from ([0-9.]+) to",
+    "source_index": 0
+  },
+  {
+    "name": "TP53 farthest consensus bin",
+    "source": "tp53/analysis/outputs/pairwise.txt",
+    "source_pattern": "\\|\u0394axis\\| in \\[[^\\n]*?: discordance=([0-9.]+)",
+    "manuscript_pattern": "promoters falls from [0-9.]+ to ([0-9.]+)",
+    "source_index": 4
+  },
+  {
+    "name": "TP53 external first bin",
+    "source": "tp53/analysis/outputs/pairwise.txt",
+    "source_pattern": "\\|\u0394axis\\| in \\[[^\\n]*?: discordance=([0-9.]+)",
+    "manuscript_pattern": "and from ([0-9.]+) to [0-9.]+ across AlphaMissense",
+    "source_index": 5
+  },
+  {
+    "name": "TP53 external last bin",
+    "source": "tp53/analysis/outputs/pairwise.txt",
+    "source_pattern": "\\|\u0394axis\\| in \\[[^\\n]*?: discordance=([0-9.]+)",
+    "manuscript_pattern": "and from [0-9.]+ to ([0-9.]+) across AlphaMissense",
+    "source_index": 9
+  },
+  {
+    "name": "inflammatory single proxy",
+    "source": "inflammation/analysis/outputs/avg_rank.txt",
+    "source_pattern": "\\n  SII\\s+rho=\\+([0-9.]+)",
+    "manuscript_pattern": "closest single index.*?SII \\(([0-9.]+)\\)"
+  },
+  {
+    "name": "inflammatory mean-rank proxy",
+    "source": "inflammation/analysis/outputs/avg_rank.txt",
+    "source_pattern": "\\[equal-weight mean rank\\]\\s+rho=\\+([0-9.]+)",
+    "manuscript_pattern": "equal-weight mean-rank score\\nagrees at ([0-9.]+)"
+  },
+  {
+    "name": "inflammatory consensus near",
+    "source": "inflammation/analysis/outputs/pairwise.txt",
+    "source_pattern": "\\|\u0394axis\\| in \\[[^\\n]*?: discordance=([0-9.]+)",
+    "manuscript_pattern": "\\(([0-9.]+) for near-ties to [0-9.]+ for well-separated",
+    "source_index": 0
+  },
+  {
+    "name": "inflammatory consensus far",
+    "source": "inflammation/analysis/outputs/pairwise.txt",
+    "source_pattern": "\\|\u0394axis\\| in \\[[^\\n]*?: discordance=([0-9.]+)",
+    "manuscript_pattern": "\\([0-9.]+ for near-ties to ([0-9.]+) for well-separated",
+    "source_index": 4
+  },
+  {
+    "name": "inflammatory age first",
+    "source": "inflammation/analysis/outputs/pairwise.txt",
+    "source_pattern": "\\|\u0394axis\\| in \\[[^\\n]*?: discordance=([0-9.]+)",
+    "manuscript_pattern": "chronological age \\(([0-9.]+) to",
+    "source_index": 5
+  },
+  {
+    "name": "inflammatory age last",
+    "source": "inflammation/analysis/outputs/pairwise.txt",
+    "source_pattern": "\\|\u0394axis\\| in \\[[^\\n]*?: discordance=([0-9.]+)",
+    "manuscript_pattern": "chronological age \\([0-9.]+ to ([0-9.]+)",
+    "source_index": 9
+  },
+  {
+    "name": "sepsis incomparability",
+    "source": "inflammation/analysis/outputs/sepsis_avg_rank.txt",
+    "source_pattern": "incomparable fraction = ([0-9.]+)",
+    "manuscript_pattern": "full frozen-sign consensus is ([0-9.]+)%",
+    "source_scale": 100,
+    "tolerance": 0.051
+  },
+  {
+    "name": "sepsis closest proxy",
+    "source": "inflammation/analysis/outputs/sepsis_avg_rank.txt",
+    "source_pattern": "Inflammatory rho=\\+([0-9.]+)",
+    "manuscript_pattern": "inflammatory\\nproxy closest.*?\\(([0-9.]+)\\)"
+  },
+  {
+    "name": "sepsis frozen-sign reproduction",
+    "source": "inflammation/analysis/outputs/sepsis_reproducibility.txt",
+    "source_pattern": "Spearman\\(disc-vec, val-vec\\) = ([0-9.]+)",
+    "manuscript_pattern": "detailed correlation\\nstructure replicates at Spearman ([0-9.]+)"
+  },
+  {
+    "name": "serotonin incomparability",
+    "source": "analysis/outputs/serotonin_controls.txt",
+    "source_pattern": "2A/2B covered subset.*?Observed-only, log gap:.*?incomparable=([0-9.]+)",
+    "manuscript_pattern": "observed-only consensus leaves ([0-9.]+)%",
+    "source_scale": 100,
+    "tolerance": 0.051
+  },
+  {
+    "name": "serotonin floor scenario",
+    "source": "analysis/outputs/serotonin_controls.txt",
+    "source_pattern": "2A/2B covered subset.*?Floor-imputed scenario, log gap:.*?incomparable=([0-9.]+)",
+    "manuscript_pattern": "([0-9.]+)% under\\nfloor imputation",
+    "source_scale": 100,
+    "tolerance": 0.051
+  },
+  {
+    "name": "Davis retention",
+    "source": "analysis/outputs/kinase_controls.txt",
+    "source_pattern": "=== Davis.*?targets= 20 log entropy : retention=([0-9.]+)",
+    "manuscript_pattern": "eligibility retention only ([0-9.]+)"
+  },
+  {
+    "name": "Davis conditional rho",
+    "source": "analysis/outputs/kinase_controls.txt",
+    "source_pattern": "=== Davis.*?targets= 20 log entropy :.*?rho=([0-9.]+)",
+    "manuscript_pattern": "log-affinity entropy has mean conditional Spearman ([0-9.]+)"
+  },
+  {
+    "name": "Davis pair recovery",
+    "source": "analysis/outputs/kinase_controls.txt",
+    "source_pattern": "=== Davis.*?targets= 20 log entropy :.*?pair=([0-9.]+)",
+    "manuscript_pattern": "unconditional pair recovery ([0-9.]+)"
+  },
+  {
+    "name": "kinase matched-set overlap",
+    "source": "analysis/outputs/kinase_platform.txt",
+    "source_pattern": "Incomparable-set Jaccard=([0-9.]+)",
+    "manuscript_pattern": "incomparable-set Jaccard is ([0-9.]+)"
+  },
+  {
+    "name": "kinase matched direction",
+    "source": "analysis/outputs/kinase_platform.txt",
+    "source_pattern": "Direction agreement.*?=([0-9.]+)",
+    "manuscript_pattern": "Direction agreement is ([0-9.]+)"
+  }
+]

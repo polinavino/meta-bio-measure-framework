@@ -1,3 +1,5 @@
+Anchors: active count shares inputs with selectivity scores; age is a clock training target.
+Smoking labels are external metadata. Correlation checks orientation, not causal validity.
 ==============================================================================
 (1) ORIENTATION CHECK — each concept-positive measure vs the external anchor
     expected sign: kinase/serotonin NEG (more targets=less selective); clocks/smoking POS
@@ -6,23 +8,20 @@
 kinase  (N=222, anchor = n_active; expected sign −)
    S-score   vs anchor: -1.000   OK
    entropy   vs anchor: -0.941   OK
-   Gini      vs anchor: -0.943   OK
-   ratio     vs anchor: -0.323   OK
+   Gini      vs anchor: -0.799   OK
+   ratio     vs anchor: -0.224   OK
    → all measures correctly oriented: True
 
-serotonin  (N=949, anchor = n_active(pKi>6); expected sign −)
-   S-score   vs anchor: -1.000   OK
-   entropy   vs anchor: -0.771   OK
-   Gini      vs anchor: -0.748   OK
-   ratio     vs anchor: -0.141   OK
+serotonin  (N=898, anchor = observed n_active (shared-input proxy; variable coverage); expected sign −)
+   S-score   vs anchor: -0.745   OK
+   entropy   vs anchor: -0.783   OK
+   Gini      vs anchor: -0.505   OK
+   ratio     vs anchor: -0.268   OK
    → all measures correctly oriented: True
 
 clocks  (N=1385, anchor = chronological age; expected sign +)
    Horvath   vs anchor: +0.561   OK
    Hannum    vs anchor: +0.592   OK
-   PhenoAge  vs anchor: +0.547   OK
-   GrimAge   vs anchor: +0.812   OK
-   DunedinPACE vs anchor: +0.330   OK
    → all measures correctly oriented: True
 
 smoking  (N=1085, anchor = never<former<current; expected sign +)
@@ -33,29 +32,35 @@ smoking  (N=1085, anchor = never<former<current; expected sign +)
    → all measures correctly oriented: True
 
 CONTROL — un-gated kinase candidate (intended 'more selective', expected NEG vs n_active):
-   vs n_active: +0.943   -> POSITIVE = MIS-ORIENTED (the check catches it)
+   vs n_active: +0.932   -> POSITIVE = MIS-ORIENTED (the check catches it)
 
 ==============================================================================
-(2) EXTERNAL ANCHOR VALIDATES THE CONSENSUS — agreement, esp. at the extremes
+(2) ANCHOR ASSOCIATIONS OF A MEAN-RANK SUMMARY — dependence must be declared
 ==============================================================================
 
-kinase: Spearman(consensus, anchor) overall = +0.940
-   mean consensus-pct by anchor tertile:  bottom 0.20 | middle 0.49 | top 0.81  (monotone = tracks)
-   agreement Spearman:  extremes (n=166) +0.917 | middle (n=56) +0.556
+kinase: Spearman(consensus, anchor) overall = +0.901
+   mean consensus-pct by anchor tertile:  bottom 0.20 | middle 0.47 | top 0.81  (monotone = tracks)
+   agreement Spearman:  extremes (n=153) +0.877 | middle (n=69) +0.703
+   per-tertile (comparable range restriction):  bottom +0.112 (n=74) | middle +0.703 (n=69) | top +0.809 (n=79)
 
-serotonin: Spearman(consensus, anchor) overall = +0.824
-   mean consensus-pct by anchor tertile:  bottom 0.29 | middle n/a | top 0.72  (monotone = tracks)
-   agreement Spearman:  extremes (n=949) +0.824 | middle (n=0) n/a (constant)
+serotonin: Spearman(consensus, anchor) overall = +0.740
+   mean consensus-pct by anchor tertile:  bottom 0.28 | middle n/a | top 0.70  (monotone = tracks)
+   agreement Spearman:  extremes (n=898) +0.740 | middle (n=0) n/a (constant)
    (anchor too discrete/tied to form a middle tertile — see per-tertile bottom/top)
+   per-tertile (comparable range restriction):  bottom +0.572 (n=424) | middle n/a (constant) (n=0) | top +0.115 (n=474)
 
-clocks: Spearman(consensus, anchor) overall = +0.645
-   mean consensus-pct by anchor tertile:  bottom 0.29 | middle 0.50 | top 0.72  (monotone = tracks)
-   agreement Spearman:  extremes (n=953) +0.675 | middle (n=432) +0.359
+clocks: Spearman(consensus, anchor) overall = +0.582
+   mean consensus-pct by anchor tertile:  bottom 0.32 | middle 0.48 | top 0.71  (monotone = tracks)
+   agreement Spearman:  extremes (n=953) +0.601 | middle (n=432) +0.421
+   per-tertile (comparable range restriction):  bottom +0.216 (n=486) | middle +0.421 (n=432) | top +0.506 (n=467)
 
 smoking: Spearman(consensus, anchor) overall = +0.677
    mean consensus-pct by anchor tertile:  bottom 0.26 | middle n/a | top 0.62  (monotone = tracks)
    agreement Spearman:  extremes (n=1085) +0.677 | middle (n=0) n/a (constant)
    (anchor too discrete/tied to form a middle tertile — see per-tertile bottom/top)
+   per-tertile (comparable range restriction):  bottom n/a (constant) (n=372) | middle n/a (constant) (n=0) | top +0.494 (n=713)
 
-(Expect: strong overall agreement; monotone consensus across anchor tertiles;
- and higher agreement at the extremes than in the middle — the concept decides the extremes.)
+(Expect: strong overall agreement and a monotone consensus across anchor tertiles.
+ The pooled extremes-vs-middle gap is read against the per-tertile line: where one
+ extreme agrees no better than the middle, the gap is a floor or ceiling effect at the
+ other end rather than a symmetric extremes-versus-middle pattern.)

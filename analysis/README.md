@@ -1,36 +1,38 @@
-# Control analyses (this work)
+# Controlled framework analyses
 
-Reproduces the controlled empirical findings in `../synthesis/repo-findings.md` §6.2 and
-`../paper/main.md` §4–§5. Scripts read data from the sibling repos via absolute paths.
+Run `bash analysis/run_framework.sh` from any directory for the full local workflow, including TP53,
+inflammation, CVD, R controls, figures, mathematical regression checks, provenance and a final audit.
+The source datasets and sibling repositories must already be present. Python needs numpy, pandas, scipy
+and sklearn; R needs dplyr; `clang++` compiles the native sampler into the system temporary directory.
+`run_all.sh` runs only the core/sibling-domain analyses. Domain runners rebuild their derived matrices.
 
-- **Python:** `/Users/polina/miniforge3/bin/python` (numpy/pandas/scipy). **R:** 4.5.2.
-- Run from anywhere (paths are absolute).
+| Files | Purpose |
+|---|---|
+| `order_utils.py`, `_poset_sampler.cpp` | Strict-reversal/tie semantics, consensus dominance and uniform extension averaging on equivalence classes. Four dispersed insertion-Gibbs chains; split R-hat <1.01 and maximum batch MCSE <0.0025 of class count are required. These are empirical checks, not a finite-time mixing proof. |
+| `test_order_utils.py` | Exact small-poset and native-kernel distribution checks; ties, equivalent objects, row and monotone-rescaling invariance. |
+| `avg_rank.py` | Tie-preserving gated kinase parameter-median poset and checked aggregate. |
+| `kinase_concentration*.py`, `kinase_pairwise.py` | Rank-boundary and separation controls. Active count is a shared-input proxy; pairwise output includes S-score-withheld results. |
+| `kinase_controls.py` | Current exponential candidate, conditional construction checks, published versus log-affinity entropy, floor and eligibility sensitivity; conditional rank recovery, retention and unconditional pair recovery on four datasets. |
+| `kinase_platform.py` | CID-resolved compounds and shared curated gene panel; direct incomparable-set overlap and matched-compound bootstrap. |
+| `serotonin_controls.py` | Observed-only versus floor-imputed scenarios, ratio implementation, fixed coverage counts and identical receptor panels. |
+| `protocol_controls.py` | Base-set omission checks, exact-family checks, population denominators and participant-bootstrap correlation-structure replication (sepsis preprocessing and signs are discovery-frozen). |
+| `external_anchor.py` | Orientation with declared dependence: active count is shared input, age is a clock training target, smoking is metadata. Historical inverted softplus is a negative control. |
+| `transfer.py` | Descriptive consensus-axis curve distances. Directions are declared in advance; strict indicator-pair reversals are used. No held-out predictive-transfer claim. |
+| `repro_borrowed.py`, `smoking_control.R`, `fasd_auc.R` | Confirm sibling results and classification/endpoint controls; R stdout is retained in outputs. |
+| `provenance.py`, `reaudit.py` | Source/code hashes, sibling revisions and post-remediation checks. |
 
-| Script | What it tests | Key result |
-|---|---|---|
-| `kinase_concentration.py` | Reliability-gate resolution of the zero-active extreme; interior-concentration vs an independence null (consensus coordinate) | zero-active disagreement 66 vs 23 (gated); observed concentration slope 0.27 inside null band [0.18,0.42] → not structural |
-| `kinase_concentration2.py` | Same, with n_active as an INDEPENDENT coordinate (avoids circularity) | slope 0.11 inside null [−0.13,0.14]; disagreement flat across selectivity |
-| `kinase_pairwise.py` | Gate-cutoff sensitivity; pairwise discordance vs separation and position | discordance driven by separation (0.76→0.19); position adds ~0 (midpos coef −0.11). **No consequential middle** |
-| `avg_rank.py` | Average-rank-over-linear-extensions canonical measure (Bubley–Dyer sampler); benchmark 4 measures | poset 37.2% incomparable; Gini +0.955, entropy +0.950, S-score +0.869, ratio +0.796 vs canonical |
-| `candidate_bench.py` | Repo's EXACT softplus-entropy candidate vs the 4 measures; floor-domination test | candidate **anti-correlated** (entropy −0.87, S-score −0.94) — inverted by the softplus floor pedestal (93.6% of entries at floor). Flagged to the kinase paper and **since fixed there** (see the note below). |
-| `candidate_fix.py` | Pedestal-subtracted hinge; re-run D1–D4 + panel convergence | un-inverts (entropy +1.00, p*=110, D4 100%) **but D3 fails** (−0.94) |
-| `candidate_fix2.py` | T-sweep + scale-free variant to test whether both orientation & D3 achievable | no T gives both; original's D3 pass is a pedestal-domination artifact; scale-free (per-compound min) gets both weakly (+0.51) |
-| `candidate_fix3.py` | **Repair:** per-compound-quantile-anchored hinge (baseline-free); test all D1–D4 | q10/q25/median anchor satisfies all four — orientation **+0.996**, D3 +1.00 (shift-invariant), D4 100%, p*=110. A minimal fix for the kinase candidate. |
-| `transfer.py` | Cross-domain transfer of the separation→discordance curve (kinase/serotonin/clocks/smoking); sign-aligns measures, overlays decile curves + pairwise RMSE (no fitting) | curve monotone-decreasing in all 4 (Spearman −0.99 to −1.00); transfers across kinase/clocks/smoking (RMSE 0.10–0.14); serotonin outlier (0.40–0.50, tiny 13-receptor panel). Needs `data/smoke*.csv` (exported from methylation repo via R). |
-| `repro_borrowed.py` | Confirm source-repo-carried numbers: serotonin S-score vs Gini; clock R²/cosine/cell-type from the clock repo's computed parquets | serotonin −0.682 exact (raw, and +0.682 once both measures are oriented towards selectivity); single-linear-clock R² 0.992–0.995 over Horvath–Hannum, Horvath–PhenoAge and Hannum–PhenoAge, so the range spans the deviation clock PhenoAge and is not position-only; rate–position signed-log R² 0.93–0.95; cell-type max \|r\| 0.372 over the four clocks tested (Horvath, Hannum, PhenoAge, GrimAge — DunedinPACE not tested); cosine off-diag −0.17 to 0.11 over Horvath, Hannum, PhenoAge and DunedinPACE, GrimAge absent for lack of a single coefficient vector (corrects the cited "0.03–0.11") |
-| `fasd_auc.R` | FASD per-signature AUC per cohort (from `methylation-biomarker-agreement/data/fasd_all_scores.rds`) | buccal 0.68–0.79; van der Laan (blood) 0.935 discovery / 0.959 replication — matches cited |
-| `external_anchor.py` | Demonstrates two refinements across all 4 domains: **(1) orientation check** (each measure vs external anchor — n_active / chronological age / exposure ordinal) and **(2) anchor-validates-consensus** | (1) all standard measures correctly oriented in every domain; the un-gated candidate control is caught (+0.94 vs n_active). (2) consensus–anchor Spearman kinase +0.94 / serotonin +0.82 / clocks +0.65 / smoking +0.68; monotone across anchor tertiles; agreement higher at extremes (kinase 0.92 vs 0.56). Needs `data/smoke*.csv`. |
-| `smoking_control.R` | Per-cohort C3 agreement (reproducibility); threshold robustness; threshold-free rank spread | former lowest in both cohorts; former-smoker divergence is a binary-threshold effect; rank-spread metric is density-confounded (not used as evidence) |
+`candidate_bench.py` and `candidate_fix*.py` are historical softplus/hinge explorations. Their criterion
+numbers and one-value checks are not validation of the current candidate. They retain historical
+undefined-score conventions; ties are now handled with average ranks. `framework_audit.py` contains the
+initial diagnostic reconstruction and a demonstration of the old sampler's problem. Its stored initial
+report is historical; `outputs/reaudit.txt` is the current audit.
 
-**Candidate benchmark: done, and the flag it raised is now closed.** `candidate_bench.py` surfaced a real
-bug in the kinase paper's candidate measure (softplus floor-domination inverted it). It was flagged to the
-author rather than edited here, and the author has **acted on it**: the candidate is now hard-gated at the
-fixed assay detection floor, is validated across all four datasets by `selectivity/candidate_validation.py`,
-and converges to its full-panel ranking at 110 kinases rather than 170. The fix is written up as item 9
-("Post-resubmission correction: candidate measure was inverted") of
-`/Users/polina/Documents/BioInfStuff/selectivity/paper/response_to_reviewers.txt`, with item 10 there
-correcting the D3 justification in the same honest direction. No action remains on our side, and
-`candidate_fix*.py` are kept as the record of how the repair was found.
+The current candidate has zero weights at/below the assay floor and exponential weights above it, with
+T = tau* - x0 and an explicit activity eligibility gate. Activity eligibility, boundary locality,
+weak-addition monotonicity and equal-strength orientation are distinct from finite-panel recovery.
+Published classifier coefficients are not reconstructed for the sepsis gene-set proxies. No source is
+silently promoted from a proxy to a faithful published implementation.
 
-**Blocked:** continuous-exposure concentration in smoking — neither GSE50660 nor
-GSE42861 has a continuous exposure variable in GEO.
+Numbers in the manuscript are checked by `paper/check_claims.py` for the registered claims. Replication
+is conditional stability, not a test that uniquely identifies concept-level incomparability. No continuous
+exposure covariate is present for the smoking concentration analysis; that scope limitation remains.

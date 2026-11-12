@@ -1,22 +1,24 @@
+Descriptive consensus-axis curves; no held-out prediction or mathematical bound on constitutive disagreement.
+Discordance = fraction of indicator pairs with strict reversals; signs fixed by convention.
 domain     k  N     discordance by separation decile (0=near-tie .. 9=far)
-kinase     4    222 0.52 0.35 0.22 0.17 0.14 0.12 0.08 0.02 0.00 0.00
-serotonin  4    297 0.84 0.80 0.74 0.67 0.61 0.54 0.47 0.40 0.32 0.26
-clocks     5   1385 0.77 0.49 0.28 0.17 0.11 0.06 0.03 0.01 0.00 0.00
-smoking    4   1153 0.56 0.21 0.07 0.03 0.01 0.00 0.00 0.00 0.00 0.00
+kinase     4    200 0.40 0.28 0.20 0.15 0.13 0.11 0.06 0.01 0.00 0.00
+serotonin  4    285 0.52 0.49 0.45 0.40 0.35 0.29 0.25 0.21 0.17 0.06
+clocks     2   1385 0.40 0.03 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
+smoking    4   1153 0.45 0.19 0.07 0.03 0.01 0.00 0.00 0.00 0.00 0.00
 
-Cross-domain prediction RMSE (rows=calibrate on, cols=predict) — low = transfers:
+Cross-domain descriptive curve RMSE (rows/columns=domains; curve distances only):
              kinase serotoni   clocks  smoking
-kinase        0.000    0.412    0.098    0.100
-serotonin     0.412    0.000    0.396    0.499
-clocks        0.098    0.396    0.000    0.141
-smoking       0.100    0.499    0.141    0.000
+kinase        0.000    0.194    0.126    0.085
+serotonin     0.194    0.000    0.306    0.268
+clocks        0.126    0.306    0.000    0.060
+smoking       0.085    0.268    0.060    0.000
 
-Mean off-diagonal cross-domain RMSE = 0.274 (discordance is on a 0-1 scale)
+Mean off-diagonal descriptive cross-domain RMSE = 0.173 (discordance is on a 0-1 scale)
 Between-domain spread of discordance at each decile (std across domains):
-  0.14 0.22 0.25 0.24 0.23 0.21 0.19 0.17 0.14 0.11
+  0.05 0.17 0.17 0.16 0.14 0.12 0.10 0.09 0.07 0.03
 
 Monotonic decrease (Spearman curve vs decile; want strongly negative):
-  kinase    : -1.000
+  kinase    : -0.997
   serotonin : -1.000
-  clocks    : -0.997
+  clocks    : -0.888
   smoking   : -0.988

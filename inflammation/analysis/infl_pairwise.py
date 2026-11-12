@@ -6,6 +6,11 @@ chronological age (external to the index formulas). Question: is inter-index dis
 close two people are on the inflammation axis (near-ties), or by where they sit? Fixed random subsample
 of the NHANES 2015-16 complete panel (pairwise blows up on all ~5000). Deterministic (seeded subsample).
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analysis"))
+from order_utils import pair_disagreement, average_rank
 import numpy as np, pandas as pd
 from scipy.stats import rankdata
 from numpy.linalg import lstsq
@@ -27,9 +32,8 @@ D = D.iloc[sub].reset_index(drop=True); N = len(D)
 Rk = np.column_stack([rankdata(D[c]) for c in IDX])       # per-index ranks (concept-positive)
 
 i,j = np.triu_indices(N,1)
-s0 = np.sign(Rk[j,0]-Rk[i,0]); disc = np.zeros(len(i),bool)
-for k in range(1,len(IDX)):
-    disc |= (np.sign(Rk[j,k]-Rk[i,k]) != s0)
+disc, tie_only = pair_disagreement(Rk, i, j)
+print(f"Tie-only disagreement (comparable pairs): {tie_only.mean():.4f}")
 print(f"=== Pairwise discordance among 7 indices (N={N}, {len(i):,} pairs) ===")
 print(f"overall discordance rate: {disc.mean():.3f}\n")
 
@@ -49,5 +53,6 @@ def analyze(axis, label):
 
 analyze(Rk.mean(1), "consensus mean-rank (consensus coord)")
 analyze(D["age"].to_numpy(float), "chronological age (external to the index formulas)")
-print("Reading: if discordance falls steeply with separation and midpos adds little, disagreement is a")
-print("near-tie phenomenon, not a 'consequential middle' — the same pattern as kinase and TP53.")
+print("Reading: consensus separation is linked to disagreement by construction. The age-axis")
+print("results are a descriptive sensitivity check with a weak external proxy, not a bound on")
+print("a constitutive component. Pairwise regression coefficients have no independent-pair inference.")

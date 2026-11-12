@@ -1,3 +1,24 @@
+# Inflammatory-burden demonstrations — current status
+
+The current protocol preserves ties, freezes any fitted signs on validation and checks uniform
+average-class-rank estimates with four dispersed insertion-Gibbs chains, split R-hat and batch MCSE.
+Replication describes conditional stability and does not establish concept-level incomparability.
+
+| Instance | Current result | Scope |
+|---|---|---|
+| Clinical indices | 72.8% incomparable on a 600-person mortality-linked subset; SII/aggregate 0.844; mean-rank/aggregate 0.983 | Complete-index cohorts N=6,197/5,882 differ from mortality-linked N=5,327/5,104. CRP/CAR are highly correlated, not exact duplicate orders. |
+| Cohort index structure | Matrix-vector rho 0.995; participant-bootstrap 95% interval [0.969, 0.999] | Shared inputs and algebraic relationships can replicate. |
+| Sepsis proxies | 87.1% incomparable; inflammatory proxy/aggregate 0.613 | These are mean-z gene-set proxies, not the published SRSq/MARS classifier implementations. |
+| Sepsis replication | Discovery-frozen gene standardization and signs give matrix-vector rho 0.976; participant-bootstrap interval [0.684, 0.988] | The old 0.32 arose from fitting signs separately. MARS8's marginal outcome direction still flips. |
+| Inflammaging | Qualitative heterogeneous panel | Recomputed age regressions and single-cytokine markers do not constitute a full published-clock benchmark. |
+
+Run `bash analysis/run_all.sh` from this instance directory, or the root workflow
+`bash analysis/run_framework.sh`. Current numbers and interpretations are in the root
+`paper/manuscript.md`; post-remediation checks are in `analysis/outputs/reaudit.txt` from the root.
+
+## Historical notes (superseded where they conflict with the current status)
+
+
 # Inflammation — three candidate instances of the measurement protocol
 
 **Status: DONE (v1).** Three sub-topics were built and run on public data. Every script writes its console

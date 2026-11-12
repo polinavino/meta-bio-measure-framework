@@ -8,6 +8,7 @@ or split into families? Spearman on the mortality-labelled samples. Deterministi
 """
 import numpy as np, pandas as pd
 from scipy.stats import spearmanr
+from sepsis_orientation import discovery_signs
 
 import sys as _sys
 _OUT = "/Users/polina/Documents/BioInfStuff/meta-bio-measure-framework/inflammation/analysis/outputs/sepsis_families.txt"
@@ -23,10 +24,10 @@ D = D[D["mortality"].notna()].reset_index(drop=True)
 y = D["mortality"].to_numpy().astype(int)
 
 # orient each signature to positively predict mortality (record the sign it needed)
-signs = {s: (1 if spearmanr(D[s], y).correlation >= 0 else -1) for s in SIG}
+signs = discovery_signs(D, SIG)
 O = pd.DataFrame({s: signs[s]*D[s] for s in SIG})
 print(f"=== Sepsis signature families (GSE65682, N={len(D)} mortality-labelled, deaths={y.sum()}) ===\n")
-print("orientation sign applied so each positively predicts mortality:", signs)
+print("orientation signs fitted on discovery and frozen:", signs)
 print("(a negative sign means the raw mean-z ran opposite to outcome — mean-z direction is not a-priori")
 print(" meaningful for the mixed-direction SRS/MARS classifier genes.)\n")
 
@@ -43,6 +44,6 @@ cross = S.loc[hall, srs].to_numpy().ravel()
 print(f"Hallmark vs SRS families         r = {cross.min():+.2f}..{cross.max():+.2f} (mean {cross.mean():+.2f})")
 print(f"MARS8 vs the rest                r = {S.loc['MARS8',[c for c in SIG if c!='MARS8']].min():+.2f}"
       f"..{S.loc['MARS8',[c for c in SIG if c!='MARS8']].max():+.2f}")
-print("\nReading: even after orienting all five to the same outcome, the Hallmark-inflammatory and SRS")
-print("families remain nearly independent — 'inflammatory dysregulation' is not one order. Strong")
-print("instance of the framework's premise: competing measures of one concept genuinely disagree.")
+print("\nReading: these mean-z gene-set proxies induce different observed rankings.")
+print("They are not the official SRSq or MARS classifiers. Low correlation between proxy")
+print("blocks does not establish that a biological concept lacks a total order.")

@@ -10,6 +10,11 @@ For each: bin pairs by |Δaxis| (separation) and, among near-ties, by middle-pos
 linear-probability model asks whether middle-position adds anything beyond separation.
 Deterministic.
 """
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analysis"))
+from order_utils import pair_disagreement, average_rank
 import numpy as np, pandas as pd
 from scipy.stats import rankdata
 from numpy.linalg import lstsq
@@ -35,9 +40,8 @@ Pr = np.column_stack([rankdata(P[:,k]) for k in range(8)])        # per-promoter
 
 i,j = np.triu_indices(N,1)
 # discordant iff the 8 promoters do NOT unanimously agree which of the pair is more deleterious
-s0 = np.sign(Pr[j,0]-Pr[i,0]); disc = np.zeros(len(i),bool)
-for k in range(1,8):
-    disc |= (np.sign(Pr[j,k]-Pr[i,k]) != s0)
+disc, tie_only = pair_disagreement(Pr, i, j)
+print(f"Tie-only disagreement (comparable pairs): {tie_only.mean():.4f}")
 print(f"=== TP53 pairwise discordance among 8 promoters (N={N}, {len(i):,} pairs) ===")
 print(f"overall discordance rate: {disc.mean():.3f}\n")
 
@@ -66,10 +70,6 @@ def analyze(axis, label):
 
 analyze(P.mean(1), "8-promoter consensus (consensus coord)")
 analyze(D["am_path"].to_numpy(float), "AlphaMissense (independent of the promoter panel)")
-print("Conclusion (cf. kinase): separation (near-tie-ness) is the DOMINANT driver of TP53 disagreement")
-print("(discordance ~0.93 at near-ties -> ~0.05 when well-separated). Unlike kinase, a MODEST residual")
-print("middle effect survives: mid-deleteriousness near-ties disagree more than end near-ties. It is")
-print("partly circular on the consensus axis (midpos coef +0.33) but shrinks to +0.10 on the independent")
-print("AlphaMissense axis. Honest reading: the near-tie law holds and dominates, with a small genuine")
-print("middle residual (partial-LOF / separation-of-function variants) that kinase lacked — a real")
-print("cross-domain difference, not a 'consequential middle' of the retired P3 kind.")
+print("Conclusion: report both axes and fitted coefficients above. AlphaMissense is external to")
+print("the promoter panel, but correlated prediction error remains possible. A residual position")
+print("effect is descriptive and does not establish a biological partial-loss-of-function cause.")

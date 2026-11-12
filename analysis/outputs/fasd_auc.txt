@@ -1,0 +1,14 @@
+
+GSE112987: n=103 (39 FASD / 64 control)
+  portales     AUC = 0.774
+  lussier161   AUC = 0.789
+  lussier183   AUC = 0.788
+  vanderlaan   AUC = 0.935
+
+GSE113012: n=35 (7 FASD / 28 control)
+  portales     AUC = 0.679
+  lussier161   AUC = 0.724
+  lussier183   AUC = 0.714
+  vanderlaan   AUC = 0.959
+
+Cited: buccal (portales/lussier) 0.68-0.79; van der Laan (blood) 0.93 discovery / 0.96 replication

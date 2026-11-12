@@ -1,12 +1,14 @@
 """
+HISTORICAL EXPLORATION: superseded candidate/criterion numbering. These checks
+are not validation of the current exponential candidate; see kinase_controls.py.
 Confirm the tension: does the ORIGINAL candidate pass D3 only because pedestal-domination makes it
 baseline-insensitive (and inverted)? Does ANY smoothing width give BOTH correct orientation AND D3?
 Also test a scale-free variant (per-compound anchor).
 """
 import numpy as np, pandas as pd
-from scipy.stats import spearmanr
+from scipy.stats import spearmanr, rankdata
 M = pd.read_csv("/Users/polina/Documents/BioInfStuff/selectivity/klaeger_matrix.csv", index_col=0).values.astype(float)
-def to_ranks(s): return len(s)-s.argsort().argsort()
+def to_ranks(s): return rankdata(-s, method="average")
 def entropy(P,b=5.0,e=1e-10):
     s=np.maximum(P-b,0); rs=np.where(s.sum(1,keepdims=True)==0,e,s.sum(1,keepdims=True)); p=s/rs
     return -(-(p*np.where(p>0,np.log2(p+e),0)).sum(1))
